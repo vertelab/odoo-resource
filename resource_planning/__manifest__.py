@@ -46,7 +46,7 @@ More information:
     #hr_contract- smankoplad med hr, funkar utan? NOPPE
     #web_timeline- behövs för visalusering och date_start/date_stop
     #project- behövs pga att vi behöver(?) projekt för att göra planering?
-    'depends': ['hr', 'calendar'],
+    'depends': ['hr', 'calendar','project'],
     'data': [
         'security/ir.model.access.csv',
         'views/resource_menu.xml',

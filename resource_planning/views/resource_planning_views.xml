@@ -17,9 +17,11 @@
                             <page name="shifts" string="Shifts">
                                 <field name="shift_ids">
                                     <list>
-                                        <field name="day"/>
-                                        <field name="start_time"/>
-                                        <field name="end_time"/>
+                                        <!-- <field name="day"/> -->
+                                        <!-- <field name="start_time"/>
+                                        <field name="end_time"/> -->
+                                        <field name="date_start"/>
+                                        <field name="date_stop"/>
                                         <field name="duration"/>
                                     </list>
                                 </field >
@@ -51,9 +53,11 @@
                         <group>
                             <field name="name"/>
                             <field name="role_id"/>
-                            <field name="day"/>
-                            <field name="start_time" widget="float_time"/>
-                            <field name="end_time" widget="float_time" />
+                            <!-- <field name="day"/> -->
+                            <field name="date_start"/>
+                            <field name="date_stop"/>
+                            <!-- <field name="start_time" widget="float_time"/>
+                            <field name="end_time" widget="float_time" /> -->
                             <field name="duration" widget="float_time"/>
                         </group>
                     </sheet>

@@ -5,11 +5,11 @@ from pytz import timezone
 
 class ResourceShiftSlot(models.Model):
     _name = 'resource.shift.slot'
-    _description = 'Planning Shift Slot'
+    _description = 'Resource Shift Slot'
 
-    planning_shift = fields.Many2one('planning.shift', string='Shift')
+    planning_shift = fields.Many2one('resource.shift', string='Shift')
     
-    role_id = fields.Many2one('planning.role', required=True, string="Role")
+    role_id = fields.Many2one('resource.role', required=True, string="Role")
     
 
     resource_ids = fields.Many2many(

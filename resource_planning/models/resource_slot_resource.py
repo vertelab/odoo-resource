@@ -7,5 +7,5 @@ class ResourceSlotResource(models.Model):
     _name="resource.slot.resource"
     _description="Resource Slot Resource"
     
-    slot_id = fields.Many2one(comodel_name="planning.slot")
+    slot_id = fields.Many2one(comodel_name="resource.slot")
     resource_id = fields.Many2one(comodel_name="resource.resource")

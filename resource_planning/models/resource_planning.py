@@ -1,7 +1,7 @@
 import logging
+from datetime import timedelta
 
 from odoo import models, fields, api
-from datetime import timedelta
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from pytz import timezone
 
@@ -26,8 +26,7 @@ class ResourcePlanning(models.Model):
                 _logger.error(f"{week_temps=}")
                 records = []
                 for week_template_id in week_temps:
-                    record = week_template_id.read(["date_start","date_stop","duration"])
-                    record.update({"role_id": self.role_id.id})
+                    record = {"date_start": week_template_id.date_start, "duration": week_template_id.duration, "role_id": self.role_id.id}
                     records.append(record)
                 _logger.error(f"{records=}")
                 self.env["resource.shift"].create(records)
