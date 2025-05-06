@@ -4,5 +4,6 @@ from . import resource_shift_slot
 from . import resource_shift 
 from . import resource_slot_resource 
 from . import resource_slot
-from . import resource_week_template
 from . import resource_shift_template
+from . import resource_week_template
+from . import resource_week_template_shift

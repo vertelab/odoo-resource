@@ -28,7 +28,7 @@
         <record id="action_resource_week_template" model="ir.actions.act_window">
             <field name="name">Resource Week Template</field>
             <field name="res_model">resource.week.template</field>
-            <field name="view_mode">calendar</field>
+            <field name="view_mode">list,form</field>
         </record>
 
         <record id="action_resource_slot" model="ir.actions.act_window">

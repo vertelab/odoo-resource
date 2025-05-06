@@ -12,26 +12,19 @@ class ResourceWeekTemplate(models.Model):
     _name = 'resource.week.template'
     _description = 'Resource Week Template'
 
-    date_start = fields.Datetime()
-    date_stop = fields.Datetime(compute="_compute_date_stop",store=True)
-    duration = fields.Float()
-    name = fields.Char(compute="_compute_name", store=True)
+    name = fields.Char(required=True)
+    role_id = fields.Many2one(comodel_name="resource.role")
+    week_template_shift_ids = fields.One2many(comodel_name="resource.week.template.shift",inverse_name="week_template_id")
 
-    @api.depends("duration","date_start")
-    def _compute_date_stop(self):
-        for record in self:
-            if record.date_start and record.duration:
-                record.date_stop = record.date_start + timedelta(hours=record.duration)
-            else:
-                record.date_stop = False
-
-    #planning_id = fields.Many2one(comodel_name="resource.planning")
-    # shift_template_id = fields.Many2one(comodel_name="resource.shift.template")
-    
-    @api.depends("date_start","date_stop")
-    def _compute_name(self):
-        for record in self:
-            if record.date_start and record.date_stop:
-                record.name = f"{record.date_start} - {record.date_stop}"
-            else:
-                record.name = False
+    def week_template_shift_action(self):
+        action = {
+        'type': 'ir.actions.act_window',
+        'name': 'Week Template Shifts',
+        'res_model': 'resource.week.template.shift',
+        'view_mode': 'calendar',
+        'target': 'current',
+        'context': {
+            'default_week_template_id': self.id
+            },
+        }
+        return action

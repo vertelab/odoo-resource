@@ -14,3 +14,4 @@ class ResourceShiftTemplate(models.Model):
     date_start = fields.Datetime()
     date_stop = fields.Datetime()
     duration = fields.Float()
+    

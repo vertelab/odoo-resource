@@ -172,9 +172,11 @@
 
         <record id="view_resource_week_template_calendar" model="ir.ui.view">
             <field name="name">resource.week.template.calendar</field>
-            <field name="model">resource.week.template</field>
+            <field name="model">resource.week.template.shift</field>
             <field name="arch" type="xml">
-                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration"/>
+                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration">
+                    <field name="partner_ids" options="{'block': True, 'icon': 'fa fa-users'}" filters="1" widget="many2manyattendeeexpandable" write_model="calendar.filters" write_field="partner_id" filter_field="partner_checked" avatar_field="avatar_128"/>
+                </calendar>
             </field>
         </record>
 
@@ -188,16 +190,46 @@
                     </header>
                     <sheet>
                         <group>
-                            <field name="week_template_ids" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                            <field name="name"/>
                             <field name="role_id" required="True"/>
-                            <field name="date_start" required="True"/>
-                            <field name="date_stop" required="True"/>
+                            <field name="week_template_id" domain="['|',('role_id', '=', False),('role_id', '=', role_id)]"/>
+                            <!-- <field name="date_start" required="True"/>
+                            <field name="date_stop" required="True"/> -->
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
+        <record id="view_resource_week_template_form" model="ir.ui.view">
+            <field name="name">resource.week.template.form</field>
+            <field name="model">resource.week.template</field>
+            <field name="arch" type="xml">
+                <form string="Week Template">
+                    <header>
+                        <button name="week_template_shift_action" type="object" string="View Shifts" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="role_id"/>
+                        </group>
+
+                        <notebook>
+                            <page string="Weekly Shifts">
+                                <field name="week_template_shift_ids">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                        <field name="date_start"/>
+                                        <field name="date_stop"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
     </data>
 </odoo>
