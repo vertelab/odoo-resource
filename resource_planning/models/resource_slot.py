@@ -25,6 +25,7 @@ class ResourceSlot(models.Model):
     #slot_resource_ids = fields.One2many(comodel_name="resource.slot.resource", inverse_name="slot_id" )
     resource_id = fields.Many2one(comodel_name="resource.resource",group_expand="_group_expand_resource_id",domain="[('resource_type', '=', 'user')]")
     res_users_id = fields.Many2one(comodel_name="res.users")
+    role_id = fields.Many2one(comodel_name="resource.role")
 
     @api.depends("duration","date_start")
     def _compute_date_stop(self):

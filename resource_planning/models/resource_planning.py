@@ -1,5 +1,5 @@
 import logging
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from odoo import models, fields, api
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
@@ -12,32 +12,28 @@ class ResourcePlanning(models.Model):
     _name = 'resource.planning'
     _description = 'Resource Planning'
 
-    #name = fields.Char(compute="_compute_name",store=True)
     name = fields.Char()
-    role_id = fields.Many2one(comodel_name="resource.role")
-    week_template_id = fields.Many2one(comodel_name="resource.week.template")
-    date_start = fields.Datetime()
-    date_stop = fields.Datetime()
+    week_template_ids = fields.Many2many(comodel_name="resource.week.template")
+    date_start = fields.Date()
 
     def create_shifts(self):
-        if self.week_template_id:
-            week_template_ids = self.env["resource.week.template.shift"].search([("week_template_id", "=", self.week_template_id.id)])
-            _logger.error(f"{week_template_ids=}")
-            if week_template_ids:
-                records = []
-                for week_template_id in week_template_ids:
-                    record = {"date_start": week_template_id.date_start, "duration": week_template_id.duration, "day": str(week_template_id.date_start.weekday())}
-                    if self.role_id:
-                        record.update({"role_id": self.role_id.id})
+        records = []
+        date_start = self.reset_date_start()
+        for week_template_id in self.week_template_ids:
+            week_template_shift_ids = self.env["resource.week.template.shift"].search([('week_template_id', 'in', self.week_template_ids.ids)])
+            for day_number in range(7):
+                day_filter = filter(lambda w: w.week_number == day_number ,week_template_shift_ids)
+                for day in day_filter:
+                    new_date_start = datetime(date_start.year,date_start.month,date_start.day,day.date_start.hour,day.date_start.minute,day.date_start.second)
+                    record = {"date_start": new_date_start, "duration": day.duration, "role_id": day.role_id.id}
                     records.append(record)
-                _logger.error(f"{records=}")
-                self.env["resource.shift"].create(records)
+                date_start = date_start + timedelta(days=1)
+            date_start = date_start + timedelta(days=1)
+            
+        self.env["resource.shift"].create(records)
 
-    
-    # @api.depends("date_start","date_stop")
-    # def _compute_name(self):
-    #     for record in self:
-    #         if record.date_start and record.date_stop:
-    #             record.name = f"{record.date_start} - {record.date_stop}"
-    #         else:
-    #             record.name = False
+    def reset_date_start(self):
+        if self.date_start.weekday() == 0:
+            return self.date_start
+        else:
+            return self.date_start - timedelta(days=self.date_start.weekday())

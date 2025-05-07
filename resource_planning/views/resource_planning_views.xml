@@ -1,6 +1,27 @@
 <odoo>
     <data>
-        <!-- Role View -->
+
+        <!-- From Views -->
+
+        <record id="view_resource_planning_form" model="ir.ui.view">
+            <field name="name">resource.planning.form</field>
+            <field name="model">resource.planning</field>
+            <field name="arch" type="xml">
+                <form string="Resource Planning">
+                    <header>
+                        <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="date_start" required="True"/>
+                            <field name="week_template_ids" widget="many2many_tags" required="True"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
         <record id="view_resource_role_form" model="ir.ui.view">
             <field name="name">resource.role.form</field>
             <field name="model">resource.role</field>
@@ -17,9 +38,6 @@
                             <page name="shifts" string="Shifts">
                                 <field name="shift_ids">
                                     <list>
-                                        <!-- <field name="day"/> -->
-                                        <!-- <field name="start_time"/>
-                                        <field name="end_time"/> -->
                                         <field name="date_start"/>
                                         <field name="date_stop"/>
                                         <field name="duration"/>
@@ -32,18 +50,6 @@
             </field>
         </record>
 
-
-        <record id="view_resource_role_tree" model="ir.ui.view">
-            <field name="name">resource.role.tree</field>
-            <field name="model">resource.role</field>
-            <field name="arch" type="xml">
-                <list string="resource Roles">
-                    <field name="name"/>
-                </list>
-            </field>
-        </record>
-
-        <!-- Shift View -->
         <record id="view_resource_shift_form" model="ir.ui.view">
             <field name="name">resource.shift.form</field>
             <field name="model">resource.shift</field>
@@ -53,148 +59,9 @@
                         <group>
                             <field name="name"/>
                             <field name="role_id"/>
-                            <!-- <field name="day"/> -->
                             <field name="date_start"/>
                             <field name="date_stop"/>
-                            <!-- <field name="start_time" widget="float_time"/>
-                            <field name="end_time" widget="float_time" /> -->
                             <field name="duration" widget="float_time"/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <record id="view_resource_shift_tree" model="ir.ui.view">
-            <field name="name">resource.shift.tree</field>
-            <field name="model">resource.shift</field>
-            <field name="arch" type="xml">
-                <list string="resource Shifts">
-                    <field name="name"/>
-                    <field name="role_id"/>
-                    <field name="start_time" widget="float_time"/>
-                    <field name="duration" widget="float_time"/>
-                    <field name="end_time" widget="float_time"/>
-                </list>
-            </field>
-        </record>
-
-        <!-- Form View -->
-        <record id="view_resource_shift_slot_form" model="ir.ui.view">
-            <field name="name">resource.shift.slot.form</field>
-            <field name="model">resource.shift.slot</field>
-            <field name="arch" type="xml">
-                <form string="resource Shift Slot">
-                    <sheet>
-                        <group>
-                            <field name="name" readonly="1"/>
-                            <field name="role_id"/>
-                            <field name="resource_ids" widget="many2many_tags"/>
-                            <!-- <field name="resource_shift"/> -->
-                            <field name="start_date"/>
-                            <field name="stop_date"/>
-                            <field name="duration" widget="float_time"/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <!-- Kanban View -->
-        <record id="view_resource_shift_slot_kanban" model="ir.ui.view">
-            <field name="name">resource.shift.slot.kanban</field>
-            <field name="model">resource.shift.slot</field>
-            <field name="arch" type="xml">
-                <kanban string="resource Shift Slots">
-                    <templates>
-                        <t t-name="kanban-box">
-                            <div class="oe_kanban_global_click">
-                                <div class="oe_kanban_details">
-                                    <strong>
-                                        <field name="name"/>
-                                    </strong>
-                                    <div>
-                                        <span>Role:</span>
-                                        <field name="role_id"/>
-                                    </div>
-                                    <div>
-                                        <span>Start Time:</span>
-                                        <field name="start_date" />
-                                    </div>
-                                    <div>
-                                        <span>End Time:</span>
-                                        <field name="stop_date" />
-                                    </div>
-                                    <div>
-                                        <span>Duration:</span>
-                                        <field name="duration"/>
- hours</div>
-                                    <div>
-                                        <span>Assigned:</span>
-                                        <field name="resource_ids" widget="many2many_tags"/>
- hours</div>
-                                </div>
-                            </div>
-                        </t>
-                    </templates>
-                </kanban>
-            </field>
-        </record>
-
-        <!-- Calendar View -->
-        <record id="view_resource_shift_slot_calendar" model="ir.ui.view">
-            <field name="name">resource.shift.slot.calendar</field>
-            <field name="model">resource.shift.slot</field>
-            <field name="arch" type="xml">
-                <calendar string="resource Shift Slots" date_start="start_date" date_stop="stop_date" date_delay="duration">
-                    <field name="resource_ids"/>
-                    <field name="name"/>
-                </calendar>
-            </field>
-        </record>
-
-        <!-- List View -->
-        <record id="view_resource_shift_slot_list" model="ir.ui.view">
-            <field name="name">resource.shift.slot.list</field>
-            <field name="model">resource.shift.slot</field>
-            <field name="arch" type="xml">
-                <list string="resource Shift Slots">
-                    <!-- Fields to display in the list view -->
-                    <field name="name"/>
-                    <field name="resource_ids" widget="many2many_tags"/>
-                    <field name="role_id"/>
-                    <field name="start_date"/>
-                    <field name="stop_date"/>
-                    <field name="duration"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_resource_week_template_calendar" model="ir.ui.view">
-            <field name="name">resource.week.template.calendar</field>
-            <field name="model">resource.week.template.shift</field>
-            <field name="arch" type="xml">
-                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration">
-                    <field name="partner_ids" options="{'block': True, 'icon': 'fa fa-users'}" filters="1" widget="many2manyattendeeexpandable" write_model="calendar.filters" write_field="partner_id" filter_field="partner_checked" avatar_field="avatar_128"/>
-                </calendar>
-            </field>
-        </record>
-
-        <record id="view_resource_planning_form" model="ir.ui.view">
-            <field name="name">resource.planning.form</field>
-            <field name="model">resource.planning</field>
-            <field name="arch" type="xml">
-                <form string="Resource Planning">
-                    <header>
-                        <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary"/>
-                    </header>
-                    <sheet>
-                        <group>
-                            <field name="name"/>
-                            <field name="role_id" required="True"/>
-                            <field name="week_template_id" domain="['|',('role_id', '=', False),('role_id', '=', role_id)]"/>
-                            <!-- <field name="date_start" required="True"/>
-                            <field name="date_stop" required="True"/> -->
                         </group>
                     </sheet>
                 </form>
@@ -212,7 +79,6 @@
                     <sheet>
                         <group>
                             <field name="name"/>
-                            <field name="role_id"/>
                         </group>
 
                         <notebook>
@@ -228,6 +94,56 @@
                         </notebook>
                     </sheet>
                 </form>
+            </field>
+        </record>
+
+        <!-- List Views -->
+
+        <record id="view_resource_role_tree" model="ir.ui.view">
+            <field name="name">resource.role.tree</field>
+            <field name="model">resource.role</field>
+            <field name="arch" type="xml">
+                <list string="resource Roles">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_resource_shift_tree" model="ir.ui.view">
+            <field name="name">resource.shift.tree</field>
+            <field name="model">resource.shift</field>
+            <field name="arch" type="xml">
+                <list string="resource Shifts">
+                    <field name="name"/>
+                    <field name="role_id"/>
+                    <field name="date_start"/>
+                    <field name="duration" widget="float_time"/>
+                    <field name="date_stop"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Kanban Views -->
+
+        <!-- Calandar Views -->
+
+        <record id="view_resource_shift_calendar" model="ir.ui.view">
+            <field name="name">resource.calendar</field>
+            <field name="model">resource.shift</field>
+            <field name="arch" type="xml">
+                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration">
+                    <field name="role_id" filters="1" />
+                </calendar>
+            </field>
+        </record>
+
+        <record id="view_resource_week_template_calendar" model="ir.ui.view">
+            <field name="name">resource.week.template.calendar</field>
+            <field name="model">resource.week.template.shift</field>
+            <field name="arch" type="xml">
+                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" scales="week" quick_create="false" event_open_popup="true">
+                    <field name="role_id" filters="1" />
+                </calendar>
             </field>
         </record>
 

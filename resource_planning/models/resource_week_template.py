@@ -13,7 +13,6 @@ class ResourceWeekTemplate(models.Model):
     _description = 'Resource Week Template'
 
     name = fields.Char(required=True)
-    role_id = fields.Many2one(comodel_name="resource.role")
     week_template_shift_ids = fields.One2many(comodel_name="resource.week.template.shift",inverse_name="week_template_id")
 
     def week_template_shift_action(self):
@@ -26,5 +25,6 @@ class ResourceWeekTemplate(models.Model):
         'context': {
             'default_week_template_id': self.id
             },
+        'domain': [('week_template_id','=',self.id)]
         }
         return action
