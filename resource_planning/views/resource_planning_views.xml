@@ -12,6 +12,14 @@
                         <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary"/>
                     </header>
                     <sheet>
+                    <div name="button_box" id="button_box" class="oe_button_box">
+                        <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-calendar">
+                            <field string="Shifts" name="shift_count" widget="statinfo" />
+                        </button>
+                        <button name="action_get_slots" class="oe_stat_button " type="object" icon="fa-th">
+                            <field string="Slots" name="slot_count" widget="statinfo" />
+                        </button>
+                    </div>
                         <group>
                             <field name="name"/>
                             <field name="date_start" required="True"/>
@@ -31,20 +39,8 @@
                         <group>
                             <field name="name"/>
                             <field name="description"/>
-                            <field name="amount"/>
                             <field name="resource_ids" widget="many2many_tags"/>
                         </group>
-                        <notebook>
-                            <page name="shifts" string="Shifts">
-                                <field name="shift_ids">
-                                    <list>
-                                        <field name="date_start"/>
-                                        <field name="date_stop"/>
-                                        <field name="duration"/>
-                                    </list>
-                                </field >
-                            </page>
-                        </notebook>
                     </sheet>
                 </form>
             </field>
@@ -59,6 +55,8 @@
                         <group>
                             <field name="name"/>
                             <field name="role_id"/>
+                            <field name="slot_id"/>
+                            <field name="resource_id"/>
                             <field name="date_start"/>
                             <field name="date_stop"/>
                             <field name="duration" widget="float_time"/>
@@ -131,8 +129,10 @@
             <field name="name">resource.calendar</field>
             <field name="model">resource.shift</field>
             <field name="arch" type="xml">
-                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration">
+                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" color="resource_id" hide_time="true">
+                    <field name="name"/>
                     <field name="role_id" filters="1" />
+                    <field name="resource_id" filters="1" />
                 </calendar>
             </field>
         </record>
@@ -141,7 +141,8 @@
             <field name="name">resource.week.template.calendar</field>
             <field name="model">resource.week.template.shift</field>
             <field name="arch" type="xml">
-                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" scales="week" quick_create="false" event_open_popup="true">
+                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" scales="week" quick_create="false" event_open_popup="true" color="role_id" hide_time="true">
+                    <field name="name"/>
                     <field name="role_id" filters="1" />
                 </calendar>
             </field>

@@ -15,21 +15,58 @@ class ResourcePlanning(models.Model):
     name = fields.Char()
     week_template_ids = fields.Many2many(comodel_name="resource.week.template")
     date_start = fields.Date()
+    shift_ids = fields.One2many(comodel_name="resource.shift",inverse_name="planning_id")
+    shift_count = fields.Integer(compute="_compute_shift_count")
+    slot_ids = fields.One2many(comodel_name="resource.slot",inverse_name="planning_id")
+    slot_count = fields.Integer(compute="_compute_slot_count")
+
+    @api.depends("shift_ids")
+    def _compute_shift_count(self):
+        for record in self:
+            record.shift_count = self.env["resource.shift"].search_count([('planning_id', '=', record.id)])
+    
+    @api.depends("slot_ids")
+    def _compute_slot_count(self):
+        for record in self:
+            record.slot_count = self.env["resource.slot"].search_count([('planning_id', '=', record.id)])
+
+    def action_get_shifts(self):
+        action = {
+            'type': 'ir.actions.act_window',
+            'name': 'Shifts',
+            'res_model': 'resource.shift',
+            'view_mode': 'calendar,form,list',
+            'target': 'current',
+            #'context': {},  # you can pass context here if needed
+            'domain': [('planning_id', '=', self.id)]
+        }
+        return action
+
+    def action_get_slots(self):
+        action = {
+            'type': 'ir.actions.act_window',
+            'name': 'Slots',
+            'res_model': 'resource.slot',
+            'view_mode': 'kanban,form,list',
+            'target': 'current',
+            #'context': {},  # you can pass context here if needed
+            'domain': [('planning_id', '=', self.id)]
+        }
+        return action
 
     def create_shifts(self):
         records = []
-        date_start = self.reset_date_start()
+        date_start = self.date_start
         for week_template_id in self.week_template_ids:
-            week_template_shift_ids = self.env["resource.week.template.shift"].search([('week_template_id', 'in', self.week_template_ids.ids)])
-            for day_number in range(7):
-                day_filter = filter(lambda w: w.week_number == day_number ,week_template_shift_ids)
-                for day in day_filter:
-                    new_date_start = datetime(date_start.year,date_start.month,date_start.day,day.date_start.hour,day.date_start.minute,day.date_start.second)
-                    record = {"date_start": new_date_start, "duration": day.duration, "role_id": day.role_id.id}
-                    records.append(record)
+            _logger.error(f"{date_start.weekday()=}")
+            for day_number in range(date_start.weekday(),7):
+                shifts_this_day = list(filter(lambda w: w.week_number == day_number,week_template_id.week_template_shift_ids))
+                if date_start.weekday() == day_number:
+                    for shift in shifts_this_day:
+                        new_date_start = datetime(date_start.year,date_start.month,date_start.day,shift.date_start.hour,shift.date_start.minute,shift.date_start.second)
+                        record = {"date_start": new_date_start, "duration": shift.duration, "role_id": shift.role_id.id, "planning_id": self.id}
+                        records.append(record)
                 date_start = date_start + timedelta(days=1)
-            date_start = date_start + timedelta(days=1)
-            
         self.env["resource.shift"].create(records)
 
     def reset_date_start(self):

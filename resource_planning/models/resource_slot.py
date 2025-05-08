@@ -15,7 +15,6 @@ class ResourceSlot(models.Model):
 
 
     name = fields.Char(compute="_compute_name",store=True)
-    shift_id = fields.Many2one(comodel_name="resource.shift")
     project_id = fields.Many2one(comodel_name="project.project")
     ref_object = fields.Reference(string='Object', selection=lambda m: [(model.model, model.name) for model in
                                                                        m.env['ir.model'].sudo().search([('model','in',MODELS_LIST)])])
@@ -26,6 +25,7 @@ class ResourceSlot(models.Model):
     resource_id = fields.Many2one(comodel_name="resource.resource",group_expand="_group_expand_resource_id",domain="[('resource_type', '=', 'user')]")
     res_users_id = fields.Many2one(comodel_name="res.users")
     role_id = fields.Many2one(comodel_name="resource.role")
+    planning_id = fields.Many2one(comodel_name="resource.planning")
 
     @api.depends("duration","date_start")
     def _compute_date_stop(self):

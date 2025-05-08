@@ -2,6 +2,14 @@
     <data>
         <!-- Actions -->
 
+        <!-- Action for Shifts -->
+        <record id="action_resource_shifts" model="ir.actions.act_window">
+            <field name="name">Shifts</field>
+            <field name="res_model">resource.shift</field>
+            <field name="view_mode">calendar,list,form</field>
+            <field name="help">Manage shifts and their associated roles and timings.</field>
+        </record>
+
         <!-- Action for Roles -->
         <record id="action_resource_roles" model="ir.actions.act_window">
             <field name="name">Roles</field>
@@ -10,13 +18,6 @@
             <field name="help">Manage resource roles and assign resources to them.</field>
         </record>
 
-        <!-- Action for Shifts -->
-        <record id="action_resource_shifts" model="ir.actions.act_window">
-            <field name="name">Shifts</field>
-            <field name="res_model">resource.shift</field>
-            <field name="view_mode">calendar,list,form</field>
-            <field name="help">Manage shifts and their associated roles and timings.</field>
-        </record>
 
         <record id="action_resource_week_template" model="ir.actions.act_window">
             <field name="name">Resource Week Template</field>
@@ -39,21 +40,18 @@
         <!-- Main Menu -->
         <menuitem id="menu_resource_root" name="Resource Planner" sequence="10"/>
 
-        <!-- Submenu: Roles -->
-        <menuitem id="menu_resource_roles" name="Roles" parent="menu_resource_root" action="action_resource_roles" sequence="10"/>
+        <menuitem id="menu_resource_planning" name="Planning" parent="menu_resource_root" action="action_resource_planning" sequence="10"/>
 
-        <!-- Submenu: Shifts -->
-        <menuitem id="menu_resource_shifts" name="Shifts" parent="menu_resource_root" action="action_resource_shifts" sequence="20"/>
+        <menuitem id="menu_resource_planning_configuration" name="Configuration" parent="menu_resource_root" sequence="11"/>
+
+        <menuitem id="menu_resource_roles" name="Roles" parent="menu_resource_planning_configuration" action="action_resource_roles" sequence="40"/>
+
+        <menuitem id="menu_resource_week_template" name="Week Template" parent="menu_resource_planning_configuration" action="action_resource_week_template" sequence="40"/>
 
 
+        <!-- <menuitem id="menu_resource_shifts" name="Shifts" parent="menu_resource_root" action="action_resource_shifts" sequence="40"/> -->
 
-        <!-- Submenu: Daily Templates -->
-        <menuitem id="menu_resource_slot_root" name="Slots" parent="menu_resource_root" action="action_resource_slot" sequence="40"/>
-
-        <menuitem id="menu_resource_week_template" name="Week Template" parent="menu_resource_root" action="action_resource_week_template" sequence="40"/>
-
-        <menuitem id="menu_resource_planning" name="Planning" parent="menu_resource_root" action="action_resource_planning" sequence="40"/>
-
+        <!-- <menuitem id="menu_resource_slot_root" name="Slots" parent="menu_resource_root" action="action_resource_slot" sequence="40"/> -->
 
     </data>
 </odoo>
