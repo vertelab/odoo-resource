@@ -19,7 +19,23 @@ class ResourceWeekTemplateShift(models.Model):
     name = fields.Char(compute="_compute_name", store=True)
     week_template_id = fields.Many2one(comodel_name="resource.week.template",required=True)
     role_id = fields.Many2one(comodel_name="resource.role",required=True)
-    week_number = fields.Integer(compute="_compute_week_number")
+    week_number = fields.Integer(compute="_compute_week_number",store=True)
+
+    day = fields.Selection([
+        ('0', 'Monday'),
+        ('1', 'Tuesday'),
+        ('2', 'Wednesday'),
+        ('3', 'Thursday'),
+        ('4', 'Friday'),
+        ('5', 'Saturday'),
+        ('6', 'Sunday')
+    ], compute="_compute_day", store=True)
+
+
+    @api.depends("week_number")
+    def _compute_day(self):
+        for record in self:
+            record.day = str(record.week_number)
 
     @api.depends("duration","date_start")
     def _compute_date_stop(self):

@@ -6,7 +6,7 @@
         <record id="action_resource_shifts" model="ir.actions.act_window">
             <field name="name">Shifts</field>
             <field name="res_model">resource.shift</field>
-            <field name="view_mode">calendar,list,form</field>
+            <field name="view_mode">kanban,calendar,list,form,pivot</field>
             <field name="help">Manage shifts and their associated roles and timings.</field>
         </record>
 

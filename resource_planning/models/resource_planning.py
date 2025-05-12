@@ -35,9 +35,9 @@ class ResourcePlanning(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Shifts',
             'res_model': 'resource.shift',
-            'view_mode': 'calendar,form,list',
+            'view_mode': 'kanban,calendar,form,list,pivot',
             'target': 'current',
-            #'context': {},  # you can pass context here if needed
+            'context': {'group_by':'resource_id'},
             'domain': [('planning_id', '=', self.id)]
         }
         return action
