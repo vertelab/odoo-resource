@@ -51,6 +51,7 @@ More information:
         'security/ir.model.access.csv',
         'views/resource_menu.xml',
         'views/resource_planning_views.xml',
+        'wizard/week_template_wizard_views.xml'
        ],
     'installable': True,
 }

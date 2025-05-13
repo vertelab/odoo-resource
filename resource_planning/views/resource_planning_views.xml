@@ -123,6 +123,19 @@
             </field>
         </record>
 
+        <record id="view_resource_week_template_shift_tree" model="ir.ui.view">
+            <field name="name">resource.week.template.shift.tree</field>
+            <field name="model">resource.week.template.shift</field>
+            <field name="arch" type="xml">
+                <list string="Template Shifts">
+                    <header>
+                        <button name="action_template_shift_wizard" type="object" string="Generate Shifts" class="btn-primary" display="always"/>
+                    </header>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
         <!-- Search Views -->
 
         <record id="resource_shift_search" model="ir.ui.view">

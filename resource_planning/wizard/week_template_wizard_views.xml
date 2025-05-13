@@ -1,0 +1,29 @@
+<odoo>
+
+    <record id="week_template_wizard_view" model="ir.ui.view">
+        <field name="name">week.template.wizard.view</field>
+        <field name="model">week.template.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Warning">
+                <group>
+                    <field name="day"/>
+                    <field name="week_template_shift_ids" widget="many2many_tags"/>
+                </group>
+                <group>
+                    <field name="monday" />
+                    <field name="tuesday" />
+                    <field name="wednesday" />
+                    <field name="thursday" />
+                    <field name="friday" />
+                    <field name="saturday" />
+                    <field name="sunday" />
+                </group>
+                <footer>
+                    <button name="copy_days" string="Copy" type="object" class="oe_highlight"/>
+                    <button name="cancel" string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

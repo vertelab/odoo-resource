@@ -31,7 +31,6 @@ class ResourceWeekTemplateShift(models.Model):
         ('6', 'Sunday')
     ], compute="_compute_day", store=True)
 
-
     @api.depends("week_number")
     def _compute_day(self):
         for record in self:
@@ -57,3 +56,16 @@ class ResourceWeekTemplateShift(models.Model):
                 record.name = f"{record.date_start} - {record.date_stop}"
             else:
                 record.name = False
+
+    def action_template_shift_wizard(self):
+        _logger.error(f"{self.env.context["default_week_template_id"]=}")
+        action = {
+            'type': 'ir.actions.act_window',
+            'name': 'Template Copy Shift Wizard',
+            'res_model': 'week.template.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_week_template_id': self.env.context["default_week_template_id"]},
+            #'domain': [('planning_id', '=', self.id)]
+        }
+        return action

@@ -13,7 +13,7 @@ class ResourceWeekTemplate(models.Model):
     _description = 'Resource Week Template'
 
     name = fields.Char(required=True)
-    week_template_shift_ids = fields.One2many(comodel_name="resource.week.template.shift",inverse_name="week_template_id")
+    week_template_shift_ids = fields.One2many(comodel_name="resource.week.template.shift",inverse_name="week_template_id",copy=True)
     week_template_shift_count = fields.Integer(compute="compute_week_template_shift_count")
 
     @api.depends("week_template_shift_ids")
@@ -23,6 +23,7 @@ class ResourceWeekTemplate(models.Model):
 
 
     def week_template_shift_action(self):
+        _logger.error(f"{self.env.context=}")
         action = {
         'type': 'ir.actions.act_window',
         'name': 'Week Template Shifts',
