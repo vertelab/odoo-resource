@@ -53,7 +53,10 @@ class ResourceWeekTemplateShift(models.Model):
     def _compute_name(self):
         for record in self:
             if record.date_start and record.date_stop:
-                record.name = f"{record.date_start} - {record.date_stop}"
+                record.name = f"{dict(record._fields['day'].selection).get(record.day)} {record.date_start.strftime('%H:%M')} - {record.date_stop.strftime('%H:%M')}"
+                if record.role_id:
+                    record.name = f"{record.role_id.name} {record.name}"
+
             else:
                 record.name = False
 

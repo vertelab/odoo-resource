@@ -32,9 +32,7 @@ class WeekTemplateWizard(models.TransientModel):
 
     @api.onchange("day")
     def get_shift_on_day(self):
-        _logger.error(f"{self.week_template_id.week_template_shift_ids=}")
         shifts = list(map(lambda s: s.id,filter(lambda shift: shift.day == self.day, self.week_template_id.week_template_shift_ids)))
-        _logger.error(f"{shifts=}")
         self.week_template_shift_ids = [(6,0, shifts)]
 
     def copy_days(self):
