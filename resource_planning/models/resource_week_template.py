@@ -15,6 +15,15 @@ class ResourceWeekTemplate(models.Model):
     name = fields.Char(required=True)
     week_template_shift_ids = fields.One2many(comodel_name="resource.week.template.shift",inverse_name="week_template_id",copy=True)
     week_template_shift_count = fields.Integer(compute="compute_week_template_shift_count")
+    week_template_line_ids = fields.One2many('resource.week.template.line','week_template_id',compute="create_stuff")
+
+
+    def compute_week_template_line_ids(self):
+        for record in self:
+            role_ids = record.week_template_shift_ids.mapped("role_id")
+            for role_id in role_ids:
+                role_shifts = filter(lambda r: r.role_id.id == role_id.id,record.week_template_shift_ids)
+                sum(role_shifts.mapped("duration"))
 
     @api.depends("week_template_shift_ids")
     def compute_week_template_shift_count(self):

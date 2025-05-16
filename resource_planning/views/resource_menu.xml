@@ -3,6 +3,20 @@
         <!-- Actions -->
 
         <!-- Action for Shifts -->
+        
+        <record id="action_resource_plan" model="ir.actions.act_window">
+            <field name="name">Resource Planning</field>
+            <field name="res_model">resource.planning</field>
+            <field name="view_mode">kanban,list,form,calendar</field>
+        </record>
+
+        <record id="action_resource_planning" model="ir.actions.act_window">
+            <field name="name">Resource Planning</field>
+            <field name="res_model">resource.planning</field>
+            <field name="view_mode">kanban,list,form,calendar</field>
+        </record>
+
+        
         <record id="action_resource_shifts" model="ir.actions.act_window">
             <field name="name">Shifts</field>
             <field name="res_model">resource.shift</field>
@@ -31,22 +45,19 @@
             <field name="view_mode">kanban,list,form</field>
         </record>
 
-        <record id="action_resource_planning" model="ir.actions.act_window">
-            <field name="name">Resource Planning</field>
-            <field name="res_model">resource.planning</field>
-            <field name="view_mode">list,form</field>
-        </record>
 
         <!-- Main Menu -->
         <menuitem id="menu_resource_root" name="Resource Planner" sequence="10"/>
 
         <menuitem id="menu_resource_planning" name="Planning" parent="menu_resource_root" action="action_resource_planning" sequence="10"/>
 
-        <menuitem id="menu_resource_planning_configuration" name="Configuration" parent="menu_resource_root" sequence="11"/>
+        <!-- <menuitem id="menu_resource_plan" name="Plan" parent="menu_resource_root" action="action_resource_plan" sequence="10"/> -->
 
-        <menuitem id="menu_resource_roles" name="Roles" parent="menu_resource_planning_configuration" action="action_resource_roles" sequence="40"/>
+        <menuitem id="menu_resource_plan_configuration" name="Configuration" parent="menu_resource_root" sequence="11"/>
 
-        <menuitem id="menu_resource_week_template" name="Week Template" parent="menu_resource_planning_configuration" action="action_resource_week_template" sequence="40"/>
+        <menuitem id="menu_resource_roles" name="Roles" parent="menu_resource_plan_configuration" action="action_resource_roles" sequence="40"/>
+
+        <menuitem id="menu_resource_week_template" name="Week Template" parent="menu_resource_plan_configuration" action="action_resource_week_template" sequence="40"/>
 
 
         <!-- <menuitem id="menu_resource_shifts" name="Shifts" parent="menu_resource_root" action="action_resource_shifts" sequence="40"/> -->

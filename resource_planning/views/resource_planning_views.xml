@@ -8,6 +8,31 @@
             <field name="model">resource.planning</field>
             <field name="arch" type="xml">
                 <form string="Resource Planning">
+                    <sheet>
+                        <div name="button_box" id="button_box" class="oe_button_box">
+                            <button name="get_plans" class="oe_stat_button " type="object" icon="fa-calendar">
+                                <field string="Plans" name="plan_count" widget="statinfo" />
+                            </button>
+                        </div>
+                        <div class="oe_title pe-0">
+                            <h1 class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex w-100">
+                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Name..."/>
+                                </div>
+                            </h1>
+                        </div>
+                        <group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_resource_plan_form" model="ir.ui.view">
+            <field name="name">resource.plan.form</field>
+            <field name="model">resource.plan</field>
+            <field name="arch" type="xml">
+                <form string="Resource Planning">
                     <header>
                         <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary"/>
                     </header>
@@ -20,10 +45,16 @@
                                 <field string="Slots" name="slot_count" widget="statinfo" />
                             </button>
                         </div>
+                        <div class="oe_title pe-0">
+                            <h1 class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex w-100">
+                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Month..."/>
+                                </div>
+                            </h1>
+                        </div>
                         <group>
-                            <field name="name"/>
                             <field name="date_start" required="True"/>
-                            <field name="week_template_ids" widget="many2many_tags" required="True"/>
+                            <field name="week_template_ids" widget="many2many_tags"/>
                         </group>
                     </sheet>
                 </form>
@@ -36,8 +67,14 @@
             <field name="arch" type="xml">
                 <form string="Resource Role">
                     <sheet>
+                        <div class="oe_title pe-0">
+                            <h1 class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex w-100">
+                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Role..."/>
+                                </div>
+                            </h1>
+                        </div>
                         <group>
-                            <field name="name"/>
                             <field name="description"/>
                             <field name="resource_ids" widget="many2many_tags"/>
                         </group>
@@ -52,8 +89,14 @@
             <field name="arch" type="xml">
                 <form string="resource Shift">
                     <sheet>
+                        <div class="oe_title pe-0">
+                            <h1 class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex w-100">
+                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Shift"/>
+                                </div>
+                            </h1>
+                        </div>
                         <group>
-                            <field name="name"/>
                             <field name="role_id"/>
                             <field name="slot_id"/>
                             <field name="resource_id"/>
@@ -77,21 +120,18 @@
                                 <field string="Template Shifts" name="week_template_shift_count" widget="statinfo" />
                             </button>
                         </div>
+                        <div class="oe_title pe-0">
+                            <h1 class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex w-100">
+                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Week..."/>
+                                </div>
+                            </h1>
+                        </div>
+
                         <group>
-                            <field name="name"/>
+
                         </group>
 
-                        <notebook>
-                            <page string="Weekly Shifts">
-                                <field name="week_template_shift_ids">
-                                    <list editable="bottom">
-                                        <field name="name"/>
-                                        <field name="date_start"/>
-                                        <field name="date_stop"/>
-                                    </list>
-                                </field>
-                            </page>
-                        </notebook>
                     </sheet>
                 </form>
             </field>
@@ -147,6 +187,8 @@
                     <field name="day" />
                     <field name="role_id" />
                     <field name="resource_id" />
+                    <field name="date_start"/>
+                    <filter string="Start Date" name="date_start" date="date_start" />
                     <filter string="Monday" name="monday" domain="[('day', '=', 0)]" />
                     <filter string="Tuesday" name="tuesday" domain="[('day', '=', 1)]" />
                     <filter string="Wednesday" name="wednesday" domain="[('day', '=', 2)]" />
@@ -154,6 +196,8 @@
                     <filter string="Friday" name="friday" domain="[('day', '=', 4)]" />
                     <filter string="Saturday" name="saturday" domain="[('day', '=', 5)]" />
                     <filter string="Sunday" name="sunday" domain="[('day', '=', 6)]" />
+                    <filter string="This Week" name="this_week" domain="[('date_start','&gt;=', (datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())).strftime('%Y-%m-%d 00:00:00')), ('date_start','&lt;=', (datetime.date.today() + datetime.timedelta(days=(6 - datetime.date.today().weekday()))).strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <!-- <filter string="week1" name="week1" domain="[('date_start','&gt;=',(context_today - relativedelta(days=context_today.weekday()).strftime('%%Y-%%m-%%d 00:00:00'))),('date_start','&lt;',(context_today + relativedelta(days=(7 - context_today.weekday())).strftime('%%Y-%%m-%%d 23:59:59')))]" /> -->
                     <group expand="0" string="Group By">
                         <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
                         <filter string="Roles" name="group_by_role" context="{'group_by': 'role_id'}" />

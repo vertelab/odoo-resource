@@ -1,5 +1,5 @@
 import logging
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from odoo import models, fields, api
 
@@ -11,9 +11,10 @@ class ResourceShift(models.Model):
 
     name = fields.Char(string="Shift Name", compute="_compute_name")
     role_id = fields.Many2one(comodel_name="resource.role")
-    planning_id = fields.Many2one(comodel_name="resource.planning")
+    plan_id = fields.Many2one(comodel_name="resource.plan")
     slot_id = fields.Many2one(comodel_name="resource.slot")
     resource_id = fields.Many2one(comodel_name="resource.resource",group_expand="_group_expand_resource_id",domain="[('resource_type', '=', 'user')]")
+    week_start_date = fields.Datetime(compute="_compute_week_start_date",store=True)
     date_start = fields.Datetime()
     date_stop = fields.Datetime(compute="_compute_date_stop",store=True)
     duration = fields.Float()
@@ -27,20 +28,6 @@ class ResourceShift(models.Model):
         ('6', 'Sunday')
     ], compute="_compute_day", store=True)
 
-    # @api.model_create_multi
-    # def create(self, vals_list):
-    #     shift_ids = super(ResourceShift,self).create(vals_list)
-    #     self.create_slot(shift_ids)
-    #     return shift_ids
-
-    # def create_slot(self,shift_ids=False):
-    #     if not shift_ids:
-    #         shift_ids = self
-    #     for shift in shift_ids:
-    #         record = {"date_start": shift.date_start, "duration": shift.duration, "role_id": shift.role_id.id, "planning_id": shift.planning_id.id}
-    #         slot_id = self.env["resource.slot"].create(record)
-    #         shift.slot_id = slot_id.id
-
     start_time = fields.Float(
         string="Start Time",
         help="Shift start time (24-hour format)"
@@ -52,6 +39,16 @@ class ResourceShift(models.Model):
         string="Duration (Hours)",
         help="Shift duration in decimal hours",
     )
+
+    @api.depends("plan_id.date_start")
+    def _compute_week_start_date(self):
+        for record in self:
+            _logger.error(f"{record.plan_id=} {record.plan_id.date_start=}")
+            if record.plan_id and record.plan_id.date_start:
+                record.week_start_date = record.plan_id.date_start - timedelta(days=record.plan_id.date_start.weekday())
+            else:
+                record.week_start_date = datetime.now()
+
 
     @api.depends("date_start")
     def _compute_day(self):

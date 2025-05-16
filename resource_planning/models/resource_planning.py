@@ -8,69 +8,30 @@ from pytz import timezone
 
 _logger = logging.getLogger(__name__)
 
-class ResourcePlanning(models.Model):
+class ResourcPlanning(models.Model):
     _name = 'resource.planning'
     _description = 'Resource Planning'
 
     name = fields.Char()
-    week_template_ids = fields.Many2many(comodel_name="resource.week.template")
-    date_start = fields.Date()
-    shift_ids = fields.One2many(comodel_name="resource.shift",inverse_name="planning_id")
-    shift_count = fields.Integer(compute="_compute_shift_count")
-    slot_ids = fields.One2many(comodel_name="resource.slot",inverse_name="planning_id")
-    slot_count = fields.Integer(compute="_compute_slot_count")
+    plan_ids = fields.One2many(comodel_name="resource.plan", inverse_name="planning_id")
+    date_start = fields.Datetime()
+    date_stop = fields.Datetime()
+    plan_count = fields.Integer(compute="_compute_plan_count")
 
-    @api.depends("shift_ids")
-    def _compute_shift_count(self):
+    @api.depends("plan_ids")
+    def _compute_plan_count(self):
         for record in self:
-            record.shift_count = self.env["resource.shift"].search_count([('planning_id', '=', record.id)])
-    
-    @api.depends("slot_ids")
-    def _compute_slot_count(self):
-        for record in self:
-            record.slot_count = self.env["resource.slot"].search_count([('planning_id', '=', record.id)])
+            record.plan_count = len(record.plan_ids)
 
-    def action_get_shifts(self):
+    def get_plans(self):
         action = {
             'type': 'ir.actions.act_window',
-            'name': 'Shifts',
-            'res_model': 'resource.shift',
-            'view_mode': 'kanban,calendar,form,list,pivot',
+            'name': 'Plans',
+            'res_model': 'resource.plan',
+            'view_mode': 'list,form,pivot',
             'target': 'current',
-            'context': {'group_by':'resource_id'},
+            'context': {'default_planning_id': self.id},
             'domain': [('planning_id', '=', self.id)]
         }
         return action
 
-    def action_get_slots(self):
-        action = {
-            'type': 'ir.actions.act_window',
-            'name': 'Slots',
-            'res_model': 'resource.slot',
-            'view_mode': 'kanban,form,list',
-            'target': 'current',
-            #'context': {},  # you can pass context here if needed
-            'domain': [('planning_id', '=', self.id)]
-        }
-        return action
-
-    def create_shifts(self):
-        records = []
-        date_start = self.date_start
-        for week_template_id in self.week_template_ids:
-            _logger.error(f"{date_start.weekday()=}")
-            for day_number in range(date_start.weekday(),7):
-                shifts_this_day = list(filter(lambda w: w.week_number == day_number,week_template_id.week_template_shift_ids))
-                if date_start.weekday() == day_number:
-                    for shift in shifts_this_day:
-                        new_date_start = datetime(date_start.year,date_start.month,date_start.day,shift.date_start.hour,shift.date_start.minute,shift.date_start.second)
-                        record = {"date_start": new_date_start, "duration": shift.duration, "role_id": shift.role_id.id, "planning_id": self.id}
-                        records.append(record)
-                date_start = date_start + timedelta(days=1)
-        self.env["resource.shift"].create(records)
-
-    def reset_date_start(self):
-        if self.date_start.weekday() == 0:
-            return self.date_start
-        else:
-            return self.date_start - timedelta(days=self.date_start.weekday())

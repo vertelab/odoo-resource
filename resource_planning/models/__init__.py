@@ -1,4 +1,5 @@
-from . import resource_planning 
+from . import resource_planning
+from . import resource_plan 
 from . import resource_role 
 from . import resource_shift 
 from . import resource_slot
