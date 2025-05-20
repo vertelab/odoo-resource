@@ -10,13 +10,13 @@
                     <field name="week_template_shift_ids" widget="many2many_tags"/>
                 </group>
                 <group>
-                    <field name="monday" />
-                    <field name="tuesday" />
-                    <field name="wednesday" />
-                    <field name="thursday" />
-                    <field name="friday" />
-                    <field name="saturday" />
-                    <field name="sunday" />
+                    <field name="monday" invisible="day == '0'"/>
+                    <field name="tuesday" invisible="day == '1'"/>
+                    <field name="wednesday" invisible="day == '2'"/>
+                    <field name="thursday" invisible="day == '3'"/>
+                    <field name="friday" invisible="day == '4'"/>
+                    <field name="saturday" invisible="day == '5'"/>
+                    <field name="sunday" invisible="day == '6'"/>
                 </group>
                 <footer>
                     <button name="copy_days" string="Copy" type="object" class="oe_highlight"/>

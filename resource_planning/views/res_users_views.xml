@@ -1,0 +1,16 @@
+<odoo>
+
+    <record id="res_users_view_form_profile" model="ir.ui.view">
+        <field name="name">res.users.preferences.form.inherit.resource.smart.button</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="hr.res_users_view_form_profile"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="get_shifts" class="oe_stat_button" type="object" icon="fa-calendar">
+                    <field string="Shifts" name="resource_shift_count" widget="statinfo" />
+                </button>
+            </div>
+        </field>
+    </record>
+
+</odoo>

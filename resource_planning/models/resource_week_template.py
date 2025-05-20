@@ -11,25 +11,27 @@ _logger = logging.getLogger(__name__)
 class ResourceWeekTemplate(models.Model):
     _name = 'resource.week.template'
     _description = 'Resource Week Template'
+    _inherit = ["mail.thread", "mail.activity.mixin"]  
 
     name = fields.Char(required=True)
     week_template_shift_ids = fields.One2many(comodel_name="resource.week.template.shift",inverse_name="week_template_id",copy=True)
-    week_template_shift_count = fields.Integer(compute="compute_week_template_shift_count")
-    week_template_line_ids = fields.One2many('resource.week.template.line','week_template_id',compute="create_stuff")
+    week_template_shift_count = fields.Integer(compute="_compute_week_template_shift_count")
+    week_template_line_ids = fields.One2many(comodel_name='resource.week.template.line',inverse_name='week_template_id')
 
-
-    def compute_week_template_line_ids(self):
-        for record in self:
-            role_ids = record.week_template_shift_ids.mapped("role_id")
-            for role_id in role_ids:
-                role_shifts = filter(lambda r: r.role_id.id == role_id.id,record.week_template_shift_ids)
-                sum(role_shifts.mapped("duration"))
+    def update_template_lines(self):
+        for template in self:
+            template.week_template_line_ids.unlink()
+            role_ids = set(template.week_template_shift_ids.mapped("role_id"))
+            for role in role_ids:
+                filterd_shifts = template.week_template_shift_ids.filtered(lambda s: s.role_id.id == role.id)
+                total_duration = sum(filterd_shifts.mapped("duration"))
+                self.env["resource.week.template.line"].create({"week_template_id": template.id, "role_id": role.id, "duration": total_duration})
+                
 
     @api.depends("week_template_shift_ids")
-    def compute_week_template_shift_count(self):
+    def _compute_week_template_shift_count(self):
         for record in self:
             record.week_template_shift_count = len(record.week_template_shift_ids)
-
 
     def week_template_shift_action(self):
         _logger.error(f"{self.env.context=}")

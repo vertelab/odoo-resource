@@ -12,6 +12,7 @@ _logger = logging.getLogger(__name__)
 class ResourceWeekTemplateShift(models.Model):
     _name = 'resource.week.template.shift'
     _description = 'Resource Week Template Shift'
+    _inherit = ["mail.thread", "mail.activity.mixin"]  
 
     date_start = fields.Datetime(required=True)
     date_stop = fields.Datetime(compute="_compute_date_stop",store=True)
@@ -20,6 +21,25 @@ class ResourceWeekTemplateShift(models.Model):
     week_template_id = fields.Many2one(comodel_name="resource.week.template",required=True)
     role_id = fields.Many2one(comodel_name="resource.role",required=True)
     week_number = fields.Integer(compute="_compute_week_number",store=True)
+
+    @api.model_create_multi
+    def create(self, vals):
+        template_shifts = super(ResourceWeekTemplateShift, self).create(vals)
+        self.create_write_template_lines(template_shifts)
+        return template_shifts
+
+    def create_write_template_lines(self,template_shifts=False):
+        template_lines = []
+        if not template_shifts:
+            template_shifts = self
+        for template_shift in template_shifts:
+            template_line = self.env["resource.week.template.line"].search([("week_template_id", "=", template_shift.week_template_id.id),("role_id", "=", template_shift.role_id.id)],limit=1)
+            if not template_line:
+                template_line = self.env["resource.week.template.line"].create({"week_template_id": template_shift.week_template_id.id, "role_id": template_shift.role_id.id})
+            template_line.duration += template_shift.duration
+            template_lines.append(template_line)
+        return template_lines
+        
 
     day = fields.Selection([
         ('0', 'Monday'),

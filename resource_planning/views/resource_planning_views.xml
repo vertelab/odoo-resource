@@ -24,6 +24,7 @@
                         <group>
                         </group>
                     </sheet>
+                    <chatter/>
                 </form>
             </field>
         </record>
@@ -35,6 +36,7 @@
                 <form string="Resource Planning">
                     <header>
                         <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary"/>
+                        <button name="update_data_lines" type="object" string="Update Data" class="btn-primary"/>
                     </header>
                     <sheet>
                         <div name="button_box" id="button_box" class="oe_button_box">
@@ -56,7 +58,26 @@
                             <field name="date_start" required="True"/>
                             <field name="week_template_ids" widget="many2many_tags"/>
                         </group>
+                        <notebook>
+                            <page string="Roles Data">
+                                <field name="plan_role_ids">
+                                    <list>
+                                        <field name="role_id" />
+                                        <field name="duration" widget="float_time"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Resource Data">
+                                <field name="plan_resource_ids">
+                                    <list>
+                                        <field name="resource_id" />
+                                        <field name="duration" widget="float_time"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
+                    <chatter/>
                 </form>
             </field>
         </record>
@@ -79,6 +100,7 @@
                             <field name="resource_ids" widget="many2many_tags"/>
                         </group>
                     </sheet>
+                    <chatter/>
                 </form>
             </field>
         </record>
@@ -105,6 +127,7 @@
                             <field name="duration" widget="float_time"/>
                         </group>
                     </sheet>
+                    <chatter/>
                 </form>
             </field>
         </record>
@@ -114,6 +137,9 @@
             <field name="model">resource.week.template</field>
             <field name="arch" type="xml">
                 <form string="Week Template">
+                    <header>
+                        <button name="update_template_lines" type="object" string="Updated Shifts" class="btn-primary"/>
+                    </header>
                     <sheet>
                         <div name="button_box" id="button_box" class="oe_button_box">
                             <button name="week_template_shift_action" class="oe_stat_button " type="object" icon="fa-calendar">
@@ -127,12 +153,50 @@
                                 </div>
                             </h1>
                         </div>
-
-                        <group>
-
-                        </group>
-
+                        <notebook>
+                            <page string="Shift Data">
+                                <group>
+                                    <field name="week_template_line_ids" nolabel="1">
+                                        <list>
+                                            <field name="role_id"/>
+                                            <field name="duration" widget="float_time"/>
+                                        </list>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
                     </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_resource_week_template_shift_form" model="ir.ui.view">
+            <field name="name">resource.week.template.shift.form</field>
+            <field name="model">resource.week.template.shift</field>
+            <field name="arch" type="xml">
+                <form string="Resource Template Shifts">
+                    <header>
+                        <button name="action_template_shift_wizard" type="object" string="Generate Shifts" class="btn-primary" display="always"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title pe-0">
+                            <h1 class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex w-100">
+                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Shift"/>
+                                </div>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_stop"/>
+                        </group>
+                        <group>
+                            <field name="role_id"/>
+                            <field name="duration" widget="float_time"/>
+                        </group>
+                    </sheet>
+                    <chatter/>
                 </form>
             </field>
         </record>
@@ -253,6 +317,18 @@
                     <field name="name"/>
                     <field name="role_id" filters="1" />
                 </calendar>
+            </field>
+        </record>
+
+        <!-- Pivot Views -->
+
+        <record id="view_resource_week_template_shift_pivot" model="ir.ui.view">
+            <field name="name">resource.week.template.pivot.view</field>
+            <field name="model">resource.week.template.shift</field>
+            <field name="arch" type="xml">
+                <pivot string="Template Shifts">
+
+                </pivot>
             </field>
         </record>
 

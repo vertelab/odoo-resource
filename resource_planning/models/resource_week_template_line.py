@@ -12,8 +12,9 @@ _logger = logging.getLogger(__name__)
 class ResourceWeekTemplateLine(models.Model):
     _name = 'resource.week.template.line'
     _description = 'Resource Week Template Line'
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
     week_template_id = fields.Many2one(comodel_name="resource.week.template")
     #week_template_shift_id = fields.Many2one(comodel_name="resource.week.template.shift") 
-    role_id = many2one('resource.role')  
+    role_id = fields.Many2one(comodel_name='resource.role')  
     duration = fields.Float()

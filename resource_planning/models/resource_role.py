@@ -7,6 +7,7 @@ _logger = logging.getLogger(__name__)
 class ResourceRole(models.Model):
     _name = 'resource.role'
     _description = 'Resource Role'
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(required=True)
     description = fields.Html()

@@ -12,6 +12,7 @@ MODELS_LIST = ["project.project"]
 class ResourceSlot(models.Model):
     _name="resource.slot"
     _description="Resource Slot"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
 
     name = fields.Char(compute="_compute_name",store=True)

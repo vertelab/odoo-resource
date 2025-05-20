@@ -11,6 +11,7 @@ _logger = logging.getLogger(__name__)
 class ResourcPlanning(models.Model):
     _name = 'resource.planning'
     _description = 'Resource Planning'
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char()
     plan_ids = fields.One2many(comodel_name="resource.plan", inverse_name="planning_id")
