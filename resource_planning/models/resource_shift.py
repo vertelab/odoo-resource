@@ -22,6 +22,8 @@ class ResourceShift(models.Model):
     date_start = fields.Datetime()
     date_stop = fields.Datetime(compute="_compute_date_stop",store=True)
     duration = fields.Float()
+    attendance_id = fields.Many2one(comodel_name="hr.attendance")
+    worked_hours = fields.Float(related="attendance_id.worked_hours")
     day = fields.Selection([
         ('0', 'Monday'),
         ('1', 'Tuesday'),
@@ -58,7 +60,6 @@ class ResourceShift(models.Model):
             else:
                 record.week_start_date = datetime.now()
 
-
     @api.depends("date_start")
     def _compute_day(self):
         for record in self:
@@ -87,6 +88,16 @@ class ResourceShift(models.Model):
                     record.name = f"{record.resource_id.name} " + record.name
             else:
                 record.name = False
+
+    # @api.constrains('role_id','resource_id')
+    # def _check_resource_role(self):
+    #     for shift in self:
+    #         if shift.
+
+    def action_assign_shifts(self):
+        employees = self.env["resource.resource"].search([("role_id", "!=", False)])
+        for employee in employees:
+            role_shifts = self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", False)])
 
 
     def _group_expand_resource_id(self, resource_id, domain):

@@ -16,7 +16,8 @@ class ResourcePlanResource(models.Model):
     plan_id = fields.Many2one(comodel_name="resource.plan")
     resource_id = fields.Many2one(comodel_name="resource.resource")
     shift_ids = fields.One2many(related="plan_id.shift_ids")
-    duration= fields.Float(compute="_compute_duration")
+    duration = fields.Float(string="Planned Hours",compute="_compute_duration")
+    worked_hours = fields.Float(compute="_compute_worked_hours") 
 
     def _compute_duration(self):
         for record in self:
@@ -25,3 +26,11 @@ class ResourcePlanResource(models.Model):
                 record.duration = sum(filtered_shifts.mapped("duration"))
             else:
                 record.duration = False
+
+    def _compute_worked_hours(self):
+        for record in self:
+            filtered_shifts = record.shift_ids.filtered(lambda s: s.resource_id.id == record.resource_id.id)
+            if filtered_shifts:
+                record.worked_hours = sum(filtered_shifts.mapped("worked_hours"))
+            else:
+                record.worked_hours = False

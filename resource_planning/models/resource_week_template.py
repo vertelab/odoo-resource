@@ -23,9 +23,7 @@ class ResourceWeekTemplate(models.Model):
             template.week_template_line_ids.unlink()
             role_ids = set(template.week_template_shift_ids.mapped("role_id"))
             for role in role_ids:
-                filterd_shifts = template.week_template_shift_ids.filtered(lambda s: s.role_id.id == role.id)
-                total_duration = sum(filterd_shifts.mapped("duration"))
-                self.env["resource.week.template.line"].create({"week_template_id": template.id, "role_id": role.id, "duration": total_duration})
+                self.env["resource.week.template.line"].create({"week_template_id": template.id, "role_id": role.id})
                 
 
     @api.depends("week_template_shift_ids")

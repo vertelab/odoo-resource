@@ -1,5 +1,6 @@
 from . import res_users
 from . import hr_employee
+from . import hr_attendance
 from . import resource
 from . import resource_planning
 from . import resource_plan

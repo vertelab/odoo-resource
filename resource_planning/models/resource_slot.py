@@ -14,7 +14,6 @@ class ResourceSlot(models.Model):
     _description="Resource Slot"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
-
     name = fields.Char(compute="_compute_name",store=True)
     project_id = fields.Many2one(comodel_name="project.project")
     ref_object = fields.Reference(string='Object', selection=lambda m: [(model.model, model.name) for model in

@@ -64,6 +64,7 @@
                                     <list>
                                         <field name="role_id" />
                                         <field name="duration" widget="float_time"/>
+                                        <field name="worked_hours" widget="float_time"/>
                                     </list>
                                 </field>
                             </page>
@@ -72,6 +73,7 @@
                                     <list>
                                         <field name="resource_id" />
                                         <field name="duration" widget="float_time"/>
+                                        <field name="worked_hours" widget="float_time"/>
                                     </list>
                                 </field>
                             </page>
