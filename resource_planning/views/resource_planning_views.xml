@@ -254,6 +254,7 @@
                     <field name="role_id" />
                     <field name="resource_id" />
                     <field name="date_start"/>
+                    <field name="week_number_string"/>
                     <filter string="Start Date" name="date_start" date="date_start" />
                     <filter string="Monday" name="monday" domain="[('day', '=', 0)]" />
                     <filter string="Tuesday" name="tuesday" domain="[('day', '=', 1)]" />
@@ -262,8 +263,11 @@
                     <filter string="Friday" name="friday" domain="[('day', '=', 4)]" />
                     <filter string="Saturday" name="saturday" domain="[('day', '=', 5)]" />
                     <filter string="Sunday" name="sunday" domain="[('day', '=', 6)]" />
-                    <filter string="This Week" name="this_week" domain="[('date_start','&gt;=', (datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())).strftime('%Y-%m-%d 00:00:00')), ('date_start','&lt;=', (datetime.date.today() + datetime.timedelta(days=(6 - datetime.date.today().weekday()))).strftime('%Y-%m-%d 23:59:59'))]"/>
-                    <!-- <filter string="week1" name="week1" domain="[('date_start','&gt;=',(context_today - relativedelta(days=context_today.weekday()).strftime('%%Y-%%m-%%d 00:00:00'))),('date_start','&lt;',(context_today + relativedelta(days=(7 - context_today.weekday())).strftime('%%Y-%%m-%%d 23:59:59')))]" /> -->
+                    <!-- <filter string="Current Week" domain="[('week_number_string', '=', (context_today()+relativedelta(weeks=0)).strftime('%%W'))]"/> -->
+                    <filter string="Next Week" name="next_week" domain="[('date_start','&gt;=', (context_today() + relativedelta(weeks=1)).strftime('%%Y-%%m-01')), 
+                        ('date_start','&lt;', (context_today() + relativedelta(weeks=2)).strftime('%%Y-%%m-01'))]"/>
+                    <filter string="Last Week" name="last_week" domain="[('date_start','&gt;=', (context_today() - relativedelta(weeks=1)).strftime('%%Y-%%m-01')), 
+                        ('date_start','&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
                     <group expand="0" string="Group By">
                         <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
                         <filter string="Roles" name="group_by_role" context="{'group_by': 'role_id'}" />

@@ -1,7 +1,8 @@
 import logging
 from datetime import timedelta, datetime
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError, ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -33,6 +34,9 @@ class ResourceShift(models.Model):
         ('5', 'Saturday'),
         ('6', 'Sunday')
     ], compute="_compute_day", store=True)
+    week_number = fields.Integer(compute="_compute_week_number", store=True)
+    week_number_string = fields.Char(compute="_compute_week_number_string", store=True)
+
 
     start_time = fields.Float(
         string="Start Time",
@@ -45,6 +49,24 @@ class ResourceShift(models.Model):
         string="Duration (Hours)",
         help="Shift duration in decimal hours",
     )
+
+    @api.constrains('role_id','resource_id')
+    def _check_resource_role(self):
+        for shift in self:
+            if shift.resource_id:
+                if shift.role_id.id != shift.resource_id.role_id.id:
+                    raise UserError(_(f"{shift.resource_id.name} doesn't have the role {shift.role_id.name}."))
+
+    @api.depends("date_start")
+    def _compute_week_number(self):
+        for record in self:
+            record.week_number = record.date_start.isocalendar().week
+    
+
+    @api.depends("week_number")
+    def _compute_week_number_string(self):
+        for record in self:
+            record.week_number_string = str(record.week_number)
 
     @api.depends("resource_id")
     def _compute_employee_id(self):
@@ -89,15 +111,15 @@ class ResourceShift(models.Model):
             else:
                 record.name = False
 
-    # @api.constrains('role_id','resource_id')
-    # def _check_resource_role(self):
-    #     for shift in self:
-    #         if shift.
-
     def action_assign_shifts(self):
         employees = self.env["resource.resource"].search([("role_id", "!=", False)])
         for employee in employees:
-            role_shifts = self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", False)])
+
+            weeks = self.env["resource.shift"].search([]).mapped("week_number")
+            for week in weeks:
+                role_shifts = self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", False),("week_number", "=", week)])
+                for shift in role_shifts:
+                    pass
 
 
     def _group_expand_resource_id(self, resource_id, domain):
