@@ -22,6 +22,8 @@
                             </h1>
                         </div>
                         <group>
+                            <field name="company_id"  groups="base.group_multi_company"/>
+                                    <field name="department_id"  />
                         </group>
                     </sheet>
                     <chatter/>
@@ -60,20 +62,20 @@
                         </group>
                         <notebook>
                             <page string="Roles Data">
-                                <field name="plan_role_ids">
-                                    <list>
+                                <field name="plan_role_ids" no_open="1">
+                                    <list create="false" edit="false" delete="false">
                                         <field name="role_id" />
-                                        <field name="duration" widget="float_time"/>
-                                        <field name="worked_hours" widget="float_time"/>
+                                        <field name="duration" widget="float_time" sum="True"/>
+                                        <field name="worked_hours" widget="float_time" sum="True"/>
                                     </list>
                                 </field>
                             </page>
                             <page string="Resource Data">
-                                <field name="plan_resource_ids">
-                                    <list>
-                                        <field name="resource_id" />
-                                        <field name="duration" widget="float_time"/>
-                                        <field name="worked_hours" widget="float_time"/>
+                                <field name="plan_resource_ids" no_open="1">
+                                    <list create="false" edit="false" delete="false">
+                                        <field name="resource_id" widget="many2one_avatar_user" />
+                                        <field name="duration" widget="float_time" sum="True"/>
+                                        <field name="worked_hours" widget="float_time" sum="True"/>
                                     </list>
                                 </field>
                             </page>
@@ -83,6 +85,24 @@
                 </form>
             </field>
         </record>
+        
+        
+               <record id="view_resource_plan_list" model="ir.ui.view">
+                  <field name="name">resource.plan.list</field>
+                  <field name="model">resource.plan</field>
+                  <field name="arch" type="xml">
+                    <list string="Resource Plans">
+                      <header>
+                        <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" display="always" />
+                      </header>
+                      <field name="name" />
+                      <field name="date_start" required="True" />
+                      <field name="week_template_ids" widget="many2many_tags" />
+                      <field name="duration" widget="float_time" sum="True" />
+                      <field name="worked_hours" widget="float_time" sum="True" />
+                    </list>
+                  </field>
+                </record>
 
         <record id="view_resource_role_form" model="ir.ui.view">
             <field name="name">resource.role.form</field>
@@ -158,10 +178,10 @@
                         <notebook>
                             <page string="Shift Data">
                                 <group>
-                                    <field name="week_template_line_ids" nolabel="1">
-                                        <list>
+                                    <field name="week_template_line_ids" nolabel="1" no_open="1">
+                                        <list create="false" edit="false" delete="false">
                                             <field name="role_id"/>
-                                            <field name="duration" widget="float_time"/>
+                                            <field name="duration" widget="float_time" sum="True"/>
                                         </list>
                                     </field>
                                 </group>
@@ -220,10 +240,13 @@
             <field name="model">resource.shift</field>
             <field name="arch" type="xml">
                 <list string="resource Shifts">
+                                                                        <header>
+                        <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
+                      </header>
                     <field name="name"/>
                     <field name="role_id"/>
                     <field name="date_start"/>
-                    <field name="duration" widget="float_time"/>
+                    <field name="duration" widget="float_time" sum="True" />
                     <field name="date_stop"/>
                 </list>
             </field>
@@ -271,6 +294,9 @@
                     <group expand="0" string="Group By">
                         <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
                         <filter string="Roles" name="group_by_role" context="{'group_by': 'role_id'}" />
+                        <filter string="Week" name="group_by_week" context="{'group_by': 'week_number'}" />
+                        <filter string="Date" name="group_by_date" context="{'group_by': 'date_start'}" />
+                        <filter string="Department" name="group_by_department" context="{'group_by': 'department_id'}" />
                     </group>
                 </search>
             </field>
@@ -300,6 +326,66 @@
         </record>
 
         <!-- Kanban Views -->
+          <record id="resource_shift_kanban" model="ir.ui.view">
+    <field name="name">resource.shift.kanban</field>
+    <field name="model">resource.shift</field>
+     <field name="arch" type="xml">
+      <kanban highlight_color="color" quick_create="true">
+                                <header>
+                        <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
+                      </header>
+        <field name="color" />
+        <field name="name" />
+        <field name="status_color" />
+        <field name="image_128" />
+        <field name="show_hr_icon_display" />
+        <field name="hr_icon_display" />
+        <field name="company_id" />
+        <templates>
+          <t t-name="menu">
+            <a role="menuitem" type="open" class="dropdown-item" t-if="widget.editable">Edit</a>
+            <a role="menuitem" type="delete" class="dropdown-item" t-if="widget.deletable">Delete</a>
+            <field name="color" widget="kanban_color_picker" />
+          </t>
+          <t t-name="card" class="flex-row">
+            <aside class="o_kanban_aside_full">
+              <t t-if="record.image_128.raw_value">
+                <field name="image_128" widget="background_image" options="{'zoom': true, 'zoom_delay': 1000}" class="d-block position-relative" />
+              </t>
+              <div t-else="" class="d-flex align-items-center justify-content-center bg-100 bg-gradient">
+                <svg class="w-75 h-75 opacity-50" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <g fill="currentColor">
+                    <path d="M 10 11 C 4.08 11 2 14 2 16 L 2 19 L 18 19 L 18 16 C 18 14 15.92 11 10 11 Z" />
+                    <circle cx="10" cy="5.5" r="4.5" />
+                  </g>
+                </svg>
+              </div>
+            </aside>
+            <main class="ms-2">
+              <div>
+                <field class="fw-bold fs-5" name="name" placeholder="Shift Name" />
+                <div t-if="record.show_hr_icon_display.raw_value" class="float-end">
+                  <field name="hr_icon_display" class="o_employee_availability" widget="hr_presence_status" />
+                </div>
+              </div>
+              <footer>
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <div class="d-flex align-items-center">
+                    <span class="fa fa-clock-o me-2" title="Dates" />
+                    <!--
+                         <field name="last_run" t-if="record.last_run.value != False" />
+                    -->
+                  </div>
+                  <span t-att-class="'o_status_bubble mx-0 o_color_bubble_' + record.status_color.value or 0" />
+                </div>
+              </footer>
+            </main>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+        
 
         <!-- Calandar Views -->
 

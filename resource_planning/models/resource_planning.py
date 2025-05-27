@@ -18,6 +18,9 @@ class ResourcPlanning(models.Model):
     date_start = fields.Datetime()
     date_stop = fields.Datetime()
     plan_count = fields.Integer(compute="_compute_plan_count")
+    company_id = fields.Many2one(comodel_name="res.company")
+    department_id = fields.Many2one(comodel_name="hr.department")
+
 
     @api.depends("plan_ids")
     def _compute_plan_count(self):

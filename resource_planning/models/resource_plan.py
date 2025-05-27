@@ -13,17 +13,32 @@ class ResourcePlan(models.Model):
     _description = 'Resource Plan'
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
-    name = fields.Char()
-    planning_id = fields.Many2one(comodel_name="resource.plan")
-    week_template_ids = fields.Many2many(comodel_name="resource.week.template")
     date_start = fields.Date()
-    shift_ids = fields.One2many(comodel_name="resource.shift",inverse_name="plan_id")
-    shift_count = fields.Integer(compute="_compute_shift_count")
-    slot_ids = fields.One2many(comodel_name="resource.slot",inverse_name="plan_id")
-    slot_count = fields.Integer(compute="_compute_slot_count")
-    plan_role_ids = fields.One2many(comodel_name="resource.plan.role", inverse_name="plan_id")
+    duration= fields.Float(string="Planned Hours",compute="_compute_duration")
+    name = fields.Char()
     plan_resource_ids = fields.One2many(comodel_name="resource.plan.resource", inverse_name="plan_id")
+    plan_role_ids = fields.One2many(comodel_name="resource.plan.role", inverse_name="plan_id")
+    planning_id = fields.Many2one(comodel_name="resource.planning")
+    shift_count = fields.Integer(compute="_compute_shift_count")
+    shift_ids = fields.One2many(comodel_name="resource.shift",inverse_name="plan_id")
+    slot_count = fields.Integer(compute="_compute_slot_count")
+    slot_ids = fields.One2many(comodel_name="resource.slot",inverse_name="plan_id")
+    week_template_ids = fields.Many2many(comodel_name="resource.week.template")
+    worked_hours = fields.Float(compute="_compute_worked_hours") 
 
+    def _compute_duration(self):
+        for record in self:
+            if record.shift_ids:
+                record.duration = sum(record.shift_ids.mapped("duration"))
+            else:
+                record.duration = False
+                
+    def _compute_worked_hours(self):
+        for record in self:
+            if record.shift_ids:
+                record.worked_hours = sum(record.shift_ids.mapped("worked_hours"))
+            else:
+                record.worked_hours = False
 
     @api.depends("shift_ids")
     def _compute_shift_count(self):

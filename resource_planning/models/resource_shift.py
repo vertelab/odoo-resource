@@ -11,20 +11,11 @@ class ResourceShift(models.Model):
     _description = 'Resource Shift'
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
-    name = fields.Char(string="Shift Name", compute="_compute_name")
-    role_id = fields.Many2one(comodel_name="resource.role")
-    plan_id = fields.Many2one(comodel_name="resource.plan")
-    slot_id = fields.Many2one(comodel_name="resource.slot")
-    employee_id = fields.Many2one(comodel_name="hr.employee", compute="_compute_employee_id",store=True)
-    res_users_id = fields.Many2one(comodel_name="res.users", related="resource_id.user_id")
-    week_template_id = fields.Many2one(comodel_name="resource.week.template")
-    resource_id = fields.Many2one(comodel_name="resource.resource",group_expand="_group_expand_resource_id",domain="[('resource_type', '=', 'user')]")
-    week_start_date = fields.Datetime(compute="_compute_week_start_date",store=True)
+    attendance_id = fields.Many2one(comodel_name="hr.attendance")
+    color = fields.Integer()
+    company_id = fields.Many2one(comodel_name='res.company',)
     date_start = fields.Datetime()
     date_stop = fields.Datetime(compute="_compute_date_stop",store=True)
-    duration = fields.Float()
-    attendance_id = fields.Many2one(comodel_name="hr.attendance")
-    worked_hours = fields.Float(related="attendance_id.worked_hours")
     day = fields.Selection([
         ('0', 'Monday'),
         ('1', 'Tuesday'),
@@ -33,29 +24,48 @@ class ResourceShift(models.Model):
         ('4', 'Friday'),
         ('5', 'Saturday'),
         ('6', 'Sunday')
-    ], compute="_compute_day", store=True)
+        ], compute="_compute_day", store=True)
+    department_id = fields.Many2one(related="plan_id.planning_id.department_id")
+    duration = fields.Float()
+    duration = fields.Float(string="Duration (Hours)",help="Shift duration in decimal hours",)
+    employee_id = fields.Many2one(comodel_name="hr.employee", compute="_compute_employee_id",store=True)
+    end_time = fields.Float(string="End Time", )
+    hr_icon_display = fields.Selection(related='employee_id.hr_icon_display')
+    image_128 = fields.Binary(related="employee_id.image_128")
+    name = fields.Char(string="Shift Name", compute="_compute_name")
+    plan_id = fields.Many2one(comodel_name="resource.plan")
+    planning_id = fields.Many2one(related="plan_id.planning_id")
+    res_users_id = fields.Many2one(comodel_name="res.users", related="resource_id.user_id")
+    resource_id = fields.Many2one(comodel_name="resource.resource",group_expand="_group_expand_resource_id",domain="[('resource_type', '=', 'user')]")
+    role_id = fields.Many2one(comodel_name="resource.role")
+    show_hr_icon_display = fields.Boolean(related="employee_id.show_hr_icon_display")
+    slot_id = fields.Many2one(comodel_name="resource.slot")
+    start_time = fields.Float(string="Start Time", help="Shift start time (24-hour format)")
+    status_color = fields.Integer(compute="compute_status_color")
     week_number = fields.Integer(compute="_compute_week_number", store=True)
     week_number_string = fields.Char(compute="_compute_week_number_string", store=True)
+    week_start_date = fields.Datetime(compute="_compute_week_start_date",store=True)
+    week_template_id = fields.Many2one(comodel_name="resource.week.template")
+    worked_hours = fields.Float(related="attendance_id.worked_hours")
 
 
-    start_time = fields.Float(
-        string="Start Time",
-        help="Shift start time (24-hour format)"
-    )
-    end_time = fields.Float(
-        string="End Time",
-    )
-    duration = fields.Float(
-        string="Duration (Hours)",
-        help="Shift duration in decimal hours",
-    )
-
-    @api.constrains('role_id','resource_id')
-    def _check_resource_role(self):
+    def compute_status_color(self):
         for shift in self:
+            shift.status_color = 0 # Grey
             if shift.resource_id:
                 if shift.role_id.id != shift.resource_id.role_id.id:
-                    raise UserError(_(f"{shift.resource_id.name} doesn't have the role {shift.role_id.name}."))
+                    shift.status_color = 1  # Red
+                else:
+                    shift.status_color = 10  # Green
+            else:
+                shift.status_color = 3  # Orange
+
+    # ~ @api.constrains('role_id','resource_id')
+    # ~ def _check_resource_role(self):
+        # ~ for shift in self:
+            # ~ if shift.resource_id:
+                # ~ if shift.role_id.id != shift.resource_id.role_id.id:
+                    # ~ raise UserError(_(f"{shift.resource_id.name} doesn't have the role {shift.role_id.name}."))
 
     @api.depends("date_start")
     def _compute_week_number(self):
@@ -114,13 +124,11 @@ class ResourceShift(models.Model):
     def action_assign_shifts(self):
         employees = self.env["resource.resource"].search([("role_id", "!=", False)])
         for employee in employees:
-
             weeks = self.env["resource.shift"].search([]).mapped("week_number")
             for week in weeks:
                 role_shifts = self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", False),("week_number", "=", week)])
                 for shift in role_shifts:
                     pass
-
 
     def _group_expand_resource_id(self, resource_id, domain):
         _logger.error(f"{domain=}")

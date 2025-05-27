@@ -56,6 +56,7 @@ More information:
         'views/res_users_views.xml',
         'wizard/week_template_wizard_views.xml'
        ],
+    'application': True,
     'installable': True,
 }
 
