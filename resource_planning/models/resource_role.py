@@ -15,3 +15,7 @@ class ResourceRole(models.Model):
         comodel_name='resource.resource',
         string="Available Resources"
     )
+    resource_type = fields.Selection([
+        ('user', 'Human'),
+        ('material', 'Material')], string='Type',
+        default='user', required=True)

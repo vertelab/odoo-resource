@@ -149,7 +149,8 @@ model.action_assign_shifts()
                         </div>
                         <group>
                             <field name="description"/>
-                            <field name="resource_ids" widget="many2many_tags"/>
+                            <field name="resource_ids" widget="many2many_tags" domain="[('resource_type','=',resource_type)]"/>
+                            <field name="resource_type" />
                         </group>
                     </sheet>
                     <chatter/>
@@ -274,10 +275,12 @@ model.action_assign_shifts()
                 <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
               </header>
               <field name="name" />
-              <field name="role_id" />
-              <field name="date_start" />
-              <field name="duration" widget="float_time" sum="True" />
-              <field name="date_stop" />
+              <field name="role_id" optional="hide" />
+              <field name="date_start" optional="hide" />
+                            <field name="date_stop" optional="hide" />
+
+              <field name="duration" widget="float_time" sum="True" optional="hide"/>
+              <field name="worked_hours" widget="float_time" sum="True"  optional="hide"/>
             </list>
           </field>
         </record>
@@ -361,9 +364,9 @@ model.action_assign_shifts()
     <field name="model">resource.shift</field>
      <field name="arch" type="xml">
       <kanban highlight_color="color" quick_create="true">
-                                <header>
-                        <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
-                      </header>
+        <header>
+          <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
+        </header>
         <field name="color" />
         <field name="name" />
         <field name="status_color" />
@@ -371,12 +374,15 @@ model.action_assign_shifts()
         <field name="show_hr_icon_display" />
         <field name="hr_icon_display" />
         <field name="company_id" />
+        <progressbar field="activity_state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}" sum_field="duration" recurring_revenue_sum_field="worked_hours" help="This bar allows to filter the opportunities based on scheduled activities."/>
         <templates>
           <t t-name="menu">
             <a role="menuitem" type="open" class="dropdown-item" t-if="widget.editable">Edit</a>
             <a role="menuitem" type="delete" class="dropdown-item" t-if="widget.deletable">Delete</a>
             <field name="color" widget="kanban_color_picker" />
           </t>
+                 
+          
           <t t-name="card" class="flex-row">
             <aside class="o_kanban_aside_full">
               <t t-if="record.image_128.raw_value">
@@ -419,16 +425,29 @@ model.action_assign_shifts()
 
         <!-- Calandar Views -->
 
+<!--
         <record id="view_resource_shift_calendar" model="ir.ui.view">
-            <field name="name">resource.calendar</field>
-            <field name="model">resource.shift</field>
-            <field name="arch" type="xml">
-                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" quick_create="1" quick_create_view_id="%(resource_planning.view_resource_shift_test_form)d" color="resource_id" hide_time="true">
-                    <field name="name"/>
-                    <field name="role_id" filters="1" />
-                    <field name="resource_id" filters="1" />
-                </calendar>
-            </field>
+          <field name="name">resource.calendar</field>
+          <field name="model">resource.shift</field>
+          <field name="arch" type="xml">
+            <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" quick_create="1" quick_create_view_id="%(resource_planning.view_resource_shift_test_form)d" color="resource_id" hide_time="true">
+              <field name="name" />
+              <field name="role_id" filters="1" />
+              <field name="resource_id" filters="1" />
+            </calendar>
+          </field>
+        </record>
+-->        
+<record id="view_resource_shift_calendar" model="ir.ui.view">
+          <field name="name">resource.shift.calendar</field>
+          <field name="model">resource.shift</field>
+          <field name="arch" type="xml">
+            <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" quick_create="1" quick_create_view_id="%(resource_planning.view_resource_shift_test_form)d" color="resource_id" hide_time="true">
+              <field name="name" />
+              <field name="role_id" filters="1" />
+              <field name="resource_id" filters="1" />
+            </calendar>
+          </field>
         </record>
 
         <record id="view_resource_week_template_calendar" model="ir.ui.view">
