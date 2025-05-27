@@ -1,6 +1,16 @@
 <odoo>
     <data>
 
+        <record id="action_assign_shifts" model="ir.actions.server">
+            <field name="name">Assign Shifts</field>
+            <field name="model_id" ref="resource_planning.model_resource_shift"/>
+            <field name="binding_model_id" ref="resource_planning.model_resource_shift"/>
+            <field name="state">code</field>
+            <field name="code">
+model.action_assign_shifts()
+            </field>
+        </record>
+
         <!-- From Views -->
 
         <record id="view_resource_planning_form" model="ir.ui.view">
@@ -23,6 +33,26 @@
                         </div>
                         <group>
                         </group>
+                        <!-- <notebook>
+                            <page string="Roles Data">
+                                <field name="plan_role_ids">
+                                    <list>
+                                        <field name="role_id" />
+                                        <field name="duration" widget="float_time"/>
+                                        <field name="worked_hours" widget="float_time"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Resource Data">
+                                <field name="plan_resource_ids">
+                                    <list>
+                                        <field name="resource_id" />
+                                        <field name="duration" widget="float_time"/>
+                                        <field name="worked_hours" widget="float_time"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook> -->
                     </sheet>
                     <chatter/>
                 </form>
@@ -307,7 +337,7 @@
             <field name="name">resource.calendar</field>
             <field name="model">resource.shift</field>
             <field name="arch" type="xml">
-                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" color="resource_id" hide_time="true">
+                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" quick_create="1" quick_create_view_id="%(resource_planning.view_resource_shift_test_form)d" color="resource_id" hide_time="true">
                     <field name="name"/>
                     <field name="role_id" filters="1" />
                     <field name="resource_id" filters="1" />
@@ -335,6 +365,16 @@
                 <pivot string="Template Shifts">
 
                 </pivot>
+            </field>
+        </record>
+
+        <record id="view_resource_shift_test_form" model="ir.ui.view">
+            <field name="name">resource.shift.test.from.view</field>
+            <field name="model">resource.shift</field>
+            <field name="arch" type="xml">
+                <form string="Test Shifts">
+                    <field name="role_id"/>
+                </form>
             </field>
         </record>
 

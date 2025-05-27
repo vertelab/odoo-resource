@@ -11,9 +11,10 @@ class ResourceShift(models.Model):
     _description = 'Resource Shift'
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
-    name = fields.Char(string="Shift Name", compute="_compute_name")
-    role_id = fields.Many2one(comodel_name="resource.role")
+    name = fields.Char(string="Shift Name", compute="_compute_name", store=True)
+    role_id = fields.Many2one(comodel_name="resource.role", required=True)
     plan_id = fields.Many2one(comodel_name="resource.plan")
+    planning_id = fields.Many2one(comodel_name="resource.planning")
     slot_id = fields.Many2one(comodel_name="resource.slot")
     employee_id = fields.Many2one(comodel_name="hr.employee", compute="_compute_employee_id",store=True)
     res_users_id = fields.Many2one(comodel_name="res.users", related="resource_id.user_id")
@@ -95,7 +96,7 @@ class ResourceShift(models.Model):
             else:
                 record.date_stop = False
 
-    @api.depends("date_start","date_stop","resource_id")
+    @api.depends("date_start","date_stop","resource_id","role_id")
     def _compute_name(self):
         for record in self:
             if record.date_start and record.date_stop:
@@ -113,13 +114,37 @@ class ResourceShift(models.Model):
 
     def action_assign_shifts(self):
         employees = self.env["resource.resource"].search([("role_id", "!=", False)])
+        weeks = set(self.env["resource.shift"].search([]).mapped("week_number"))
+        days = set(self.env["resource.shift"].search([]).mapped("day"))
+        _logger.error(f"{weeks=}")
+        _logger.error(f"{days=}")
         for employee in employees:
-
-            weeks = self.env["resource.shift"].search([]).mapped("week_number")
             for week in weeks:
-                role_shifts = self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", False),("week_number", "=", week)])
-                for shift in role_shifts:
-                    pass
+                for day in days:
+                    role_shifts = self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", False),("week_number", "=", week),("day", "=", day)])
+                    _logger.error(f"{role_shifts=}")
+                    # role_shifts = self._filter_unique_shifts(role_shifts)
+                    if role_shifts:
+                        while True:
+                            if sum(role_shifts.mapped("duration")) + sum(self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", employee.id),("week_number", "=", week),("day", "=", day)]).mapped("duration")) > 8:
+                                role_shifts = role_shifts.filtered(lambda r: r.id != role_shifts.ids[-1])
+                            else:
+                                break
+                        for shift in role_shifts:
+                            _logger.error(f"{shift=}")
+                            shift.resource_id = employee.id
+
+                
+
+    def _filter_unique_shifts(self,shifts):
+        overlapping_shifts = set()
+        for check_shift in shifts:
+            for shift in shifts:
+                if check_shift.date_start >= shift.date_start and check_shift.date_start < shift.date_stop:
+                    overlapping_shifts.add(check_shift.id)
+        unique_shifts = shifts.filtered(lambda s: s.id not in overlapping_shifts)
+        _logger.error(f"{unique_shifts=}")
+        return unique_shifts
 
 
     def _group_expand_resource_id(self, resource_id, domain):
