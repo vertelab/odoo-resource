@@ -57,7 +57,7 @@ class ResourcePlan(models.Model):
             'res_model': 'resource.shift',
             'view_mode': 'kanban,calendar,form,list,pivot',
             'target': 'current',
-            'context': {'group_by':'resource_id'},
+            'context': {'group_by':'resource_id','default_plan_id': self.id},
             'domain': [('plan_id', '=', self.id)]
         }
         return action

@@ -26,18 +26,17 @@ class ResourceShift(models.Model):
         ('6', 'Sunday')
         ], compute="_compute_day", store=True)
     department_id = fields.Many2one(related="plan_id.planning_id.department_id")
-    duration = fields.Float()
     duration = fields.Float(string="Duration (Hours)",help="Shift duration in decimal hours",)
     employee_id = fields.Many2one(comodel_name="hr.employee", compute="_compute_employee_id",store=True)
     end_time = fields.Float(string="End Time", )
     hr_icon_display = fields.Selection(related='employee_id.hr_icon_display')
     image_128 = fields.Binary(related="employee_id.image_128")
-    name = fields.Char(string="Shift Name", compute="_compute_name")
+    name = fields.Char(string="Shift Name", compute="_compute_name", store=True)
     plan_id = fields.Many2one(comodel_name="resource.plan")
     planning_id = fields.Many2one(related="plan_id.planning_id")
     res_users_id = fields.Many2one(comodel_name="res.users", related="resource_id.user_id")
     resource_id = fields.Many2one(comodel_name="resource.resource",group_expand="_group_expand_resource_id",domain="[('resource_type', '=', 'user')]")
-    role_id = fields.Many2one(comodel_name="resource.role")
+    role_id = fields.Many2one(comodel_name="resource.role", required=True)
     show_hr_icon_display = fields.Boolean(related="employee_id.show_hr_icon_display")
     slot_id = fields.Many2one(comodel_name="resource.slot")
     start_time = fields.Float(string="Start Time", help="Shift start time (24-hour format)")
@@ -47,7 +46,6 @@ class ResourceShift(models.Model):
     week_start_date = fields.Datetime(compute="_compute_week_start_date",store=True)
     week_template_id = fields.Many2one(comodel_name="resource.week.template")
     worked_hours = fields.Float(related="attendance_id.worked_hours")
-
 
     def compute_status_color(self):
         for shift in self:
@@ -105,7 +103,7 @@ class ResourceShift(models.Model):
             else:
                 record.date_stop = False
 
-    @api.depends("date_start","date_stop","resource_id")
+    @api.depends("date_start","date_stop","resource_id","role_id")
     def _compute_name(self):
         for record in self:
             if record.date_start and record.date_stop:
@@ -123,12 +121,36 @@ class ResourceShift(models.Model):
 
     def action_assign_shifts(self):
         employees = self.env["resource.resource"].search([("role_id", "!=", False)])
+        weeks = set(self.env["resource.shift"].search([]).mapped("week_number"))
+        days = set(self.env["resource.shift"].search([]).mapped("day"))
+        _logger.error(f"{weeks=}")
+        _logger.error(f"{days=}")
         for employee in employees:
             weeks = self.env["resource.shift"].search([]).mapped("week_number")
             for week in weeks:
-                role_shifts = self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", False),("week_number", "=", week)])
-                for shift in role_shifts:
-                    pass
+                for day in days:
+                    role_shifts = self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", False),("week_number", "=", week),("day", "=", day)])
+                    _logger.error(f"{role_shifts=}")
+                    # role_shifts = self._filter_unique_shifts(role_shifts)
+                    if role_shifts:
+                        while True:
+                            if sum(role_shifts.mapped("duration")) + sum(self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", employee.id),("week_number", "=", week),("day", "=", day)]).mapped("duration")) > 8:
+                                role_shifts = role_shifts.filtered(lambda r: r.id != role_shifts.ids[-1])
+                            else:
+                                break
+                        for shift in role_shifts:
+                            _logger.error(f"{shift=}")
+                            shift.resource_id = employee.id
+
+    def _filter_unique_shifts(self,shifts):
+        overlapping_shifts = set()
+        for check_shift in shifts:
+            for shift in shifts:
+                if check_shift.date_start >= shift.date_start and check_shift.date_start < shift.date_stop:
+                    overlapping_shifts.add(check_shift.id)
+        unique_shifts = shifts.filtered(lambda s: s.id not in overlapping_shifts)
+        _logger.error(f"{unique_shifts=}")
+        return unique_shifts
 
     def _group_expand_resource_id(self, resource_id, domain):
         _logger.error(f"{domain=}")
