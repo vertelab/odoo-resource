@@ -1,8 +1,8 @@
-import logging
-from datetime import timedelta, datetime
-
+from datetime import timedelta, datetime, time
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
+from pytz import timezone
+import logging
 
 _logger = logging.getLogger(__name__)
 
@@ -120,27 +120,30 @@ class ResourceShift(models.Model):
                 record.name = False
 
     def action_assign_shifts(self):
-        employees = self.env["resource.resource"].search([("role_id", "!=", False)])
-        weeks = set(self.env["resource.shift"].search([]).mapped("week_number"))
-        days = set(self.env["resource.shift"].search([]).mapped("day"))
-        _logger.error(f"{weeks=}")
-        _logger.error(f"{days=}")
-        for employee in employees:
-            weeks = self.env["resource.shift"].search([]).mapped("week_number")
-            for week in weeks:
-                for day in days:
-                    role_shifts = self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", False),("week_number", "=", week),("day", "=", day)])
-                    _logger.error(f"{role_shifts=}")
-                    # role_shifts = self._filter_unique_shifts(role_shifts)
-                    if role_shifts:
-                        while True:
-                            if sum(role_shifts.mapped("duration")) + sum(self.env["resource.shift"].search([("role_id", "=", employee.role_id.id),("resource_id", "=", employee.id),("week_number", "=", week),("day", "=", day)]).mapped("duration")) > 8:
-                                role_shifts = role_shifts.filtered(lambda r: r.id != role_shifts.ids[-1])
-                            else:
-                                break
-                        for shift in role_shifts:
-                            _logger.error(f"{shift=}")
-                            shift.resource_id = employee.id
+        active_domain = self.env.context.get('active_domain', [])
+        plan = self.env['resource.plan'].browse(next((v for (field, op, v) in active_domain if field == 'plan_id' and op == '='), None))
+        active_domain.append(('resource_id', '=', False))
+        
+        nbr = 0
+        while self.env['resource.shift'].search_count(active_domain) > 0 and nbr < 30:
+            shifts = self.env['resource.shift'].search(active_domain)
+            roles = set(shifts.mapped('role_id'))
+            for employee in plan.get_prioritized_resources():
+                _logger.warning(f"{employee.name} {nbr=} {roles=}")
+                for shift in shifts:
+                    if shift.role_id in employee.role_ids and employee.resource_calendar_id._work_intervals_batch(
+                                    timezone(employee.tz or 'UTC').localize(shift.date_start),
+                                    timezone(employee.tz or 'UTC').localize( shift.date_stop),
+                                    compute_leaves=True):
+                        overlapping_shifts = employee.resource_shift_ids.filtered(
+                                lambda s: (
+                                        s.date_start <= shift.date_stop and
+                                        shift.date_start <= s.date_stop
+                                    ))
+                        if not bool(overlapping_shifts):
+                            shift.write({'resource_id': employee.id})
+            nbr += 1
+            
 
     def _filter_unique_shifts(self,shifts):
         overlapping_shifts = set()
@@ -154,6 +157,63 @@ class ResourceShift(models.Model):
 
     def _group_expand_resource_id(self, resource_id, domain):
         _logger.error(f"{domain=}")
-        domain=[('resource_type', '=', 'user')]
-        resource_ids = resource_id._search(domain)
-        return self.env["resource.resource"].browse(resource_ids)
+        # ~ domain=[('resource_type', '=', 'user')]
+        # ~ resource_ids = resource_id._search(domain)
+        plan_id = None
+        for item in domain:
+            if isinstance(item, (list, tuple)) and len(item) == 3:
+                field, op, v = item
+                if field == 'plan_id' and op == '=':
+                    plan_id = v
+                    break
+        plan = self.env['resource.plan'].browse(plan_id) if plan_id else None
+        role_id = None
+        for item in domain:
+            if isinstance(item, (list, tuple)) and len(item) == 3:
+                field, op, v = item
+                if field == 'role_id' and op == '=':
+                    role_id = v
+                    break
+        role = self.env['resource.role'].browse(role_id) if role_id else None
+        if role:
+            return self.env["resource.resource"].browse(plan.get_prioritized_resources().filtered(lambda e: role in e.role_ids).mapped('resource_id.id'))
+        return self.env["resource.resource"].browse(plan.get_prioritized_resources().mapped('resource_id.id'))
+
+    def resouce_allocation_date(self,date,resource_id):
+        return sum(self.env['resource.shift'].search([
+                ('date_start','>=',date.strftime('%Y-%m-%d 00:00:00')),
+                ('date_start','<=',date.strftime('%Y-%m-%d 23:59:59')),
+                ('resource_id','=',resource_id.id)]).mapped('duration'))
+    
+    def resouce_allocation_plan_role(self,plan_id,role_ids):
+        return self.env['resource.shift'].search([('plan_id','=',plan_id.id),('role_id','in',role_ids),('resource_id','=',False)])
+    
+    def resource_non_parallell_date_role(self,date,role_id):
+        all_shifts = self.env['resource.shift'].search([
+                ('date_start','>=',date.strftime('%Y-%m-%d 00:00:00')),
+                ('date_start','<=',date.strftime('%Y-%m-%d 23:59:59')),
+                ('resource_id','=',False),
+                ('role_id','=',role_id.id)])
+        
+        non_parallel_shifts = self.env['resource.shift']
+        last_end = None
+        for shift in all_shifts.sorted(lambda d: d.date_start):
+            if not last_end or shift.date_start >= last_end:
+                non_parallel_shifts += shift
+                last_end = shift.date_stop
+        return non_parallel_shifts.sorted(lambda d: d.duration,reverse=True)
+
+    def plan_resouce_non_parallell_date_role(self,date,role_id):
+        all_shift = self.env['resource.shift'].search([
+                ('date_start','>=',date.strftime('%Y-%m-%d 00:00:00')),
+                ('date_start','<=',date.strftime('%Y-%m-%d 23:59:59')),
+                ('resource_id','=',False),
+                ('role_id','=',role_id.id)])
+        
+        non_parallel_shifts = self.env['resource.shift']
+        last_end = None
+        for shift in sorted_shifts.sorted(lambda d: d.date_start):
+            if not last_end or shift.date_start >= last_end:
+                non_parallel_shifts += shift
+                last_end = shift.date_stop
+        return non_parallel_shifts.sorted(lambda d: duration,reverse=True)

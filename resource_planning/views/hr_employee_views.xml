@@ -10,6 +10,9 @@
                     <field string="Shifts" name="resource_shift_count" widget="statinfo" />
                 </button>
             </div>
+            <field name="category_ids" position="after">
+                <field name="role_ids" widget="many2many_tags" />
+            </field>
         </field>
     </record>
 

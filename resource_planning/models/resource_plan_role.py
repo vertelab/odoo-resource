@@ -34,3 +34,5 @@ class ResourcePlanRole(models.Model):
                 record.worked_hours = sum(filtered_shifts.mapped("worked_hours"))
             else:
                 record.worked_hours = False
+                
+                

@@ -115,3 +115,25 @@ class ResourcePlan(models.Model):
             return self.date_start
         else:
             return self.date_start - timedelta(days=self.date_start.weekday())
+
+    def get_shift_role_ids(self):
+        return set(self.env['resource.shift'].search([('plan_id','=',self.id)]).mapped('role_id'))
+
+    def get_unallocated_shift(self):
+        return self.env['resource.shift'].search([('plan_id','=',self.id),('resource_id','=',False)])
+
+    def get_prioritized_resources(self):
+        employee_department = freelance_department = self.env['hr.employee']
+        if self.planning_id.department_id:
+            employee_department = self.env["hr.employee"].search([('employee_type','in',['employee','worker','contractor']),('department_id','=',self.planning_id.department_id.id)])
+            freelance_department = self.env["hr.employee"].search([('employee_type','in',['freelance','student','trainee']),('department_id','=',self.planning_id.department_id.id)])
+        employee_all = self.env["hr.employee"].search([('employee_type','in',['employee','worker','contractor'])])
+        freelance_all = self.env["hr.employee"].search([('employee_type','in',['freelance','student','trainee'])])
+                
+        return (employee_department | freelance_department | employee_all | freelance_all).sorted(key=lambda r: (
+                                        0 if r in employee_department else
+                                        1 if r in freelance_department else
+                                        2 if r in employee_all else
+                                        3
+                                    ))
+                            
