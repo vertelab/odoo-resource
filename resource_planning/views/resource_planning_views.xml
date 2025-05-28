@@ -1,491 +1,550 @@
 <odoo>
-    <data>
-
-        <record id="action_assign_shifts" model="ir.actions.server">
-            <field name="name">Assign Shifts</field>
-            <field name="model_id" ref="resource_planning.model_resource_shift"/>
-            <field name="binding_model_id" ref="resource_planning.model_resource_shift"/>
-            <field name="state">code</field>
-            <field name="code">
-model.action_assign_shifts()
-            </field>
-        </record>
-
-        <!-- From Views -->
-
-        <record id="view_resource_planning_form" model="ir.ui.view">
-            <field name="name">resource.planning.form</field>
-            <field name="model">resource.planning</field>
-            <field name="arch" type="xml">
-                <form string="Resource Planning">
-                    <sheet>
-                        <div name="button_box" id="button_box" class="oe_button_box">
-                            <button name="get_plans" class="oe_stat_button " type="object" icon="fa-calendar">
-                                <field string="Plans" name="plan_count" widget="statinfo" />
-                            </button>
-                        </div>
-                        <div class="oe_title pe-0">
-                            <h1 class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex w-100">
-                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Name..."/>
-                                </div>
-                            </h1>
-                        </div>
-                        <group>
-                            <field name="company_id"  groups="base.group_multi_company"/>
-                                    <field name="department_id"  />
-                        </group>
-                        <!-- <notebook>
-                            <page string="Roles Data">
-                                <field name="plan_role_ids">
-                                    <list>
-                                        <field name="role_id" />
-                                        <field name="duration" widget="float_time"/>
-                                        <field name="worked_hours" widget="float_time"/>
-                                    </list>
-                                </field>
-                            </page>
-                            <page string="Resource Data">
-                                <field name="plan_resource_ids">
-                                    <list>
-                                        <field name="resource_id" />
-                                        <field name="duration" widget="float_time"/>
-                                        <field name="worked_hours" widget="float_time"/>
-                                    </list>
-                                </field>
-                            </page>
-                        </notebook> -->
-                    </sheet>
-                    <chatter/>
-                </form>
-            </field>
-        </record>
-
-        <record id="view_resource_plan_form" model="ir.ui.view">
-            <field name="name">resource.plan.form</field>
-            <field name="model">resource.plan</field>
-            <field name="arch" type="xml">
-                <form string="Resource Planning">
-                    <header>
-                        <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" readonly="shift_count > 0"/>
-                        <button name="update_data_lines" type="object" string="Update Data" class="btn-primary"/>
-                    </header>
-                    <sheet>
-                        <div name="button_box" id="button_box" class="oe_button_box">
-                            <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-calendar">
-                                <field string="Shifts" name="shift_count" widget="statinfo" />
-                            </button>
-                            <button name="action_get_slots" class="oe_stat_button " type="object" icon="fa-th">
-                                <field string="Slots" name="slot_count" widget="statinfo" />
-                            </button>
-                        </div>
-                        <div class="oe_title pe-0">
-                            <h1 class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex w-100">
-                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Month..."/>
-                                </div>
-                            </h1>
-                        </div>
-                        <group>
-                            <field name="date_start" required="True"/>
-                            <field name="week_template_ids" widget="many2many_tags"/>
-                        </group>
-                        <notebook>
-                            <page string="Roles Data">
-                                <field name="plan_role_ids" no_open="1">
-                                    <list create="false" edit="false" delete="false">
-                                        <field name="role_id" />
-                                        <field name="duration" widget="float_time" sum="True"/>
-                                        <field name="worked_hours" widget="float_time" sum="True"/>
-                                    </list>
-                                </field>
-                            </page>
-                            <page string="Resource Data">
-                                <field name="plan_resource_ids" no_open="1">
-                                    <list create="false" edit="false" delete="false">
-                                        <field name="resource_id" widget="many2one_avatar_user" />
-                                        <field name="duration" widget="float_time" sum="True"/>
-                                        <field name="worked_hours" widget="float_time" sum="True"/>
-                                    </list>
-                                </field>
-                            </page>
-                        </notebook>
-                    </sheet>
-                    <chatter/>
-                </form>
-            </field>
-        </record>
-        
-        
-               <record id="view_resource_plan_list" model="ir.ui.view">
-                  <field name="name">resource.plan.list</field>
-                  <field name="model">resource.plan</field>
-                  <field name="arch" type="xml">
-                    <list string="Resource Plans">
-                      <header>
-                        <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" display="always" />
-                      </header>
-                      <field name="name" />
-                      <field name="date_start" required="True" />
-                      <field name="week_template_ids" widget="many2many_tags" />
+  <data>
+    <record id="action_assign_shifts" model="ir.actions.server">
+      <field name="name">Assign Shifts</field>
+      <field name="model_id" ref="resource_planning.model_resource_shift" />
+      <field name="binding_model_id" ref="resource_planning.model_resource_shift" />
+      <field name="state">code</field>
+      <field name="code">model.action_assign_shifts()</field>
+    </record>
+    <!-- From Views -->
+    <record id="view_resource_planning_form" model="ir.ui.view">
+      <field name="name">resource.planning.form</field>
+      <field name="model">resource.planning</field>
+      <field name="arch" type="xml">
+        <form string="Resource Planning">
+          <sheet>
+            <div name="button_box" id="button_box" class="oe_button_box">
+              <button name="get_plans" class="oe_stat_button " type="object" icon="fa-calendar">
+                <field string="Plans" name="plan_count" widget="statinfo" />
+              </button>
+            </div>
+            <!--
+                 <div class="oe_title pe-0">
+                 <h1 class="d-flex justify-content-between align-items-center">
+                 <div class="d-flex w-100">
+                 <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Name..."/>
+                 </div>
+                 </h1>
+                 </div>
+            -->
+            <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active" />
+            <div class="row justify-content-between position-relative w-100 m-0 mb-2">
+              <div class="oe_title mw-75 ps-0 pe-2">
+                <h1 class="d-flex flex-row align-items-center">
+                  <field name="name" placeholder="Planning entity" required="True" style="font-size: min(4vw, 2rem);" />
+                </h1>
+              </div>
+              <div class="o_employee_avatar m-0 p-0">
+                <field name="image_128" widget='image' class="oe_avatar m-0" />
+              </div>
+            </div>
+            <group>
+              <field name="company_id" groups="base.group_multi_company" />
+              <field name="department_id" />
+            </group>
+            <!-- <notebook>
+                 <page string="Roles Data">
+                 <field name="plan_role_ids">
+                 <list>
+                 <field name="role_id" />
+                 <field name="duration" widget="float_time"/>
+                 <field name="worked_hours" widget="float_time"/>
+                 </list>
+                 </field>
+                 </page>
+                 <page string="Resource Data">
+                 <field name="plan_resource_ids">
+                 <list>
+                 <field name="resource_id" />
+                 <field name="duration" widget="float_time"/>
+                 <field name="worked_hours" widget="float_time"/>
+                 </list>
+                 </field>
+                 </page>
+                 </notebook> -->
+          </sheet>
+          <chatter />
+        </form>
+      </field>
+    </record>
+    <record id="resource_planning_kanban" model="ir.ui.view">
+      <field name="name">resource.planning.kanban</field>
+      <field name="model">resource.planning</field>
+      <field name="arch" type="xml">
+        <kanban highlight_color="color" quick_create="true">
+          <header>
+            <!--
+                 <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
+            -->
+          </header>
+          <field name="color" />
+          <field name="name" />
+          <field name="status_color" />
+          <field name="image_128" />
+          <!--
+               <field name="show_hr_icon_display" />
+               <field name="hr_icon_display" />
+          -->
+          <field name="company_id" />
+          <progressbar field="activity_state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}" sum_field="duration" recurring_revenue_sum_field="worked_hours" help="This bar allows to filter the opportunities based on scheduled activities." />
+          <templates>
+            <t t-name="menu">
+              <a role="menuitem" type="open" class="dropdown-item" t-if="widget.editable">Edit</a>
+              <a role="menuitem" type="delete" class="dropdown-item" t-if="widget.deletable">Delete</a>
+              <field name="color" widget="kanban_color_picker" />
+            </t>
+            <t t-name="card" class="flex-row">
+              <aside class="o_kanban_aside_full">
+                <t t-if="record.image_128.raw_value">
+                  <field name="image_128" widget="background_image" options="{'zoom': true, 'zoom_delay': 1000}" class="d-block position-relative" />
+                </t>
+                <div t-else="" class="d-flex align-items-center justify-content-center bg-100 bg-gradient">
+                  <svg class="w-75 h-75 opacity-50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="currentColor">
+                      <!-- Fabriksbyggnad -->
+                      <rect x="2" y="10" width="20" height="10" rx="2" />
+                      <!-- Skorstenar -->
+                      <rect x="5" y="6" width="2" height="6" />
+                      <rect x="9" y="4" width="2" height="8" />
+                      <rect x="13" y="7" width="2" height="5" />
+                      <!-- Rök från skorstenar -->
+                      <path d="M6 4 Q6.5 2, 7 4" stroke="currentColor" fill="none" />
+                      <path d="M10 2 Q10.5 0, 11 2" stroke="currentColor" fill="none" />
+                      <path d="M14 5 Q14.5 3, 15 5" stroke="currentColor" fill="none" />
+                      <!-- Fönster -->
+                      <rect x="16" y="14" width="2" height="2" fill="#fff" />
+                      <rect x="12" y="14" width="2" height="2" fill="#fff" />
+                      <rect x="8" y="14" width="2" height="2" fill="#fff" />
+                    </g>
+                  </svg>
+                </div>
+              </aside>
+              <main class="ms-2">
+                <div>
+                  <field class="fw-bold fs-5" name="name" placeholder="Shift Name" />
+                </div>
+                <button name="get_plans" class="oe_stat_button " type="object" icon="fa-calendar">
+                  <field string="Plans" name="plan_count" widget="statinfo" />
+                </button>
+                <button string="Today" name="get_today" type="object" />
+                <footer>
+                  <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="d-flex align-items-center">
+                      <span class="fa fa-clock-o me-2" title="Dates" />
+                      <!--
+                           <field name="last_run" t-if="record.last_run.value != False" />
+                      -->
+                    </div>
+                    <span t-att-class="'o_status_bubble mx-0 o_color_bubble_' + record.status_color.value or 0" />
+                  </div>
+                </footer>
+              </main>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+    <record id="view_resource_plan_form" model="ir.ui.view">
+      <field name="name">resource.plan.form</field>
+      <field name="model">resource.plan</field>
+      <field name="arch" type="xml">
+        <form string="Resource Planning">
+          <header>
+            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" readonly="shift_count > 0" />
+            <button name="update_data_lines" type="object" string="Update Data" class="btn-primary" />
+          </header>
+          <sheet>
+            <div name="button_box" id="button_box" class="oe_button_box">
+              <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-calendar">
+                <field string="Shifts" name="shift_count" widget="statinfo" />
+              </button>
+              <button name="action_get_slots" class="oe_stat_button " type="object" icon="fa-th">
+                <field string="Slots" name="slot_count" widget="statinfo" />
+              </button>
+            </div>
+            <div class="oe_title pe-0">
+              <h1 class="d-flex justify-content-between align-items-center">
+                <div class="d-flex w-100">
+                  <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Month..." />
+                </div>
+              </h1>
+            </div>
+            <group>
+              <field name="date_start" required="True" />
+              <field name="week_template_ids" widget="many2many_tags" />
+            </group>
+            <notebook>
+              <page string="Roles Data">
+                <field name="plan_role_ids" no_open="1">
+                  <list create="false" edit="false" delete="false">
+                    <field name="role_id" />
+                    <field name="duration" widget="float_time" sum="True" />
+                    <field name="worked_hours" widget="float_time" sum="True" />
+                  </list>
+                </field>
+              </page>
+              <page string="Resource Data">
+                <field name="plan_resource_ids" no_open="1">
+                  <list create="false" edit="false" delete="false">
+                    <field name="resource_id" widget="many2one_avatar_user" />
+                    <field name="duration" widget="float_time" sum="True" />
+                    <field name="worked_hours" widget="float_time" sum="True" />
+                  </list>
+                </field>
+              </page>
+            </notebook>
+          </sheet>
+          <chatter />
+        </form>
+      </field>
+    </record>
+    <record id="view_resource_plan_list" model="ir.ui.view">
+      <field name="name">resource.plan.list</field>
+      <field name="model">resource.plan</field>
+      <field name="arch" type="xml">
+        <list string="Resource Plans">
+          <header>
+            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" display="always" />
+          </header>
+          <field name="name" />
+          <field name="date_start" required="True" />
+          <field name="week_template_ids" widget="many2many_tags" />
+          <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-calendar" />
+          <field name="duration" widget="float_time" sum="True" />
+          <field name="worked_hours" widget="float_time" sum="True" />
+        </list>
+      </field>
+    </record>
+    <record id="view_resource_role_form" model="ir.ui.view">
+      <field name="name">resource.role.form</field>
+      <field name="model">resource.role</field>
+      <field name="arch" type="xml">
+        <form string="Resource Role">
+          <sheet>
+            <div class="oe_title pe-0">
+              <h1 class="d-flex justify-content-between align-items-center">
+                <div class="d-flex w-100">
+                  <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Role..." />
+                </div>
+              </h1>
+            </div>
+            <group>
+              <field name="description" />
+              <field name="resource_ids" widget="many2many_tags" domain="[('resource_type','=',resource_type)]" />
+              <field name="resource_type" />
+            </group>
+          </sheet>
+          <chatter />
+        </form>
+      </field>
+    </record>
+    <record id="view_resource_shift_form" model="ir.ui.view">
+      <field name="name">resource.shift.form</field>
+      <field name="model">resource.shift</field>
+      <field name="arch" type="xml">
+        <form string="resource Shift">
+          <sheet>
+            <div class="oe_title pe-0">
+              <h1 class="d-flex justify-content-between align-items-center">
+                <div class="d-flex w-100">
+                  <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Shift" />
+                </div>
+              </h1>
+            </div>
+            <group>
+              <field name="role_id" />
+              <field name="slot_id" />
+              <field name="resource_id" />
+              <field name="date_start" />
+              <field name="date_stop" />
+              <field name="duration" widget="float_time" />
+            </group>
+          </sheet>
+          <chatter />
+        </form>
+      </field>
+    </record>
+    <record id="view_resource_week_template_form" model="ir.ui.view">
+      <field name="name">resource.week.template.form</field>
+      <field name="model">resource.week.template</field>
+      <field name="arch" type="xml">
+        <form string="Week Template">
+          <header>
+            <button name="update_template_lines" type="object" string="Updated Shifts" class="btn-primary" />
+          </header>
+          <sheet>
+            <div name="button_box" id="button_box" class="oe_button_box">
+              <button name="week_template_shift_action" class="oe_stat_button " type="object" icon="fa-calendar">
+                <field string="Template Shifts" name="week_template_shift_count" widget="statinfo" />
+              </button>
+            </div>
+            <div class="oe_title pe-0">
+              <h1 class="d-flex justify-content-between align-items-center">
+                <div class="d-flex w-100">
+                  <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Week..." />
+                </div>
+              </h1>
+            </div>
+            <notebook>
+              <page string="Shift Data">
+                <group>
+                  <field name="week_template_line_ids" nolabel="1" no_open="1">
+                    <list create="false" edit="false" delete="false">
+                      <field name="role_id" />
                       <field name="duration" widget="float_time" sum="True" />
-                      <field name="worked_hours" widget="float_time" sum="True" />
                     </list>
                   </field>
-                </record>
-
-        <record id="view_resource_role_form" model="ir.ui.view">
-            <field name="name">resource.role.form</field>
-            <field name="model">resource.role</field>
-            <field name="arch" type="xml">
-                <form string="Resource Role">
-                    <sheet>
-                        <div class="oe_title pe-0">
-                            <h1 class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex w-100">
-                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Role..."/>
-                                </div>
-                            </h1>
-                        </div>
-                        <group>
-                            <field name="description"/>
-                            <field name="resource_ids" widget="many2many_tags" domain="[('resource_type','=',resource_type)]"/>
-                            <field name="resource_type" />
-                        </group>
-                    </sheet>
-                    <chatter/>
-                </form>
-            </field>
-        </record>
-
-        <record id="view_resource_shift_form" model="ir.ui.view">
-            <field name="name">resource.shift.form</field>
-            <field name="model">resource.shift</field>
-            <field name="arch" type="xml">
-                <form string="resource Shift">
-                    <sheet>
-                        <div class="oe_title pe-0">
-                            <h1 class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex w-100">
-                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Shift"/>
-                                </div>
-                            </h1>
-                        </div>
-                        <group>
-                            <field name="role_id"/>
-                            <field name="slot_id"/>
-                            <field name="resource_id"/>
-                            <field name="date_start"/>
-                            <field name="date_stop"/>
-                            <field name="duration" widget="float_time"/>
-                        </group>
-                    </sheet>
-                    <chatter/>
-                </form>
-            </field>
-        </record>
-
-        <record id="view_resource_week_template_form" model="ir.ui.view">
-            <field name="name">resource.week.template.form</field>
-            <field name="model">resource.week.template</field>
-            <field name="arch" type="xml">
-                <form string="Week Template">
-                    <header>
-                        <button name="update_template_lines" type="object" string="Updated Shifts" class="btn-primary"/>
-                    </header>
-                    <sheet>
-                        <div name="button_box" id="button_box" class="oe_button_box">
-                            <button name="week_template_shift_action" class="oe_stat_button " type="object" icon="fa-calendar">
-                                <field string="Template Shifts" name="week_template_shift_count" widget="statinfo" />
-                            </button>
-                        </div>
-                        <div class="oe_title pe-0">
-                            <h1 class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex w-100">
-                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Week..."/>
-                                </div>
-                            </h1>
-                        </div>
-                        <notebook>
-                            <page string="Shift Data">
-                                <group>
-                                    <field name="week_template_line_ids" nolabel="1" no_open="1">
-                                        <list create="false" edit="false" delete="false">
-                                            <field name="role_id"/>
-                                            <field name="duration" widget="float_time" sum="True"/>
-                                        </list>
-                                    </field>
-                                </group>
-                            </page>
-                        </notebook>
-                    </sheet>
-                    <chatter/>
-                </form>
-            </field>
-        </record>
-
-        <record id="view_resource_week_template_shift_form" model="ir.ui.view">
-            <field name="name">resource.week.template.shift.form</field>
-            <field name="model">resource.week.template.shift</field>
-            <field name="arch" type="xml">
-                <form string="Resource Template Shifts">
-                    <header>
-                        <button name="action_template_shift_wizard" type="object" string="Generate Shifts" class="btn-primary" display="always"/>
-                    </header>
-                    <sheet>
-                        <div class="oe_title pe-0">
-                            <h1 class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex w-100">
-                                    <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Shift"/>
-                                </div>
-                            </h1>
-                        </div>
-                        <group>
-                            <field name="date_start"/>
-                            <field name="date_stop"/>
-                        </group>
-                        <group>
-                            <field name="role_id"/>
-                            <field name="duration" widget="float_time"/>
-                        </group>
-                    </sheet>
-                    <chatter/>
-                </form>
-            </field>
-        </record>
-
-        <!-- List Views -->
-
-        <record id="view_resource_role_tree" model="ir.ui.view">
-            <field name="name">resource.role.tree</field>
-            <field name="model">resource.role</field>
-            <field name="arch" type="xml">
-                <list string="resource Roles">
-                    <field name="name"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="view_resource_shift_tree" model="ir.ui.view">
-          <field name="name">resource.shift.tree</field>
-          <field name="model">resource.shift</field>
-          <field name="arch" type="xml">
-            <list string="resource Shifts">
-              <header>
-                <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
-              </header>
-              <field name="name" />
-              <field name="role_id" optional="hide" />
-              <field name="date_start" optional="hide" />
-                            <field name="date_stop" optional="hide" />
-
-              <field name="duration" widget="float_time" sum="True" optional="hide"/>
-              <field name="worked_hours" widget="float_time" sum="True"  optional="hide"/>
-            </list>
-          </field>
-        </record>
-
-        <record id="view_resource_week_template_shift_tree" model="ir.ui.view">
-            <field name="name">resource.week.template.shift.tree</field>
-            <field name="model">resource.week.template.shift</field>
-            <field name="arch" type="xml">
-                <list string="Template Shifts">
-                    <header>
-                        <button name="action_template_shift_wizard" type="object" string="Generate Shifts" class="btn-primary" display="always"/>
-                    </header>
-                    <field name="name"/>
-                </list>
-            </field>
-        </record>
-
-        <!-- Search Views -->
-
-        <record id="resource_shift_search" model="ir.ui.view">
-            <field name="name">resource.shift.search</field>
-            <field name="model">resource.shift</field>
-            <field name="arch" type="xml">
-                <search string="Search Shifts">
-                    <field name="name" />
-                    <field name="day" />
-                    <field name="role_id" />
-                    <field name="resource_id" />
-                    <field name="date_start"/>
-                    <field name="week_number_string"/>
-                    <filter string="Start Date" name="date_start" date="date_start" />
-                    <filter string="Monday" name="monday" domain="[('day', '=', 0)]" />
-                    <filter string="Tuesday" name="tuesday" domain="[('day', '=', 1)]" />
-                    <filter string="Wednesday" name="wednesday" domain="[('day', '=', 2)]" />
-                    <filter string="Thursday" name="thursday" domain="[('day', '=', 3)]" />
-                    <filter string="Friday" name="friday" domain="[('day', '=', 4)]" />
-                    <filter string="Saturday" name="saturday" domain="[('day', '=', 5)]" />
-                    <filter string="Sunday" name="sunday" domain="[('day', '=', 6)]" />
-                    <!-- <filter string="Current Week" domain="[('week_number_string', '=', (context_today()+relativedelta(weeks=0)).strftime('%%W'))]"/> -->
-                    <filter string="Next Week" name="next_week" domain="[('date_start','&gt;=', (context_today() + relativedelta(weeks=1)).strftime('%%Y-%%m-01')), 
-                        ('date_start','&lt;', (context_today() + relativedelta(weeks=2)).strftime('%%Y-%%m-01'))]"/>
-                    <filter string="Last Week" name="last_week" domain="[('date_start','&gt;=', (context_today() - relativedelta(weeks=1)).strftime('%%Y-%%m-01')), 
-                        ('date_start','&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
-                    <group expand="0" string="Group By">
-                        <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
-                        <filter string="Roles" name="group_by_role" context="{'group_by': 'role_id'}" />
-                        <filter string="Week" name="group_by_week" context="{'group_by': 'week_number'}" />
-                        <filter string="Date" name="group_by_date" context="{'group_by': 'date_start'}" />
-                        <filter string="Department" name="group_by_department" context="{'group_by': 'department_id'}" />
-                    </group>
-                </search>
-            </field>
-        </record>
-
-        <record id="resource_week_template_shift_search" model="ir.ui.view">
-            <field name="name">resource.week.template.shift.search</field>
-            <field name="model">resource.week.template.shift</field>
-            <field name="arch" type="xml">
-                <search string="Search Template Shifts">
-                    <field name="name" />
-                    <field name="day" />
-                    <field name="role_id" />
-                    <filter string="Monday" name="monday" domain="[('day', '=', 0)]" />
-                    <filter string="Tuesday" name="tuesday" domain="[('day', '=', 1)]" />
-                    <filter string="Wednesday" name="wednesday" domain="[('day', '=', 2)]" />
-                    <filter string="Thursday" name="thursday" domain="[('day', '=', 3)]" />
-                    <filter string="Friday" name="friday" domain="[('day', '=', 4)]" />
-                    <filter string="Saturday" name="saturday" domain="[('day', '=', 5)]" />
-                    <filter string="Sunday" name="sunday" domain="[('day', '=', 6)]" />
-                    <group expand="0" string="Group By">
-                        <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
-                        <filter string="Roles" name="group_by_role" context="{'group_by': 'role_id'}" />
-                    </group>
-                </search>
-            </field>
-        </record>
-
-        <!-- Kanban Views -->
-          <record id="resource_shift_kanban" model="ir.ui.view">
-    <field name="name">resource.shift.kanban</field>
-    <field name="model">resource.shift</field>
-     <field name="arch" type="xml">
-      <kanban highlight_color="color" quick_create="true">
-        <header>
-          <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
-        </header>
-        <field name="color" />
-        <field name="name" />
-        <field name="status_color" />
-        <field name="image_128" />
-        <field name="show_hr_icon_display" />
-        <field name="hr_icon_display" />
-        <field name="company_id" />
-        <progressbar field="activity_state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}" sum_field="duration" recurring_revenue_sum_field="worked_hours" help="This bar allows to filter the opportunities based on scheduled activities."/>
-        <templates>
-          <t t-name="menu">
-            <a role="menuitem" type="open" class="dropdown-item" t-if="widget.editable">Edit</a>
-            <a role="menuitem" type="delete" class="dropdown-item" t-if="widget.deletable">Delete</a>
-            <field name="color" widget="kanban_color_picker" />
-          </t>
-                 
-          
-          <t t-name="card" class="flex-row">
-            <aside class="o_kanban_aside_full">
-              <t t-if="record.image_128.raw_value">
-                <field name="image_128" widget="background_image" options="{'zoom': true, 'zoom_delay': 1000}" class="d-block position-relative" />
-              </t>
-              <div t-else="" class="d-flex align-items-center justify-content-center bg-100 bg-gradient">
-                <svg class="w-75 h-75 opacity-50" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <g fill="currentColor">
-                    <path d="M 10 11 C 4.08 11 2 14 2 16 L 2 19 L 18 19 L 18 16 C 18 14 15.92 11 10 11 Z" />
-                    <circle cx="10" cy="5.5" r="4.5" />
-                  </g>
-                </svg>
-              </div>
-            </aside>
-            <main class="ms-2">
-              <div>
-                <field class="fw-bold fs-5" name="name" placeholder="Shift Name" />
-                <div t-if="record.show_hr_icon_display.raw_value" class="float-end">
-                  <field name="hr_icon_display" class="o_employee_availability" widget="hr_presence_status" />
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+          <chatter />
+        </form>
+      </field>
+    </record>
+    <record id="view_resource_week_template_shift_form" model="ir.ui.view">
+      <field name="name">resource.week.template.shift.form</field>
+      <field name="model">resource.week.template.shift</field>
+      <field name="arch" type="xml">
+        <form string="Resource Template Shifts">
+          <header>
+            <button name="action_template_shift_wizard" type="object" string="Generate Shifts" class="btn-primary" display="always" />
+          </header>
+          <sheet>
+            <div class="oe_title pe-0">
+              <h1 class="d-flex justify-content-between align-items-center">
+                <div class="d-flex w-100">
+                  <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Shift" />
                 </div>
-              </div>
-              <footer>
-                <div class="d-flex justify-content-between align-items-center w-100">
-                  <div class="d-flex align-items-center">
-                    <span class="fa fa-clock-o me-2" title="Dates" />
-                    <!--
-                         <field name="last_run" t-if="record.last_run.value != False" />
-                    -->
-                  </div>
-                  <span t-att-class="'o_status_bubble mx-0 o_color_bubble_' + record.status_color.value or 0" />
-                </div>
-              </footer>
-            </main>
-          </t>
-        </templates>
-      </kanban>
-    </field>
-  </record>
-        
-
-        <!-- Calandar Views -->
-
+              </h1>
+            </div>
+            <group>
+              <field name="date_start" />
+              <field name="date_stop" />
+            </group>
+            <group>
+              <field name="role_id" />
+              <field name="duration" widget="float_time" />
+            </group>
+          </sheet>
+          <chatter />
+        </form>
+      </field>
+    </record>
+    <!-- List Views -->
+    <record id="view_resource_role_tree" model="ir.ui.view">
+      <field name="name">resource.role.tree</field>
+      <field name="model">resource.role</field>
+      <field name="arch" type="xml">
+        <list string="resource Roles">
+          <field name="name" />
+        </list>
+      </field>
+    </record>
+    <record id="view_resource_shift_tree" model="ir.ui.view">
+      <field name="name">resource.shift.tree</field>
+      <field name="model">resource.shift</field>
+      <field name="arch" type="xml">
+        <list string="resource Shifts">
+          <header>
+            <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
+          </header>
+          <field name="name" />
+          <field name="role_id" optional="hide" />
+          <field name="date_start" optional="hide" />
+          <field name="date_stop" optional="hide" />
+          <field name="duration" widget="float_time" sum="True" optional="hide" />
+          <field name="worked_hours" widget="float_time" sum="True" optional="hide" />
+        </list>
+      </field>
+    </record>
+    <record id="view_resource_week_template_shift_tree" model="ir.ui.view">
+      <field name="name">resource.week.template.shift.tree</field>
+      <field name="model">resource.week.template.shift</field>
+      <field name="arch" type="xml">
+        <list string="Template Shifts">
+          <header>
+            <button name="action_template_shift_wizard" type="object" string="Generate Shifts" class="btn-primary" display="always" />
+          </header>
+          <field name="name" />
+        </list>
+      </field>
+    </record>
+    <!-- Search Views -->
+    <record id="resource_shift_search" model="ir.ui.view">
+      <field name="name">resource.shift.search</field>
+      <field name="model">resource.shift</field>
+      <field name="arch" type="xml">
+        <search string="Search Shifts">
+          <field name="name" />
+          <field name="day" />
+          <field name="role_id" />
+          <field name="resource_id" />
+          <field name="date_start" />
+          <field name="department_id" />
+          <field name="week_number_string" />
+          <filter string="Start Date" name="date_start" date="date_start" />
+          <filter string="Monday" name="monday" domain="[('day', '=', 0)]" />
+          <filter string="Tuesday" name="tuesday" domain="[('day', '=', 1)]" />
+          <filter string="Wednesday" name="wednesday" domain="[('day', '=', 2)]" />
+          <filter string="Thursday" name="thursday" domain="[('day', '=', 3)]" />
+          <filter string="Friday" name="friday" domain="[('day', '=', 4)]" />
+          <filter string="Saturday" name="saturday" domain="[('day', '=', 5)]" />
+          <filter string="Sunday" name="sunday" domain="[('day', '=', 6)]" />
 <!--
-        <record id="view_resource_shift_calendar" model="ir.ui.view">
-          <field name="name">resource.calendar</field>
-          <field name="model">resource.shift</field>
-          <field name="arch" type="xml">
-            <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" quick_create="1" quick_create_view_id="%(resource_planning.view_resource_shift_test_form)d" color="resource_id" hide_time="true">
-              <field name="name" />
-              <field name="role_id" filters="1" />
-              <field name="resource_id" filters="1" />
-            </calendar>
-          </field>
-        </record>
--->        
-<record id="view_resource_shift_calendar" model="ir.ui.view">
-          <field name="name">resource.shift.calendar</field>
-          <field name="model">resource.shift</field>
-          <field name="arch" type="xml">
-            <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" quick_create="1" quick_create_view_id="%(resource_planning.view_resource_shift_test_form)d" color="resource_id" hide_time="true">
-              <field name="name" />
-              <field name="role_id" filters="1" />
-              <field name="resource_id" filters="1" />
-            </calendar>
-          </field>
-        </record>
-
-        <record id="view_resource_week_template_calendar" model="ir.ui.view">
-            <field name="name">resource.week.template.calendar</field>
-            <field name="model">resource.week.template.shift</field>
-            <field name="arch" type="xml">
-                <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" scales="week" quick_create="false" event_open_popup="true" color="role_id" hide_time="true">
-                    <field name="name"/>
-                    <field name="role_id" filters="1" />
-                </calendar>
-            </field>
-        </record>
-
-        <!-- Pivot Views -->
-
-        <record id="view_resource_week_template_shift_pivot" model="ir.ui.view">
-            <field name="name">resource.week.template.pivot.view</field>
-            <field name="model">resource.week.template.shift</field>
-            <field name="arch" type="xml">
-                <pivot string="Template Shifts">
-
-                </pivot>
-            </field>
-        </record>
-
-        <record id="view_resource_shift_test_form" model="ir.ui.view">
-            <field name="name">resource.shift.test.from.view</field>
-            <field name="model">resource.shift</field>
-            <field name="arch" type="xml">
-                <form string="Test Shifts">
-                    <field name="role_id"/>
-                </form>
-            </field>
-        </record>
-
-    </data>
+           <filter string="Current Week" domain="[('week_number_string', '=', (context_today()+relativedelta(weeks=0)).strftime('%%W'))]"/> 
+-->
+          <filter string="This Week" name="this_week" domain="[('date_start','&gt;=', (context_today() + relativedelta(weeks=-1)).strftime('%%Y-%%m-01')), 
+                        ('date_start','&lt;', (context_today() + relativedelta(weeks=1)).strftime('%%Y-%%m-01'))]" />
+          <filter string="Next Week" name="next_week" domain="[('date_start','&gt;=', (context_today() + relativedelta(weeks=1)).strftime('%%Y-%%m-01')), 
+                        ('date_start','&lt;', (context_today() + relativedelta(weeks=2)).strftime('%%Y-%%m-01'))]" />
+          <filter string="Last Week" name="last_week" domain="[('date_start','&gt;=', (context_today() - relativedelta(weeks=1)).strftime('%%Y-%%m-01')), 
+                        ('date_start','&lt;', context_today().strftime('%%Y-%%m-01'))]" />
+          <group expand="0" string="Group By">
+            <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
+            <filter string="Roles" name="group_by_role" context="{'group_by': 'role_id'}" />
+            <filter string="Week" name="group_by_week" context="{'group_by': 'week_number'}" />
+            <filter string="Date" name="group_by_date" context="{'group_by': 'date_start'}" />
+            <filter string="Department" name="group_by_department" context="{'group_by': 'department_id'}" />
+          </group>
+        </search>
+      </field>
+    </record>
+    <record id="resource_week_template_shift_search" model="ir.ui.view">
+      <field name="name">resource.week.template.shift.search</field>
+      <field name="model">resource.week.template.shift</field>
+      <field name="arch" type="xml">
+        <search string="Search Template Shifts">
+          <field name="name" />
+          <field name="day" />
+          <field name="role_id" />
+          <filter string="Monday" name="monday" domain="[('day', '=', 0)]" />
+          <filter string="Tuesday" name="tuesday" domain="[('day', '=', 1)]" />
+          <filter string="Wednesday" name="wednesday" domain="[('day', '=', 2)]" />
+          <filter string="Thursday" name="thursday" domain="[('day', '=', 3)]" />
+          <filter string="Friday" name="friday" domain="[('day', '=', 4)]" />
+          <filter string="Saturday" name="saturday" domain="[('day', '=', 5)]" />
+          <filter string="Sunday" name="sunday" domain="[('day', '=', 6)]" />
+          <group expand="0" string="Group By">
+            <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
+            <filter string="Roles" name="group_by_role" context="{'group_by': 'role_id'}" />
+          </group>
+        </search>
+      </field>
+    </record>
+    <!-- Kanban Views -->
+    <record id="resource_shift_kanban" model="ir.ui.view">
+      <field name="name">resource.shift.kanban</field>
+      <field name="model">resource.shift</field>
+      <field name="arch" type="xml">
+        <kanban highlight_color="color" quick_create="false">
+          <header>
+            <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
+          </header>
+          <field name="color" />
+          <field name="name" />
+          <field name="status_color" />
+          <field name="image_128" />
+          <field name="show_hr_icon_display" />
+          <field name="hr_icon_display" />
+          <field name="company_id" />
+          <progressbar field="activity_state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}" sum_field="duration" recurring_revenue_sum_field="worked_hours" help="This bar allows to filter the opportunities based on scheduled activities." />
+          <templates>
+            <t t-name="menu">
+              <a role="menuitem" type="open" class="dropdown-item" t-if="widget.editable">Edit</a>
+              <a role="menuitem" type="delete" class="dropdown-item" t-if="widget.deletable">Delete</a>
+              <field name="color" widget="kanban_color_picker" />
+            </t>
+            <t t-name="card" class="flex-row">
+              <aside class="o_kanban_aside_full">
+                <t t-if="record.image_128.raw_value">
+                  <field name="image_128" widget="background_image" options="{'zoom': true, 'zoom_delay': 1000}" class="d-block position-relative" />
+                </t>
+                <div t-else="" class="d-flex align-items-center justify-content-center bg-100 bg-gradient">
+                  <svg class="w-75 h-75 opacity-50" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="currentColor">
+                      <path d="M 10 11 C 4.08 11 2 14 2 16 L 2 19 L 18 19 L 18 16 C 18 14 15.92 11 10 11 Z" />
+                      <circle cx="10" cy="5.5" r="4.5" />
+                    </g>
+                  </svg>
+                </div>
+              </aside>
+              <main class="ms-2">
+                <div>
+                  <field class="fw-bold fs-5" name="name" placeholder="Shift Name" />
+                  <div t-if="record.show_hr_icon_display.raw_value" class="float-end">
+                    <field name="hr_icon_display" class="o_employee_availability" widget="hr_presence_status" />
+                  </div>
+                </div>
+                <footer>
+                  <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="d-flex align-items-center">
+                      <span class="fa fa-clock-o me-2" title="Dates" />
+                      <!--
+                           <field name="last_run" t-if="record.last_run.value != False" />
+                      -->
+                    </div>
+                    <span t-att-class="'o_status_bubble mx-0 o_color_bubble_' + record.status_color.value or 0" />
+                  </div>
+                </footer>
+              </main>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+    <!-- Calandar Views -->
+    <!--
+         <record id="view_resource_shift_calendar" model="ir.ui.view">
+         <field name="name">resource.calendar</field>
+         <field name="model">resource.shift</field>
+         <field name="arch" type="xml">
+         <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" quick_create="1" quick_create_view_id="%(resource_planning.view_resource_shift_test_form)d" color="resource_id" hide_time="true">
+         <field name="name" />
+         <field name="role_id" filters="1" />
+         <field name="resource_id" filters="1" />
+         </calendar>
+         </field>
+         </record>
+    -->
+    <record id="view_resource_shift_calendar" model="ir.ui.view">
+      <field name="name">resource.shift.calendar</field>
+      <field name="model">resource.shift</field>
+      <field name="arch" type="xml">
+        <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" quick_create="1" quick_create_view_id="%(resource_planning.view_resource_shift_test_form)d" color="resource_id" hide_time="true">
+          <field name="name" />
+          <field name="role_id" filters="1" />
+          <field name="resource_id" filters="1" />
+        </calendar>
+      </field>
+    </record>
+    <record id="view_resource_week_template_calendar" model="ir.ui.view">
+      <field name="name">resource.week.template.calendar</field>
+      <field name="model">resource.week.template.shift</field>
+      <field name="arch" type="xml">
+        <calendar string="Week Template" mode="week" date_start="date_start" date_stop="date_stop" date_delay="duration" scales="week" quick_create="false" event_open_popup="true" color="role_id" hide_time="true">
+          <field name="name" />
+          <field name="role_id" filters="1" />
+        </calendar>
+      </field>
+    </record>
+    <!-- Pivot Views -->
+    <record id="view_resource_week_template_shift_pivot" model="ir.ui.view">
+      <field name="name">resource.week.template.pivot.view</field>
+      <field name="model">resource.week.template.shift</field>
+      <field name="arch" type="xml">
+        <pivot string="Template Shifts" />
+      </field>
+    </record>
+    <record id="view_resource_shift_test_form" model="ir.ui.view">
+      <field name="name">resource.shift.test.from.view</field>
+      <field name="model">resource.shift</field>
+      <field name="arch" type="xml">
+        <form string="Test Shifts">
+          <field name="role_id" />
+        </form>
+      </field>
+    </record>
+  </data>
 </odoo>
-
-
-       
-

@@ -34,6 +34,7 @@ class ResourceShift(models.Model):
     name = fields.Char(string="Shift Name", compute="_compute_name", store=True)
     plan_id = fields.Many2one(comodel_name="resource.plan")
     planning_id = fields.Many2one(related="plan_id.planning_id")
+    department_id = fields.Many2one(related="plan_id.planning_id.department_id")
     res_users_id = fields.Many2one(comodel_name="res.users", related="resource_id.user_id")
     resource_id = fields.Many2one(comodel_name="resource.resource",group_expand="_group_expand_resource_id",domain="[('resource_type', '=', 'user')]", tracking=True)
     role_id = fields.Many2one(comodel_name="resource.role", required=True, tracking=True)
@@ -46,6 +47,7 @@ class ResourceShift(models.Model):
     week_start_date = fields.Datetime(compute="_compute_week_start_date",store=True)
     week_template_id = fields.Many2one(comodel_name="resource.week.template")
     worked_hours = fields.Float(related="attendance_id.worked_hours")
+    
 
     def compute_status_color(self):
         for shift in self:
@@ -175,6 +177,17 @@ class ResourceShift(models.Model):
                     role_id = v
                     break
         role = self.env['resource.role'].browse(role_id) if role_id else None
+        department_id = None
+        for item in domain:
+            if isinstance(item, (list, tuple)) and len(item) == 3:
+                field, op, v = item
+                if field == 'department_id' and op == '=':
+                    department_id = v
+                    break
+        department = self.env['hr.department'].browse(department_id) if department_id else None
+        _logger.error(f"{department=} {role=} {plan=}")
+        if department:
+            return self.env["resource.resource"].browse(plan.get_prioritized_resources().filtered(lambda e: e.department_id.id == department_id).mapped('resource_id.id'))
         if role:
             return self.env["resource.resource"].browse(plan.get_prioritized_resources().filtered(lambda e: role in e.role_ids).mapped('resource_id.id'))
         return self.env["resource.resource"].browse(plan.get_prioritized_resources().mapped('resource_id.id'))
