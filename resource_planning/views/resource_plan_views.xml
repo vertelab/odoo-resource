@@ -8,7 +8,7 @@
       <field name="arch" type="xml">
         <form string="Resource Planning">
           <header>
-            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" readonly="shift_count > 0" />
+            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" readonly="shift_count > 0" invisible="shift_count > 0"/>
             <button name="update_data_lines" type="object" string="Update Data" class="btn-primary" />
           </header>
           <sheet>
@@ -74,7 +74,9 @@
       <field name="arch" type="xml">
         <list string="Resource Plans" default_order="date_start desc">
           <header>
+<!--
             <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" display="always" />
+-->
           </header>
           <field name="name" />          
           <field name="date_start" required="True" />

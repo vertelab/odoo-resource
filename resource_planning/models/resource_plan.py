@@ -100,7 +100,6 @@ class ResourcePlan(models.Model):
         for week_template_id in self.week_template_ids:
             if stop_loop:
                 break
-            _logger.error(f"{date_start.weekday()=}")
             for day_number in range(date_start.weekday(), 7):
                 shifts_this_day = list(filter(lambda w: w.week_number == day_number, week_template_id.week_template_shift_ids))
                 if date_start.weekday() == day_number:

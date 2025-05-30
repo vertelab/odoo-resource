@@ -4,7 +4,7 @@ from datetime import timedelta, datetime
 from odoo import models, fields, api
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.exceptions import UserError, ValidationError
-from pytz import timezone
+import pytz
 
 _logger = logging.getLogger(__name__)
 
@@ -12,7 +12,11 @@ class ResourcPlanning(models.Model):
     _name = 'resource.planning'
     _description = 'Resource Planning'
     _inherit = ["mail.thread", "mail.activity.mixin"]
+    
+    
+    _tzs = [(tz, tz) for tz in sorted(pytz.all_timezones, key=lambda tz: tz if not tz.startswith('Etc/') else '_')]
 
+    active = fields.Boolean(default=True)
     color = fields.Integer()
     company_id = fields.Many2one(comodel_name="res.company")
     date_start = fields.Datetime()
@@ -22,8 +26,12 @@ class ResourcPlanning(models.Model):
     name = fields.Char()
     plan_count = fields.Integer(compute="_compute_plan_count")
     plan_ids = fields.One2many(comodel_name="resource.plan", inverse_name="planning_id")
+    resource_calendar_id = fields.Many2one(comodel_name="resource.calendar",tracking=True)
     status_color = fields.Integer(compute="compute_status_color")
-    active = fields.Boolean(default=True)
+    tz = fields.Selection(_tzs, string='Timezone', default=lambda self: self._context.get('tz'),
+                          help="When printing documents and exporting/importing data, time values are computed according to this timezone.\n"
+                               "If the timezone is not set, UTC (Coordinated Universal Time) is used.\n"
+                               "Anywhere else, time values are computed according to the time offset of your web client.")
 
     def compute_status_color(self):
         for shift in self:
@@ -36,6 +44,17 @@ class ResourcPlanning(models.Model):
                     # ~ shift.status_color = 10  # Green
             # ~ else:
                 # ~ shift.status_color = 3  # Orange
+
+
+    def _get_tz(self):
+        # Finds the first valid timezone in his tz, his work hours tz,
+        #  the company calendar tz or UTC and returns it as a string
+        self.ensure_one()
+        return self.tz or\
+               self.resource_calendar_id.tz or\
+               self.company_id.resource_calendar_id.tz or\
+               'UTC'
+
 
     @api.depends("plan_ids")
     def _compute_plan_count(self):
@@ -83,3 +102,8 @@ class ResourcPlanning(models.Model):
         # ~ resource_ids = resource_id._search(domain)
         
         return self.env["hr.department"].search([])
+
+    def shift_fit(self,shift):
+        ok = self.resource_calendar_id._work_intervals_batch(pytz.timezone(self.tz or 'UTC').localize(shift.date_start),pytz.timezone(self.tz or 'UTC').localize( shift.date_stop),compute_leaves=True)
+        return ok
+        

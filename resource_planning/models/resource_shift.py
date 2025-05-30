@@ -12,6 +12,8 @@ class ResourceShift(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     attendance_id = fields.Many2one(comodel_name="hr.attendance")
+    check_in = fields.Datetime(related="attendance_id.check_in")
+    check_out = fields.Datetime(related="attendance_id.check_out")
     color = fields.Integer()
     company_id = fields.Many2one(comodel_name='res.company',)
     date_start = fields.Datetime(tracking=True)
@@ -26,47 +28,68 @@ class ResourceShift(models.Model):
         ('6', 'Sunday')
         ], compute="_compute_day", store=True)
     department_id = fields.Many2one(related="plan_id.planning_id.department_id")
+    department_id = fields.Many2one(related="plan_id.planning_id.department_id")
     duration = fields.Float(string="Duration (Hours)",help="Shift duration in decimal hours",tracking=True)
     employee_id = fields.Many2one(comodel_name="hr.employee", compute="_compute_employee_id",store=True)
     end_time = fields.Float(string="End Time", tracking=True)
     hr_icon_display = fields.Selection(related='employee_id.hr_icon_display')
     image_128 = fields.Binary(related="employee_id.image_128")
+    is_has_resource_checkedin = fields.Selection(string="Absent", help="The shift has started and has the employee checked in?",selection=[('ok','OK'),('not','Resource Absent')],compute="_check_shift", tracking=True, default="ok")
+    is_within_planner_calendar = fields.Selection(string="Planning Schema", selection=[('ok','OK'),('not','Out of Planning Schema')],compute="_check_shift",tracking=True, default="ok")
+    is_within_resource_calendar = fields.Selection(string="Employee Schema", selection=[('ok','OK'),('not','Out of Resource Schema')],compute="_check_shift",tracking=True, default="ok")
+    is_within_resource_dwt = fields.Selection(string="Day Worktime", selection=[('ok','OK'),('not','Out of Resource Day Worktime')],compute="_check_shift",tracking=True, default="ok")
+    is_within_resource_role = fields.Selection(string="Role", selection=[('ok','OK'),('not','Out of Planning Schema')],compute="_check_shift",tracking=True, default="ok")
+    is_within_resource_wwt = fields.Selection(string="Week Worktime", selection=[('ok','OK'),('not','Out of Resource Week Worktime')],compute="_check_shift",tracking=True, default="ok")
     name = fields.Char(string="Shift Name", compute="_compute_name", store=True)
     plan_id = fields.Many2one(comodel_name="resource.plan")
     planning_id = fields.Many2one(related="plan_id.planning_id")
-    department_id = fields.Many2one(related="plan_id.planning_id.department_id")
     res_users_id = fields.Many2one(comodel_name="res.users", related="resource_id.user_id")
     resource_id = fields.Many2one(comodel_name="resource.resource",group_expand="_group_expand_resource_id",domain="[('resource_type', '=', 'user')]", tracking=True)
     role_id = fields.Many2one(comodel_name="resource.role", required=True, tracking=True)
     show_hr_icon_display = fields.Boolean(related="employee_id.show_hr_icon_display")
     slot_id = fields.Many2one(comodel_name="resource.slot")
     start_time = fields.Float(string="Start Time", help="Shift start time (24-hour format)", tracking=True)
-    status_color = fields.Integer(compute="compute_status_color")
+    status_color = fields.Integer(compute="_check_shift")
+    status_title = fields.Char(string="Shift Status",compute="_check_shift")
     week_number = fields.Integer(compute="_compute_week_number", store=True)
     week_number_string = fields.Char(compute="_compute_week_number_string", store=True)
     week_start_date = fields.Datetime(compute="_compute_week_start_date",store=True)
     week_template_id = fields.Many2one(comodel_name="resource.week.template")
     worked_hours = fields.Float(related="attendance_id.worked_hours")
-    
-
-    def compute_status_color(self):
-        for shift in self:
-            shift.status_color = 0 # Grey
-            if shift.resource_id:
-                if shift.role_id.id != shift.resource_id.role_id.id:
-                    shift.status_color = 1  # Red
-                else:
-                    shift.status_color = 10  # Green
+ 
+    def _check_shift(self):
+        for shift in self:  
+            shift.status_color = 10 # Green
+            shift.status_title = 'All is Hunky Dory' # Green
+            
+            if not shift.plan_id.planning_id.shift_fit(shift):
+                shift.is_within_planner_calendar = 'not'
+                shift.status_color = 1 # Red
+                shift.status_title = dict(shift._fields['is_within_planner_calendar'].selection).get(shift.is_within_planner_calendar, '')
             else:
-                shift.status_color = 3  # Orange
-
-    # ~ @api.constrains('role_id','resource_id')
-    # ~ def _check_resource_role(self):
-        # ~ for shift in self:
-            # ~ if shift.resource_id:
-                # ~ if shift.role_id.id != shift.resource_id.role_id.id:
-                    # ~ raise UserError(_(f"{shift.resource_id.name} doesn't have the role {shift.role_id.name}."))
-
+                shift.is_within_planner_calendar = 'ok'
+            if not shift.employee_id.shift_fit(shift):
+                shift.is_within_resource_calendar = 'not'
+                if not shift.status_color == 1:
+                    shift.status_color = 3 # Orange
+                    shift.status_title = dict(shift._fields['is_within_resource_calendar'].selection).get(shift.is_within_resource_calendar, '')
+            else:
+                shift.is_within_resource_calendar = 'ok'
+            if not shift.role_id in shift.resource_id.role_ids:
+                shift.is_within_resource_role = 'not'
+                if not shift.status_color == 1:
+                    shift.status_color = 3 # Orange
+                    shift.status_title = dict(shift._fields['is_within_resource_role'].selection).get(shift.is_within_resource_role, '')
+            else:
+                shift.is_within_resource_role = 'ok'
+            
+            # dwt
+            shift.is_within_resource_dwt = "ok"
+            shift.is_within_resource_wwt = "ok"
+            shift.is_has_resource_checkedin = "ok"
+            
+            # ~ hr_presence_status
+ 
     @api.depends("date_start")
     def _compute_week_number(self):
         for record in self:
@@ -233,3 +256,9 @@ class ResourceShift(models.Model):
                 non_parallel_shifts += shift
                 last_end = shift.date_stop
         return non_parallel_shifts.sorted(lambda d: duration,reverse=True)
+        
+    def unset_resource(self):
+        self.resource_id = None
+        
+        
+

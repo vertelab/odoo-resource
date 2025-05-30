@@ -35,7 +35,9 @@
             </div>
             <group>
               <field name="company_id" groups="base.group_multi_company" />
-              <field name="department_id" />
+              <field name="department_id" />    
+              <field name="tz"/>
+              <field name="resource_calendar_id"/>
             </group>
             <!-- <notebook>
                  <page string="Roles Data">
