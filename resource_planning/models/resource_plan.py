@@ -14,6 +14,7 @@ class ResourcePlan(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     date_start = fields.Date()
+    date_stop = fields.Date()
     duration= fields.Float(string="Planned Hours",compute="_compute_duration")
     name = fields.Char()
     plan_resource_ids = fields.One2many(comodel_name="resource.plan.resource", inverse_name="plan_id")
@@ -57,8 +58,7 @@ class ResourcePlan(models.Model):
             'res_model': 'resource.shift',
             'view_mode': 'kanban,calendar,form,list,pivot',
             'target': 'current',
-            'context': {'group_by':'resource_id','default_plan_id': self.id},
-            'domain': [('plan_id', '=', self.id)]
+            'context': {'group_by':'resource_id','search_default_plan_id': self.id},
         }
         return action
 
@@ -69,8 +69,8 @@ class ResourcePlan(models.Model):
             'res_model': 'resource.slot',
             'view_mode': 'kanban,form,list',
             'target': 'current',
-            #'context': {},  # you can pass context here if needed
-            'domain': [('plan_id', '=', self.id)]
+            'context': {'group_by':'resource_id','search_default_plan_id': self.id},
+            # ~ 'domain': [('plan_id', '=', self.id)]
         }
         return action
 
@@ -94,20 +94,33 @@ class ResourcePlan(models.Model):
 
 
     def create_shifts(self):
-        records = []
-        if not self.week_template_ids:
-            raise UserError(_("You need to have at least one week scheduled."))
         date_start = self.date_start
+        records = []
+        stop_loop = False  # break both loops
         for week_template_id in self.week_template_ids:
+            if stop_loop:
+                break
             _logger.error(f"{date_start.weekday()=}")
-            for day_number in range(date_start.weekday(),7):
-                shifts_this_day = list(filter(lambda w: w.week_number == day_number,week_template_id.week_template_shift_ids))
+            for day_number in range(date_start.weekday(), 7):
+                shifts_this_day = list(filter(lambda w: w.week_number == day_number, week_template_id.week_template_shift_ids))
                 if date_start.weekday() == day_number:
                     for shift in shifts_this_day:
-                        new_date_start = datetime(date_start.year,date_start.month,date_start.day,shift.date_start.hour,shift.date_start.minute,shift.date_start.second)
-                        record = {"date_start": new_date_start, "duration": shift.duration, "role_id": shift.role_id.id, "plan_id": self.id, "week_template_id": week_template_id.id}
+                        new_date_start = datetime(
+                            date_start.year, date_start.month, date_start.day,
+                            shift.date_start.hour, shift.date_start.minute, shift.date_start.second
+                        )
+                        record = {
+                            "date_start": new_date_start,
+                            "duration": shift.duration,
+                            "role_id": shift.role_id.id,
+                            "plan_id": self.id,
+                            "week_template_id": week_template_id.id
+                        }
                         records.append(record)
                 date_start = date_start + timedelta(days=1)
+                if date_start > self.date_stop:
+                    stop_loop = True
+                    break
         self.env["resource.shift"].create(records)
 
     def reset_date_start(self):

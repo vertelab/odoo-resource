@@ -140,6 +140,25 @@
       </field>
     </record>
     
+    
+        <!-- Search Views -->
+    <record id="resource_planning_search" model="ir.ui.view">
+      <field name="name">resource.planning.search</field>
+      <field name="model">resource.planning</field>
+      <field name="arch" type="xml">
+        <search string="Search Shifts">
+          <field name="name" />
+
+          <field name="department_id" />
+
+
+          <group expand="0" string="Group By">
+
+            <filter string="Department" name="group_by_department" context="{'group_by': 'department_id'}" />
+          </group>
+        </search>
+      </field>
+    </record>
   </data>
 </odoo>
 

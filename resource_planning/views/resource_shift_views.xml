@@ -108,6 +108,7 @@
           <field name="date_start" />
           <field name="department_id" />
           <field name="week_number_string" />
+          <field name="plan_id" />
           <filter string="Start Date" name="date_start" date="date_start" />
           <filter string="Monday" name="monday" domain="[('day', '=', 0)]" />
           <filter string="Tuesday" name="tuesday" domain="[('day', '=', 1)]" />
@@ -135,28 +136,7 @@
         </search>
       </field>
     </record>
-    <record id="resource_week_template_shift_search" model="ir.ui.view">
-      <field name="name">resource.week.template.shift.search</field>
-      <field name="model">resource.week.template.shift</field>
-      <field name="arch" type="xml">
-        <search string="Search Template Shifts">
-          <field name="name" />
-          <field name="day" />
-          <field name="role_id" />
-          <filter string="Monday" name="monday" domain="[('day', '=', 0)]" />
-          <filter string="Tuesday" name="tuesday" domain="[('day', '=', 1)]" />
-          <filter string="Wednesday" name="wednesday" domain="[('day', '=', 2)]" />
-          <filter string="Thursday" name="thursday" domain="[('day', '=', 3)]" />
-          <filter string="Friday" name="friday" domain="[('day', '=', 4)]" />
-          <filter string="Saturday" name="saturday" domain="[('day', '=', 5)]" />
-          <filter string="Sunday" name="sunday" domain="[('day', '=', 6)]" />
-          <group expand="0" string="Group By">
-            <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
-            <filter string="Roles" name="group_by_role" context="{'group_by': 'role_id'}" />
-          </group>
-        </search>
-      </field>
-    </record>
+
     <!-- Kanban Views -->
     <record id="resource_shift_kanban" model="ir.ui.view">
       <field name="name">resource.shift.kanban</field>

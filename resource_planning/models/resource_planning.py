@@ -47,10 +47,9 @@ class ResourcPlanning(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Plans',
             'res_model': 'resource.plan',
-            'view_mode': 'list,form,pivot',
+            'view_mode': 'list,form,calendar,pivot',
             'target': 'current',
-            'context': {'default_planning_id': self.id},
-            'domain': [('planning_id', '=', self.id)]
+            'context': {'search_default_planning_id': self.id},
         }
         return action
 
@@ -61,8 +60,7 @@ class ResourcPlanning(models.Model):
             'res_model': 'resource.shift',
             'view_mode': 'calendar,list,form,kanban,pivot',
             'target': 'current',
-            'context': {'default_planning_id': self.id},
-            'domain': [('planning_id', '=', self.id)]
+            'context': {'search_default_planning_id': self.id},
         }
         return action
 
@@ -74,8 +72,7 @@ class ResourcPlanning(models.Model):
             'res_model': 'resource.shift',
             'view_mode': 'calendar,kanban,list,form,pivot',
             'target': 'current',
-            'context': {'default_planning_id': self.id},
-            'domain': [('planning_id', '=', self.id)]
+            'context': {'search_default_planning_id': self.id},
         }
         return action
 

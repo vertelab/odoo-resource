@@ -190,7 +190,10 @@ class ResourceShift(models.Model):
             return self.env["resource.resource"].browse(plan.get_prioritized_resources().filtered(lambda e: e.department_id.id == department_id).mapped('resource_id.id'))
         if role:
             return self.env["resource.resource"].browse(plan.get_prioritized_resources().filtered(lambda e: role in e.role_ids).mapped('resource_id.id'))
-        return self.env["resource.resource"].browse(plan.get_prioritized_resources().mapped('resource_id.id'))
+        if plan:
+            return self.env["resource.resource"].browse(plan.get_prioritized_resources().mapped('resource_id.id'))
+        return self.env["resource.resource"].search([])
+        
 
     def resouce_allocation_date(self,date,resource_id):
         return sum(self.env['resource.shift'].search([

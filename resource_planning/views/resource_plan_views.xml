@@ -2,8 +2,6 @@
   <data>
     
     <!-- From Views -->
-    
-    
     <record id="view_resource_plan_form" model="ir.ui.view">
       <field name="name">resource.plan.form</field>
       <field name="model">resource.plan</field>
@@ -30,8 +28,14 @@
               </h1>
             </div>
             <group>
-              <field name="date_start" required="True" />
-              <field name="week_template_ids" widget="many2many_tags" />
+            <field
+    name="date_start"
+    string="Planned Date"
+    widget="daterange"
+    options='{ "end_date_field": "date_stop", "always_range": true}'
+    required="1"
+/>
+   <field name="week_template_ids" widget="many2many_tags" />
             </group>
             <notebook>
               <page string="Roles Data">
@@ -58,42 +62,96 @@
         </form>
       </field>
     </record>
-    <record id="view_resource_plan_list" model="ir.ui.view">
+
+    
+    
+   
+    
+    <!-- List Views -->
+       <record id="view_resource_plan_list" model="ir.ui.view">
       <field name="name">resource.plan.list</field>
       <field name="model">resource.plan</field>
       <field name="arch" type="xml">
-        <list string="Resource Plans">
+        <list string="Resource Plans" default_order="date_start desc">
           <header>
             <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" display="always" />
           </header>
-          <field name="name" />
+          <field name="name" />          
           <field name="date_start" required="True" />
+          <field name="date_stop" required="True" />
           <field name="week_template_ids" widget="many2many_tags" />
-          <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-calendar" />
+          <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-trello" />
+          <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-cubes" />
           <field name="duration" widget="float_time" sum="True" />
           <field name="worked_hours" widget="float_time" sum="True" />
         </list>
       </field>
     </record>
     
-    
-   
-    
-    <!-- List Views -->
-   
-    
 
     <!-- Search Views -->
-   
+    <record id="resource_plan_search" model="ir.ui.view">
+      <field name="name">resource.plan.search</field>
+      <field name="model">resource.plan</field>
+      <field name="arch" type="xml">
+        <search string="Search Shifts">
+          <field name="name" />
+          <field name="planning_id" />
+          <field name="week_template_ids" />
+          <field name="plan_role_ids" />
+          <field name="plan_resource_ids" />
+          <field name="date_start" />
+          <field name="date_stop" />
+<!--
+          <field name="department_id" />
+-->
+  
+          <filter string="Start Date" name="date_start" date="date_start" />
+
+          <group expand="0" string="Group By">
+            <filter string="Date" name="group_by_date" context="{'group_by': 'date_start'}" />
+<!--
+            <filter string="Department" name="group_by_department" context="{'group_by': 'department_id'}" />
+-->
+          </group>
+        </search>
+      </field>
+    </record>
    
     <!-- Kanban Views -->
     
     <!-- Calandar Views -->
 
-  
+   <record id="view_resource_plan_calendar" model="ir.ui.view">
+  <field name="name">resource.plan.calendar</field>
+  <field name="model">resource.plan</field>
+  <field name="arch" type="xml">
+    <calendar
+      string="Plans"
+      date_start="date_start"
+      date_stop="date_stop"
+      quick_create="true"
+      hide_time="true"
+      mode="month"
+      color="planning_id"
+    >
+      <field name="name"/>
+      <field name="duration"/>
+      <field name="worked_hours"/>
+    </calendar>
+  </field>
+</record>
+
+   
    
     <!-- Pivot Views -->
-    
+     <record id="view_resource_plan_pivot" model="ir.ui.view">
+      <field name="name">resource.plan.pivot.view</field>
+      <field name="model">resource.plan</field>
+      <field name="arch" type="xml">
+        <pivot string="Plans" />
+      </field>
+    </record>
     
   </data>
 </odoo>
