@@ -1,0 +1,99 @@
+<odoo>
+  <data>
+    
+    <!-- From Views -->
+    
+    
+    <record id="view_resource_plan_form" model="ir.ui.view">
+      <field name="name">resource.plan.form</field>
+      <field name="model">resource.plan</field>
+      <field name="arch" type="xml">
+        <form string="Resource Planning">
+          <header>
+            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" readonly="shift_count > 0" />
+            <button name="update_data_lines" type="object" string="Update Data" class="btn-primary" />
+          </header>
+          <sheet>
+            <div name="button_box" id="button_box" class="oe_button_box">
+              <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-calendar">
+                <field string="Shifts" name="shift_count" widget="statinfo" />
+              </button>
+              <button name="action_get_slots" class="oe_stat_button " type="object" icon="fa-th">
+                <field string="Slots" name="slot_count" widget="statinfo" />
+              </button>
+            </div>
+            <div class="oe_title pe-0">
+              <h1 class="d-flex justify-content-between align-items-center">
+                <div class="d-flex w-100">
+                  <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Month..." />
+                </div>
+              </h1>
+            </div>
+            <group>
+              <field name="date_start" required="True" />
+              <field name="week_template_ids" widget="many2many_tags" />
+            </group>
+            <notebook>
+              <page string="Roles Data">
+                <field name="plan_role_ids" no_open="1">
+                  <list create="false" edit="false" delete="false">
+                    <field name="role_id" />
+                    <field name="duration" widget="float_time" sum="True" />
+                    <field name="worked_hours" widget="float_time" sum="True" />
+                  </list>
+                </field>
+              </page>
+              <page string="Resource Data">
+                <field name="plan_resource_ids" no_open="1">
+                  <list create="false" edit="false" delete="false">
+                    <field name="resource_id" widget="many2one_avatar_user" />
+                    <field name="duration" widget="float_time" sum="True" />
+                    <field name="worked_hours" widget="float_time" sum="True" />
+                  </list>
+                </field>
+              </page>
+            </notebook>
+          </sheet>
+          <chatter />
+        </form>
+      </field>
+    </record>
+    <record id="view_resource_plan_list" model="ir.ui.view">
+      <field name="name">resource.plan.list</field>
+      <field name="model">resource.plan</field>
+      <field name="arch" type="xml">
+        <list string="Resource Plans">
+          <header>
+            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" display="always" />
+          </header>
+          <field name="name" />
+          <field name="date_start" required="True" />
+          <field name="week_template_ids" widget="many2many_tags" />
+          <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-calendar" />
+          <field name="duration" widget="float_time" sum="True" />
+          <field name="worked_hours" widget="float_time" sum="True" />
+        </list>
+      </field>
+    </record>
+    
+    
+   
+    
+    <!-- List Views -->
+   
+    
+
+    <!-- Search Views -->
+   
+   
+    <!-- Kanban Views -->
+    
+    <!-- Calandar Views -->
+
+  
+   
+    <!-- Pivot Views -->
+    
+    
+  </data>
+</odoo>
