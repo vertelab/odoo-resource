@@ -80,8 +80,8 @@
           <field name="date_start" required="True" />
           <field name="date_stop" required="True" />
           <field name="week_template_ids" widget="many2many_tags" />
-          <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-trello" />
-          <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-cubes" />
+          <button name="action_get_shifts" class="oe_stat_button" title="Action Get Shifts" type="object" icon="fa-trello" />
+          <button name="action_get_shifts" class="oe_stat_button" title="ACtion Get Slots" type="object" icon="fa-cubes" />
           <field name="duration" widget="float_time" sum="True" />
           <field name="worked_hours" widget="float_time" sum="True" />
         </list>

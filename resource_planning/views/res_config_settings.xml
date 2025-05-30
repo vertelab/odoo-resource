@@ -1,0 +1,23 @@
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.resource.planning.view.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Resource Planning" string="Resource Planning" name="resource_planning" groups="base.group_system">
+                    <block title="Resource Planning Settings" name="resource_planning">
+                        <setting string="Planning Slots" help="If enabled, adds slot planning on shifts.">
+                            <field name="is_planning_slots"/>
+                        </setting>
+                        <setting string="Plan Department Selection" help="Choose how to prioritize sorting on plans.">
+                            <field name="plan_department"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
