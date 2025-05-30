@@ -17,7 +17,7 @@ class ResourcPlanning(models.Model):
     company_id = fields.Many2one(comodel_name="res.company")
     date_start = fields.Datetime()
     date_stop = fields.Datetime()
-    department_id = fields.Many2one(comodel_name="hr.department")
+    department_id = fields.Many2one(comodel_name="hr.department",group_expand="_group_expand_department_id")
     image_128 = fields.Binary()
     name = fields.Char()
     plan_count = fields.Integer(compute="_compute_plan_count")
@@ -76,3 +76,10 @@ class ResourcPlanning(models.Model):
         }
         return action
 
+
+    def _group_expand_department_id(self, resource_id, domain):
+        _logger.error(f"{domain=}")
+        # ~ domain=[('resource_type', '=', 'user')]
+        # ~ resource_ids = resource_id._search(domain)
+        
+        return self.env["hr.department"].search([])
