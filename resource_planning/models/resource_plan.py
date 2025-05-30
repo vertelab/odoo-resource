@@ -20,12 +20,23 @@ class ResourcePlan(models.Model):
     plan_resource_ids = fields.One2many(comodel_name="resource.plan.resource", inverse_name="plan_id")
     plan_role_ids = fields.One2many(comodel_name="resource.plan.role", inverse_name="plan_id")
     planning_id = fields.Many2one(comodel_name="resource.planning")
+    is_planning_slots = fields.Boolean(compute="_compute_is_planning_slots")
     shift_count = fields.Integer(compute="_compute_shift_count")
     shift_ids = fields.One2many(comodel_name="resource.shift",inverse_name="plan_id")
     slot_count = fields.Integer(compute="_compute_slot_count")
     slot_ids = fields.One2many(comodel_name="resource.slot",inverse_name="plan_id")
     week_template_ids = fields.Many2many(comodel_name="resource.week.template")
     worked_hours = fields.Float(compute="_compute_worked_hours") 
+
+
+    def _compute_is_planning_slots(self):
+        for record in self:
+            is_planning_slots_char = self.env['ir.config_parameter'].sudo().get_param('resource_planning.is_planning_slots')
+            _logger.error(f"{is_planning_slots_char=}"*100)
+            if is_planning_slots_char.lower() == "true":
+                record.is_planning_slots = True
+            else:
+                record.is_planning_slots = False
 
     def _compute_duration(self):
         for record in self:

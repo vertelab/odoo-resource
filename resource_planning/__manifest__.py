@@ -49,6 +49,7 @@ More information:
     'depends': ['hr', 'hr_attendance', 'calendar','project','resource','mail'],
     'data': [
         'security/ir.model.access.csv',
+        'views/res_config_settings.xml',
         'views/resource_menu.xml',
         'views/resource_planning_views.xml',
         'views/resource_plan_views.xml',
