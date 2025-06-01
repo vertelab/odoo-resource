@@ -120,10 +120,16 @@
                 <div>
                   <field class="fw-bold fs-5" name="name" placeholder="Shift Name" />
                 </div>
-                <button name="get_plans" class="oe_stat_button " type="object" icon="fa-calendar">
-                  <field string="Plans" name="plan_count" widget="statinfo" />
-                </button>
-                <button string="Today" name="get_today" type="object" />
+                <span>
+                <field string="Plans" name="plan_count"  style="margin-right: 0px;" />
+                <button string="Plans" name="get_plans" class="oe_stat_button " type="object" />
+                </span>
+                <field name="use_slots" invisible="True"/>
+                <span>
+                    Today
+                <button  name="get_today" type="object" icon="fa-trello"/>
+                <button  name="get_today_slots" type="object" icon="fa-cubes" invisible="use_slots == False"/>
+                </span>
                 <footer>
                   <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="d-flex align-items-center">

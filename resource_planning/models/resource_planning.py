@@ -32,7 +32,13 @@ class ResourcPlanning(models.Model):
                           help="When printing documents and exporting/importing data, time values are computed according to this timezone.\n"
                                "If the timezone is not set, UTC (Coordinated Universal Time) is used.\n"
                                "Anywhere else, time values are computed according to the time offset of your web client.")
+    use_slots = fields.Boolean(compute="_compute_use_slots")
 
+    def _compute_use_slots(self):
+        use_slots = self.env['ir.config_parameter'].sudo().get_param('resource_planning.use_slots', 'False') == 'True'
+        for rec in self:
+            rec.use_slots = use_slots
+            
     def compute_status_color(self):
         for shift in self:
             shift.status_color = 0 # Grey
@@ -82,6 +88,16 @@ class ResourcPlanning(models.Model):
             'context': {'search_default_planning_id': self.id},
         }
         return action
+    def get_today_slots(self):
+        action = {
+            'type': 'ir.actions.act_window',
+            'name': 'Today',
+            'res_model': 'resource.slot',
+            'view_mode': 'calendar,list,form,kanban,pivot',
+            'target': 'current',
+            'context': {'search_default_planning_id': self.id},
+        }
+        return action
 
 
     def get_this_week(self):
@@ -104,6 +120,9 @@ class ResourcPlanning(models.Model):
         return self.env["hr.department"].search([])
 
     def shift_fit(self,shift):
-        ok = self.resource_calendar_id._work_intervals_batch(pytz.timezone(self.tz or 'UTC').localize(shift.date_start),pytz.timezone(self.tz or 'UTC').localize( shift.date_stop),compute_leaves=True)
+        if shift.resource_id:
+            ok = self.resource_calendar_id._work_intervals_batch(pytz.timezone(self.tz or 'UTC').localize(shift.date_start),pytz.timezone(self.tz or 'UTC').localize( shift.date_stop),compute_leaves=True)
+        else:
+            ok = True
         return ok
         

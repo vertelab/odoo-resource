@@ -26,9 +26,14 @@ class ResourcePlan(models.Model):
     slot_count = fields.Integer(compute="_compute_slot_count")
     slot_ids = fields.One2many(comodel_name="resource.slot",inverse_name="plan_id")
     week_template_ids = fields.Many2many(comodel_name="resource.week.template")
-    worked_hours = fields.Float(compute="_compute_worked_hours") 
+    worked_hours = fields.Float(compute="_compute_worked_hours")
+    use_slots = fields.Boolean(compute="_compute_use_slots")
 
-
+    def _compute_use_slots(self):
+        use_slots = self.env['ir.config_parameter'].sudo().get_param('resource_planning.use_slots', 'False') == 'True'
+        for rec in self:
+            rec.use_slots = use_slots
+        
     def _compute_is_planning_slots(self):
         for record in self:
             is_planning_slots_char = self.env['ir.config_parameter'].sudo().get_param('resource_planning.is_planning_slots')

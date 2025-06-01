@@ -7,15 +7,15 @@
       <field name="arch" type="xml">
         <form string="Resource Planning">
           <header>
-            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" readonly="shift_count > 0" />
+            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" invisible="shift_count > 0" />
             <button name="update_data_lines" type="object" string="Update Data" class="btn-primary" />
           </header>
           <sheet>
             <div name="button_box" id="button_box" class="oe_button_box">
-              <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-calendar">
+              <button name="action_get_shifts" class="oe_stat_button " type="object" icon="fa-trello">
                 <field string="Shifts" name="shift_count" widget="statinfo" />
               </button>
-              <button name="action_get_slots" class="oe_stat_button " type="object" icon="fa-th">
+              <button name="action_get_slots" class="oe_stat_button " type="object" icon="fa-cubes" invisible="use_slots == False">
                 <field string="Slots" name="slot_count" widget="statinfo" />
               </button>
             </div>
@@ -27,6 +27,7 @@
               </h1>
             </div>
             <group>
+                <field name="use_slots" invisible="True"/>)
               <field name="date_start" string="Planned Date" widget="daterange" options='{ "end_date_field": "date_stop", "always_range": true}' required="1" />
               <field name="week_template_ids" widget="many2many_tags" />
             </group>
@@ -70,8 +71,9 @@
           <field name="date_start" required="True" />
           <field name="date_stop" required="True" />
           <field name="week_template_ids" widget="many2many_tags" />
+          <field name="use_slots" invisible="True"/>
           <button name="action_get_shifts" class="oe_stat_button" title="Action Get Shifts" type="object" icon="fa-trello" />
-          <button name="action_get_shifts" class="oe_stat_button" title="ACtion Get Slots" type="object" icon="fa-cubes" />
+          <button name="action_get_shifts" class="oe_stat_button" title="ACtion Get Slots" type="object" icon="fa-cubes" invisible="use_slots == False" />
           <field name="duration" widget="float_time" sum="True" />
           <field name="worked_hours" widget="float_time" sum="True" />
         </list>

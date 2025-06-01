@@ -28,7 +28,6 @@ class ResourceShift(models.Model):
         ('6', 'Sunday')
         ], compute="_compute_day", store=True)
     department_id = fields.Many2one(related="plan_id.planning_id.department_id")
-    department_id = fields.Many2one(related="plan_id.planning_id.department_id")
     duration = fields.Float(string="Duration (Hours)",help="Shift duration in decimal hours",tracking=True)
     employee_id = fields.Many2one(comodel_name="hr.employee", compute="_compute_employee_id",store=True)
     end_time = fields.Float(string="End Time", tracking=True)
@@ -56,7 +55,8 @@ class ResourceShift(models.Model):
     week_start_date = fields.Datetime(compute="_compute_week_start_date",store=True)
     week_template_id = fields.Many2one(comodel_name="resource.week.template")
     worked_hours = fields.Float(related="attendance_id.worked_hours")
- 
+    
+    @api.depends("date_start","duration","resource_id")
     def _check_shift(self):
         for shift in self:  
             shift.status_color = 10 # Green

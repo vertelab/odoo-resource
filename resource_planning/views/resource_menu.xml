@@ -52,6 +52,19 @@
         </record>
 
 
+        <record id="resource_planning_settings_action" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'resource_planning', 'bin_size': False}</field>
+    </record>
+    
+      
+        
+
+
+
         <!-- Main Menu -->
         <menuitem id="menu_resource_root" name="Resource Planner" sequence="10"/>
 
@@ -70,6 +83,9 @@
         <!-- <menuitem id="menu_resource_shifts" name="Shifts" parent="menu_resource_root" action="action_resource_shifts" sequence="40"/> -->
 
         <!-- <menuitem id="menu_resource_slot_root" name="Slots" parent="menu_resource_root" action="action_resource_slot" sequence="40"/> -->
+    <menuitem id="menu_resource_planning_settings" name="Settings" parent="menu_resource_plan_configuration" 
+    action="resource_planning_settings_action" sequence="1" groups="base.group_system"
+     />
 
     </data>
 </odoo>

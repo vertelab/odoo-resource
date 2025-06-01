@@ -8,16 +8,22 @@
             <xpath expr="//form" position="inside">
                 <app data-string="Resource Planning" string="Resource Planning" name="resource_planning" groups="base.group_system">
                     <block title="Resource Planning Settings" name="resource_planning">
-                        <setting string="Planning Slots" help="If enabled, adds slot planning on shifts.">
-                            <field name="is_planning_slots"/>
+                        <setting string="Use Slots" help="If enabled, adds slot planning on shifts. You can plan any type of object using slots.">
+                            <field name="use_slots"/>
                         </setting>
-                        <setting string="Plan Department Selection" help="Choose how to prioritize sorting on plans.">
+                        <setting string="Plan Employees" help="Choose how to prioritize emplloyees for shifts.">
                             <field name="plan_department"/>
                         </setting>
+                        <setting string="Hours Day" help="Max hours an Employee can work on a day.">
+                            <field name="hour_day"/>
+                        </setting>
+                        <setting string="Hours per Week" help="Max hours an employee can work in a week.">
+                            <field name="hours_week"/>
+                        </setting>
+                        
                     </block>
                 </app>
             </xpath>
         </field>
     </record>
-
 </odoo>

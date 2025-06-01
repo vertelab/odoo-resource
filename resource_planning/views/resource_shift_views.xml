@@ -104,6 +104,7 @@
                         ('date_start','&lt;', context_today().strftime('%%Y-%%m-01'))]" />
           <group expand="0" string="Group By">
             <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
+            <filter string="Resources" name="group_by_resource" context="{'group_by': 'resource_id'}" />
             <filter string="Roles" name="group_by_role" context="{'group_by': 'role_id'}" />
             <filter string="Week" name="group_by_week" context="{'group_by': 'week_number'}" />
             <filter string="Date" name="group_by_date" context="{'group_by': 'date_start'}" />
