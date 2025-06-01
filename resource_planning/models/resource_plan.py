@@ -28,6 +28,11 @@ class ResourcePlan(models.Model):
     week_template_ids = fields.Many2many(comodel_name="resource.week.template")
     worked_hours = fields.Float(compute="_compute_worked_hours")
     use_slots = fields.Boolean(compute="_compute_use_slots")
+    has_unassigned_shifts = fields.Boolean(compute="_has_unassigned_shifts")
+    
+    def _has_unassigned_shifts(self):
+        for plan in self:
+            plan.has_unassigned_shifts = self.env["resource.shift"].search_count([('plan_id', '=', plan.id),('resource_id','=',None)])
 
     def _compute_use_slots(self):
         use_slots = self.env['ir.config_parameter'].sudo().get_param('resource_planning.use_slots', 'False') == 'True'

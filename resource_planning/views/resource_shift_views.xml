@@ -121,7 +121,7 @@
       <field name="arch" type="xml">
         <kanban highlight_color="color" quick_create="false" editable="true">
           <header>
-            <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" invisible="" />
+            <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" invisible="[('has_unassigned_shifts', '=', False)]" />
           </header>
           <field name="color" />
           <field name="company_id" />
@@ -131,6 +131,7 @@
           <field name="show_hr_icon_display" />
           <field name="status_color" />
           <field name="status_title" />
+          <field name="has_unassigned_shifts"/>
           <progressbar field="activity_state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}" sum_field="duration" recurring_revenue_sum_field="worked_hours" help="This bar allows to filter the opportunities based on scheduled activities." />
           <templates>
             <t t-name="menu">
@@ -160,7 +161,9 @@
                     <field name="hr_icon_display" class="o_employee_availability" widget="hr_presence_status" />
 -->
                   </div>
+                            <field name="has_unassigned_shifts"/>
                 </div>
+                
                 <footer>
                   <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="d-flex align-items-center">

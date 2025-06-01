@@ -31,6 +31,7 @@ class ResourceShift(models.Model):
     duration = fields.Float(string="Duration (Hours)",help="Shift duration in decimal hours",tracking=True)
     employee_id = fields.Many2one(comodel_name="hr.employee", compute="_compute_employee_id",store=True)
     end_time = fields.Float(string="End Time", tracking=True)
+    has_unassigned_shifts = fields.Boolean(related="plan_id.has_unassigned_shifts")    
     hr_icon_display = fields.Selection(related='employee_id.hr_icon_display')
     image_128 = fields.Binary(related="employee_id.image_128")
     is_has_resource_checkedin = fields.Selection(string="Absent", help="The shift has started and has the employee checked in?",selection=[('ok','OK'),('not','Resource Absent')],compute="_check_shift", tracking=True, default="ok")
