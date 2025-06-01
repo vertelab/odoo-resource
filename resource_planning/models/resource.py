@@ -13,6 +13,3 @@ class Resource(models.Model):
     role_ids = fields.Many2many(comodel_name="resource.role")
     role_id = fields.Many2one(comodel_name="resource.role")
 
-
-
-        

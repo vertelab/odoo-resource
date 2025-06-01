@@ -11,6 +11,16 @@ class ResourceShift(models.Model):
     _description = 'Resource Shift'
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
+
+    any_unassigned = fields.Boolean(compute="_compute_any_unassigned", store=False)
+    @api.depends('plan_id')
+    def _compute_any_unassigned(self):
+        plan_ids = self.mapped('plan_id').ids
+        domain = [('plan_id', 'in', plan_ids), ('resource_id', '=', False)]
+        shifts_per_plan = self.env['resource.shift'].read_group(domain, ['plan_id'], ['plan_id'])
+        plan_unassigned = {rec['plan_id'][0]: rec['plan_id_count'] > 0 for rec in shifts_per_plan}
+        for rec in self:
+            rec.any_unassigned = plan_unassigned.get(rec.plan_id.id, False)
     attendance_id = fields.Many2one(comodel_name="hr.attendance")
     check_in = fields.Datetime(related="attendance_id.check_in")
     check_out = fields.Datetime(related="attendance_id.check_out")
@@ -83,11 +93,24 @@ class ResourceShift(models.Model):
                     shift.status_title = dict(shift._fields['is_within_resource_role'].selection).get(shift.is_within_resource_role, '')
             else:
                 shift.is_within_resource_role = 'ok'
-            
-            # dwt
-            shift.is_within_resource_dwt = "ok"
-            shift.is_within_resource_wwt = "ok"
-            shift.is_has_resource_checkedin = "ok"
+            if not shift.resouce_allocation_date(shift.date_start,shift.resource_id) > float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hour_day', 11.0)):
+                shift.is_within_resource_dwt = "not"
+                shift.status_color = 3 # Orange
+                shift.status_title = dict(shift._fields['is_within_resource_dwt'].selection).get(shift.is_within_resource_dwt, '')
+            else:
+                shift.is_within_resource_dwt = "ok"
+            if not shift.resource_allocation_week(shift.date_start,shift.resource_id,float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hours_week', 40.0))):
+                shift.is_within_resource_wwt = "not"
+                shift.status_color = 3 # Orange
+                shift.status_title = dict(shift._fields['is_within_resource_wwt'].selection).get(shift.is_within_resource_wwt, '')
+            else:
+                shift.is_within_resource_wwt = "ok"
+            if fields.Datetime.now() >= shift.date_start and not shift.check_in:
+                shift.is_has_resource_checkedin = "not"
+                shift.status_color = 1 # Red
+                shift.status_title = dict(shift._fields['is_has_resource_checkedin'].selection).get(shift.is_has_resource_checkedin, '')
+            else:
+                shift.is_has_resource_checkedin = "ok"
             
             # ~ hr_presence_status
  
@@ -224,7 +247,20 @@ class ResourceShift(models.Model):
                 ('date_start','>=',date.strftime('%Y-%m-%d 00:00:00')),
                 ('date_start','<=',date.strftime('%Y-%m-%d 23:59:59')),
                 ('resource_id','=',resource_id.id)]).mapped('duration'))
-    
+
+    def resource_allocation_week(self, date, resource_id, wwt):
+        week_start = date - timedelta(days=date.weekday())
+        period_start = week_start - timedelta(weeks=15)
+        period_end = week_start + timedelta(days=6)        
+        shifts = self.env['resource.shift'].search([
+            ('date_start', '>=', period_start.strftime('%Y-%m-%d 00:00:00')),
+            ('date_start', '<=', period_end.strftime('%Y-%m-%d 23:59:59')),
+            ('resource_id', '=', resource_id.id)
+        ])
+        total_hours = sum(shifts.mapped('duration'))
+        avg_weekly_hours = total_hours / 16.0
+        return avg_weekly_hours > wwt
+
     def resouce_allocation_plan_role(self,plan_id,role_ids):
         return self.env['resource.shift'].search([('plan_id','=',plan_id.id),('role_id','in',role_ids),('resource_id','=',False)])
     

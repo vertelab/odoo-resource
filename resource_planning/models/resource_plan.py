@@ -32,7 +32,7 @@ class ResourcePlan(models.Model):
     
     def _has_unassigned_shifts(self):
         for plan in self:
-            plan.has_unassigned_shifts = self.env["resource.shift"].search_count([('plan_id', '=', plan.id),('resource_id','=',None)])
+            plan.has_unassigned_shifts = self.env["resource.shift"].search_count([('plan_id', '=', plan.id),('resource_id','=',None)]) > 0
 
     def _compute_use_slots(self):
         use_slots = self.env['ir.config_parameter'].sudo().get_param('resource_planning.use_slots', 'False') == 'True'
