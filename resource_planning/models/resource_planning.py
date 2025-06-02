@@ -120,9 +120,11 @@ class ResourcPlanning(models.Model):
         return self.env["hr.department"].search([])
 
     def shift_fit(self,shift):
+        if not shift:
+            return
         if shift.resource_id:
-            ok = self.resource_calendar_id._work_intervals_batch(pytz.timezone(self.tz or 'UTC').localize(shift.date_start),pytz.timezone(self.tz or 'UTC').localize( shift.date_stop),compute_leaves=True)
+            ok = self.resource_calendar_id._work_intervals_batch(pytz.timezone(self.tz or 'UTC').localize(shift.date_start),pytz.timezone(self.tz or 'UTC').localize(shift.date_stop),compute_leaves=True)
         else:
-            ok = True
+            ok = False
         return ok
         

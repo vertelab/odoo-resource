@@ -6,8 +6,12 @@ from datetime import timedelta
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.exceptions import UserError, ValidationError
 from pytz import timezone
+from pytz import all_timezones
+
 
 _logger = logging.getLogger(__name__)
+
+_tzs = [(tz, tz) for tz in sorted(all_timezones, key=lambda tz: tz if not tz.startswith('Etc/') else '_')]
 
 class ResourceWeekTemplateShift(models.Model):
     _name = 'resource.week.template.shift'
@@ -21,6 +25,12 @@ class ResourceWeekTemplateShift(models.Model):
     week_template_id = fields.Many2one(comodel_name="resource.week.template",required=True)
     role_id = fields.Many2one(comodel_name="resource.role",required=True)
     week_number = fields.Integer(compute="_compute_week_number",store=True)
+    tz_date_start = fields.Datetime(compute="_compute_tz_date_start")
+    tz_date_stop = fields.Datetime(compute="_compute_tz_date_stop")
+
+    def make_tz_aware(self,_date):
+        tz = self.env.context.get('tz')
+        return timezone("UTC").localize(_date).astimezone(timezone(tz))
 
     @api.model_create_multi
     def create(self, vals):
@@ -39,7 +49,6 @@ class ResourceWeekTemplateShift(models.Model):
             template_line.duration += template_shift.duration
             template_lines.append(template_line)
         return template_lines
-        
 
     day = fields.Selection([
         ('0', 'Monday'),
@@ -73,7 +82,9 @@ class ResourceWeekTemplateShift(models.Model):
     def _compute_name(self):
         for record in self:
             if record.date_start and record.date_stop:
-                record.name = f"{dict(record._fields['day'].selection).get(record.day)} {record.date_start.strftime('%H:%M')} - {record.date_stop.strftime('%H:%M')}"
+                tz_date_start = self.make_tz_aware(record.date_start)
+                tz_date_stop = self.make_tz_aware(record.date_stop)
+                record.name = f"{dict(record._fields['day'].selection).get(record.day)} {tz_date_start.strftime('%H:%M')} - {tz_date_stop.strftime('%H:%M')}"
                 if record.role_id:
                     record.name = f"{record.role_id.name} {record.name}"
 

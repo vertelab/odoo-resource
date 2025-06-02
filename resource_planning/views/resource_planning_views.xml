@@ -64,6 +64,7 @@
         </form>
       </field>
     </record>
+    
     <record id="resource_planning_kanban" model="ir.ui.view">
       <field name="name">resource.planning.kanban</field>
       <field name="model">resource.planning</field>

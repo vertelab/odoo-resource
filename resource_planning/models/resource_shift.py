@@ -69,50 +69,60 @@ class ResourceShift(models.Model):
     
     @api.depends("date_start","duration","resource_id")
     def _check_shift(self):
-        for shift in self:  
-            shift.status_color = 10 # Green
-            shift.status_title = 'All is Hunky Dory' # Green
+        for shift in self:
+            if shift.resource_id:
+                shift.status_color = 10 # Green
+                shift.status_title = 'All is Hunky Dory' # Green
+            else:
+                shift.status_color = 0 # Gray
+                shift.status_title = 'Not Assigned' # Green
             
-            if not shift.plan_id.planning_id.shift_fit(shift):
+            if shift.resource_id and not shift.plan_id.planning_id.shift_fit(shift):
                 shift.is_within_planner_calendar = 'not'
                 shift.status_color = 1 # Red
                 shift.status_title = dict(shift._fields['is_within_planner_calendar'].selection).get(shift.is_within_planner_calendar, '')
             else:
                 shift.is_within_planner_calendar = 'ok'
-            if not shift.employee_id.shift_fit(shift):
+
+            if shift.resource_id and not shift.employee_id.shift_fit(shift):
                 shift.is_within_resource_calendar = 'not'
                 if not shift.status_color == 1:
                     shift.status_color = 3 # Orange
                     shift.status_title = dict(shift._fields['is_within_resource_calendar'].selection).get(shift.is_within_resource_calendar, '')
             else:
                 shift.is_within_resource_calendar = 'ok'
-            if not shift.role_id in shift.resource_id.role_ids:
+           
+            if shift.resource_id and not shift.role_id in shift.resource_id.role_ids:
                 shift.is_within_resource_role = 'not'
                 if not shift.status_color == 1:
                     shift.status_color = 3 # Orange
                     shift.status_title = dict(shift._fields['is_within_resource_role'].selection).get(shift.is_within_resource_role, '')
             else:
                 shift.is_within_resource_role = 'ok'
-            if not shift.resouce_allocation_date(shift.date_start,shift.resource_id) > float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hour_day', 11.0)):
+            
+            _logger.error(f"{shift.resource_allocation_week(shift.date_start,shift.resource_id,float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hours_week', 40.0)))}")
+            
+            if shift.resource_id and shift.resouce_allocation_date(shift.date_start,shift.resource_id) > float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hour_day', 11.0)):
                 shift.is_within_resource_dwt = "not"
                 shift.status_color = 3 # Orange
                 shift.status_title = dict(shift._fields['is_within_resource_dwt'].selection).get(shift.is_within_resource_dwt, '')
             else:
                 shift.is_within_resource_dwt = "ok"
-            if not shift.resource_allocation_week(shift.date_start,shift.resource_id,float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hours_week', 40.0))):
+            
+            if shift.resource_id and not shift.resource_allocation_week(shift.date_start,shift.resource_id,float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hours_week', 40.0))):
                 shift.is_within_resource_wwt = "not"
                 shift.status_color = 3 # Orange
                 shift.status_title = dict(shift._fields['is_within_resource_wwt'].selection).get(shift.is_within_resource_wwt, '')
             else:
                 shift.is_within_resource_wwt = "ok"
-            if fields.Datetime.now() >= shift.date_start and not shift.check_in:
+            
+            if shift.resource_id and fields.Datetime.now() >= shift.date_start and not shift.check_in:
                 shift.is_has_resource_checkedin = "not"
                 shift.status_color = 1 # Red
                 shift.status_title = dict(shift._fields['is_has_resource_checkedin'].selection).get(shift.is_has_resource_checkedin, '')
             else:
                 shift.is_has_resource_checkedin = "ok"
             
-            # ~ hr_presence_status
  
     @api.depends("date_start")
     def _compute_week_number(self):
@@ -156,7 +166,9 @@ class ResourceShift(models.Model):
     def _compute_name(self):
         for record in self:
             if record.date_start and record.date_stop:
-                record.name = f"{record.date_start.strftime('%H:%M')} - {record.date_stop.strftime('%H:%M')}"
+                tz_date_start = self.make_tz_aware(record.date_start)
+                tz_date_stop = self.make_tz_aware(record.date_stop)
+                record.name = f"{tz_date_start.strftime('%H:%M')} - {tz_date_stop.strftime('%H:%M')}"
                 if record.role_id:
                     record.name = f"{dict(record._fields['day'].selection).get(record.day)} " + record.name
                 if record.week_template_id:
@@ -167,6 +179,10 @@ class ResourceShift(models.Model):
                     record.name = f"{record.resource_id.name} " + record.name
             else:
                 record.name = False
+
+    def make_tz_aware(self,_date):
+        tz = self.env.context.get('tz')
+        return timezone("UTC").localize(_date).astimezone(timezone(tz))
 
     def action_assign_shifts(self):
         active_domain = self.env.context.get('active_domain', [])
@@ -251,7 +267,8 @@ class ResourceShift(models.Model):
     def resource_allocation_week(self, date, resource_id, wwt):
         week_start = date - timedelta(days=date.weekday())
         period_start = week_start - timedelta(weeks=15)
-        period_end = week_start + timedelta(days=6)        
+        # period_end = week_start + timedelta(days=6)        
+        period_end = week_start     
         shifts = self.env['resource.shift'].search([
             ('date_start', '>=', period_start.strftime('%Y-%m-%d 00:00:00')),
             ('date_start', '<=', period_end.strftime('%Y-%m-%d 23:59:59')),
@@ -272,7 +289,7 @@ class ResourceShift(models.Model):
                 ('role_id','=',role_id.id)])
         
         non_parallel_shifts = self.env['resource.shift']
-        last_end = None
+        last_end = False
         for shift in all_shifts.sorted(lambda d: d.date_start):
             if not last_end or shift.date_start >= last_end:
                 non_parallel_shifts += shift
@@ -287,7 +304,7 @@ class ResourceShift(models.Model):
                 ('role_id','=',role_id.id)])
         
         non_parallel_shifts = self.env['resource.shift']
-        last_end = None
+        last_end = False
         for shift in sorted_shifts.sorted(lambda d: d.date_start):
             if not last_end or shift.date_start >= last_end:
                 non_parallel_shifts += shift
@@ -295,7 +312,7 @@ class ResourceShift(models.Model):
         return non_parallel_shifts.sorted(lambda d: duration,reverse=True)
         
     def unset_resource(self):
-        self.resource_id = None
+        self.resource_id = False
         
         
 

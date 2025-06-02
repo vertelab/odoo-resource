@@ -32,7 +32,7 @@ class ResourcePlan(models.Model):
     
     def _has_unassigned_shifts(self):
         for plan in self:
-            plan.has_unassigned_shifts = self.env["resource.shift"].search_count([('plan_id', '=', plan.id),('resource_id','=',None)]) > 0
+            plan.has_unassigned_shifts = self.env["resource.shift"].search_count([('plan_id', '=', plan.id),('resource_id','=',False)]) > 0
 
     def _compute_use_slots(self):
         use_slots = self.env['ir.config_parameter'].sudo().get_param('resource_planning.use_slots', 'False') == 'True'
@@ -160,8 +160,8 @@ class ResourcePlan(models.Model):
         if self.planning_id.department_id:
             employee_department = self.env["hr.employee"].search([('employee_type','in',['employee','worker','contractor']),('department_id','=',self.planning_id.department_id.id)])
             freelance_department = self.env["hr.employee"].search([('employee_type','in',['freelance','student','trainee']),('department_id','=',self.planning_id.department_id.id)])
-        employee_non = self.env["hr.employee"].search([('employee_type','in',['employee','worker','contractor']),('department_id','=',None)])
-        freelance_non = self.env["hr.employee"].search([('employee_type','in',['freelance','student','trainee']),('department_id','=',None)])
+        employee_non = self.env["hr.employee"].search([('employee_type','in',['employee','worker','contractor']),('department_id','=',False)])
+        freelance_non = self.env["hr.employee"].search([('employee_type','in',['freelance','student','trainee']),('department_id','=',False)])
 
         employee_all = self.env["hr.employee"].search([('employee_type','in',['employee','worker','contractor'])])
         freelance_all = self.env["hr.employee"].search([('employee_type','in',['freelance','student','trainee'])])

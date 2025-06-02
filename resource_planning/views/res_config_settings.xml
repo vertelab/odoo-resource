@@ -15,10 +15,10 @@
                             <field name="plan_department"/>
                         </setting>
                         <setting string="Hours Day" help="Max hours an Employee can work on a day.">
-                            <field name="hour_day"/>
+                            <field name="hour_day" widget="float_time"/>
                         </setting>
                         <setting string="Hours per Week" help="Max hours an employee can work in a week.">
-                            <field name="hours_week"/>
+                            <field name="hours_week" widget="float_time"/>
                         </setting>
                         
                     </block>
