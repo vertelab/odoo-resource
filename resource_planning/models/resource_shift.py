@@ -47,6 +47,7 @@ class ResourceShift(models.Model):
     week_start_date = fields.Datetime(compute="_compute_week_start_date",store=True)
     week_template_id = fields.Many2one(comodel_name="resource.week.template")
     worked_hours = fields.Float(related="attendance_id.worked_hours")
+    shift_object_ids = fields.One2many('resource.shift.object','shift_id',string='Shift Objects')
     
 
     def compute_status_color(self):
@@ -233,3 +234,4 @@ class ResourceShift(models.Model):
                 non_parallel_shifts += shift
                 last_end = shift.date_stop
         return non_parallel_shifts.sorted(lambda d: duration,reverse=True)
+        

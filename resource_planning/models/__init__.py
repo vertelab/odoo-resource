@@ -6,8 +6,10 @@ from . import resource_planning
 from . import resource_plan
 from . import resource_plan_role
 from . import resource_plan_resource
+from . import resource_object
 from . import resource_role 
-from . import resource_shift 
+from . import resource_shift
+from . import resource_shift_object
 from . import resource_slot
 from . import resource_week_template
 from . import resource_week_template_line

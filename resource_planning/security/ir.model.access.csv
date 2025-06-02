@@ -1,5 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 resource_planning.access_resource_role,access_resource_role,resource_planning.model_resource_role,base.group_user,1,1,1,1
+resource_planning.access_object_role,access_resource_object,resource_planning.model_resource_object,base.group_user,1,1,1,1
 resource_planning.access_resource_shift,access_resource_shift,resource_planning.model_resource_shift,base.group_user,1,1,1,1
 resource_planning.access_resource_planning,access_resource_planning,resource_planning.model_resource_planning,base.group_user,1,1,1,1
 resource_planning.access_resource_plan,access_resource_plan,resource_planning.model_resource_plan,base.group_user,1,1,1,1
@@ -10,3 +11,5 @@ resource_planning.access_week_template_wizard,access_week_template_wizard,resour
 resource_planning.access_resource_week_template_line,access_resource_week_template_line,resource_planning.model_resource_week_template_line,base.group_user,1,1,1,1
 resource_planning.access_resource_plan_role,access_resource_plan_role,resource_planning.model_resource_plan_role,base.group_user,1,1,1,1
 resource_planning.access_resource_plan_resource,access_resource_plan_resource,resource_planning.model_resource_plan_resource,base.group_user,1,1,1,1
+resource_planning.access_resource_shift_object,access_resource_shift_object,resource_planning.model_resource_shift_object,base.group_user,1,1,1,1
+

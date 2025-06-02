@@ -30,12 +30,14 @@
               <field name="date_start" />
               <field name="date_stop" />
               <field name="duration" widget="float_time" />
+              <field name="shift_object_ids"/>
             </group>
           </sheet>
           <chatter />
         </form>
       </field>
     </record>
+    
     <record id="view_resource_week_template_form" model="ir.ui.view">
       <field name="name">resource.week.template.form</field>
       <field name="model">resource.week.template</field>
@@ -75,10 +77,28 @@
       </field>
     </record>
     
+    <record id="view_resource_slot_object_form" model="ir.ui.view">
+        <field name="name">resource.shift.object.form</field>
+        <field name="model">resource.shift.object</field>
+        <field name="arch" type="xml">
+            <form string="Resource Slot Object">
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="shift_id"/>
+                        <field name="reference_id"/>
+                        <field name="duration"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    
     <!-- List Views -->
     
-    <record id="view_resource_shift_tree" model="ir.ui.view">
-      <field name="name">resource.shift.tree</field>
+    <record id="view_resource_shift_list" model="ir.ui.view">
+      <field name="name">resource.shift.list</field>
       <field name="model">resource.shift</field>
       <field name="arch" type="xml">
         <list string="resource Shifts">
@@ -94,6 +114,25 @@
         </list>
       </field>
     </record>
+    
+    <record id="view_resource_slot_object_list" model="ir.ui.view">
+        <field name="name">resource.shift.object.list</field>
+        <field name="model">resource.shift.object</field>
+        <field name="arch" type="xml">
+            <list string="Resource Slot Objects">
+                <field name="name"/>
+                <field name="shift_id"/>
+                <field name="reference_id"/>
+                <field name="duration"/>
+                <button name="action_open_form"
+                        type="object"
+                        string="View"
+                        icon="fa-eye"
+                        />
+            </list>
+        </field>
+    </record>
+
    
     <!-- Search Views -->
     <record id="resource_shift_search" model="ir.ui.view">
@@ -198,6 +237,20 @@
         </kanban>
       </field>
     </record>
+    <!-- Pivot Views -->
+
+    <record id="view_resource_shift_test_form" model="ir.ui.view">
+      <field name="name">resource.shift.test.from.view</field>
+      <field name="model">resource.shift</field>
+      <field name="arch" type="xml">
+        <form string="Test Shifts">
+          <field name="role_id" />
+        </form>
+      </field>
+    </record>
+
+
+
     <!-- Calandar Views -->
 
     <record id="view_resource_shift_calendar" model="ir.ui.view">
@@ -212,16 +265,5 @@
       </field>
     </record>
    
-    <!-- Pivot Views -->
-  
-    <record id="view_resource_shift_test_form" model="ir.ui.view">
-      <field name="name">resource.shift.test.from.view</field>
-      <field name="model">resource.shift</field>
-      <field name="arch" type="xml">
-        <form string="Test Shifts">
-          <field name="role_id" />
-        </form>
-      </field>
-    </record>
   </data>
 </odoo>
