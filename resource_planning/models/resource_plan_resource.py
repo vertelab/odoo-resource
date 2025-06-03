@@ -34,3 +34,24 @@ class ResourcePlanResource(models.Model):
                 record.worked_hours = sum(filtered_shifts.mapped("worked_hours"))
             else:
                 record.worked_hours = False
+                
+    def action_get_shifts_resource(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Shifts',
+            'res_model': 'resource.shift',
+            'view_mode': 'kanban,calendar,form,list,pivot',
+            'target': 'current',
+            'context': {'search_default_plan_id': self.plan_id.id,'search_default_resource_id': self.resource_id.id},
+        }
+        
+    def action_get_slot_resource(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Slots',
+            'res_model': 'resource.slot',
+            'view_mode': 'kanban,calendar,form,list,pivot',
+            'target': 'current',
+            'context': {'search_default_plan_id': self.plan_id.id,'search_default_resource_id': self.resource_id.id},
+        }
+
