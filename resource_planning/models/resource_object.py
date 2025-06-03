@@ -31,17 +31,17 @@ class ResourceObject(models.Model):
     )
     
     shift_object_ids = fields.One2many(
-        'resource.shift.object',  
+        'resource.slot',  
         'object_description_id',   
-        string='Shift Objects'
+        string='Shift Slots'
     )
     
-    def action_open_shift_objects(self):
+    def action_open_slots(self):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
             'name': 'Shift Objects',
-            'res_model': 'resource.shift.object',
+            'res_model': 'resource.slot',
             'view_mode': 'list,form',
             'domain': [('object_description_id', '=', self.id)],
             'context': {'default_object_description_id': self.id},
@@ -74,10 +74,10 @@ class ResourceObject(models.Model):
         domain = safe_eval(self.filter_domain or '[]')
         return self.env[model_name].search(domain)
 
-    def create_resource_shift_objects(self):
+    def create_slots(self):
         for object_description in self:
             records = object_description._get_domain_records()
-            shift_object_model = object_description.env['resource.shift.object']
+            shift_object_model = object_description.env['resource.slot']
             _logger.warning(f"{records=}")
             for rec in records:
                 reference = f"{rec._name},{rec.id}"
