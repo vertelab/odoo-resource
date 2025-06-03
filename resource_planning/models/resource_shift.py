@@ -72,7 +72,13 @@ class ResourceShift(models.Model):
     week_template_id = fields.Many2one(comodel_name="resource.week.template")
     worked_hours = fields.Float(related="attendance_id.worked_hours")
     shift_object_ids = fields.One2many('resource.slot','shift_id',string='Shift Objects')
-    
+    use_slots = fields.Boolean(compute="_compute_use_slots")
+
+    def _compute_use_slots(self):
+        use_slots = self.env['ir.config_parameter'].sudo().get_param('resource_planning.use_slots', 'False') == 'True'
+        for rec in self:
+            rec.use_slots = use_slots
+            
     def action_view_shift_objects(self):
         self.ensure_one()
         return {

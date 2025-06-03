@@ -22,6 +22,7 @@
                         class="oe_stat_button"
                         icon="fa-cubes"
                         string="Slots"
+                        invisible="use_slots == False"
                         
                         >
                     <field string="Slots" name="shift_object_ids" widget="statinfo"/>
@@ -53,6 +54,7 @@
             <field name="is_within_resource_dwt" />
             <field name="is_within_resource_role" />
             <field name="is_within_resource_wwt" />
+            <field name="use_slots" invisible="True" nolabel="True" />
           </group>
                 
                 
