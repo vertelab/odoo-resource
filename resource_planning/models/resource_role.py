@@ -21,6 +21,6 @@ class ResourceRole(models.Model):
         ('material', 'Material')], string='Type',
         default='user', required=True)
     resource_object_ids = fields.Many2many(
-        comodel_name='resource.object')
+        comodel_name='resource.slot.template')
 
  

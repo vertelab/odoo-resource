@@ -6,13 +6,12 @@ from odoo.tools.safe_eval import safe_eval
 _logger = logging.getLogger(__name__)
 
 
-class ResourceObject(models.Model):
-    _name = 'resource.object'
-    _description = 'Resource Object Template'
+class ResourceSlotTemplate(models.Model):
+    _name = 'resource.slot.template'
+    _description = 'Resource Slot Template'
     _inherit = ["mail.thread", "mail.activity.mixin"]
     name = fields.Char(
         string='Name',
-        compute='_compute_name',
         store=True,
         readonly=False
     )
@@ -31,32 +30,22 @@ class ResourceObject(models.Model):
     )
     
     shift_object_ids = fields.One2many(
-        'resource.shift.object',  
+        'resource.slot',  
         'object_description_id',   
-        string='Shift Objects'
+        string='Shift Slots'
     )
     
-    def action_open_shift_objects(self):
+    def action_open_slots(self):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
             'name': 'Shift Objects',
-            'res_model': 'resource.shift.object',
+            'res_model': 'resource.slot',
             'view_mode': 'list,form',
             'domain': [('object_description_id', '=', self.id)],
             'context': {'default_object_description_id': self.id},
             'target': 'current',
         }
-
-    @api.depends('model_id', 'filter_domain', 'order_by_field')
-    def _compute_name(self):
-        for rec in self:
-            # Example logic: combine model name and filter domain
-            model_part = rec.model_id.display_name if rec.model_id else ''
-            filter_part = rec.filter_domain or ''
-            order_part = rec.order_by_field.display_name if rec.order_by_field else ''
-            # Compose the name as you wish
-            rec.name = f"{model_part} | {filter_part} | {order_part}".strip(" |")
             
     def return_duration(self, record):
         self.ensure_one()
@@ -74,10 +63,10 @@ class ResourceObject(models.Model):
         domain = safe_eval(self.filter_domain or '[]')
         return self.env[model_name].search(domain)
 
-    def create_resource_shift_objects(self):
+    def create_slots(self):
         for object_description in self:
             records = object_description._get_domain_records()
-            shift_object_model = object_description.env['resource.shift.object']
+            shift_object_model = object_description.env['resource.slot']
             _logger.warning(f"{records=}")
             for rec in records:
                 reference = f"{rec._name},{rec.id}"
@@ -102,7 +91,7 @@ class ResourceObject(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'Resource Object',
-            'res_model': 'resource.object',
+            'res_model': 'resource.slot.template',
             'view_mode': 'form',
             'res_id': self.id,
             'target': 'current',
