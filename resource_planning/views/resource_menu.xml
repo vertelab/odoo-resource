@@ -32,11 +32,11 @@
             <field name="help">Manage resource roles and assign resources to them.</field>
         </record>
         
-        <record id="action_resource_objects" model="ir.actions.act_window">
-            <field name="name">Object Description</field>
-            <field name="res_model">resource.object</field>
+        <record id="action_resource_slot_template" model="ir.actions.act_window">
+            <field name="name">Slot Templates</field>
+            <field name="res_model">resource.slot.template</field>
             <field name="view_mode">list,form</field>
-            <field name="help">Manage object descriptions.</field>
+            <field name="help">Manage slot template.</field>
         </record>
 
 
@@ -93,9 +93,11 @@
 
         <menuitem id="menu_resources" name="Resources" parent="menu_resource_plan_configuration" action="action_resources" sequence="60"/>
         
-        <menuitem id="menu_resource_objects" name="Object Templates" parent="menu_resource_plan_configuration" action="action_resource_objects" sequence="70"/>
+        <menuitem id="menu_resource_slot_template" name="Slot Templates" parent="menu_resource_plan_configuration" action="action_resource_slot_template" sequence="70"/>
         
-        <menuitem id="menu_resource_slot_object" parent="menu_resource_plan_configuration" name="Objects" action="action_resource_slot_object"  sequence="80"/>
+<!--
+        <menuitem id="menu_resource_slot_object" parent="menu_resource_plan_configuration" name="Objects" action="action_resource_slot"  sequence="80"/>
+-->
 
         <!-- <menuitem id="menu_resource_shifts" name="Shifts" parent="menu_resource_root" action="action_resource_shifts" sequence="40"/> -->
 

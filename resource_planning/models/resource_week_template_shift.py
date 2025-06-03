@@ -27,6 +27,16 @@ class ResourceWeekTemplateShift(models.Model):
     week_number = fields.Integer(compute="_compute_week_number",store=True)
     tz_date_start = fields.Datetime(compute="_compute_tz_date_start")
     tz_date_stop = fields.Datetime(compute="_compute_tz_date_stop")
+    resource_slot_template = fields.Many2many(
+        comodel_name='resource.slot.template' , compute="set_default_resource_template", store=True)
+    
+    @api.depends('role_id')
+    def set_default_resource_template(self):
+        for record in self:
+            if not record.resource_slot_template:
+                record.resource_slot_template = record.role_id.resource_object_ids
+            else:
+                record.resource_slot_template = record.resource_slot_template
 
     def make_tz_aware(self,_date):
         tz = self.env.context.get('tz')

@@ -5,7 +5,7 @@ from . import res_users
 from . import resource
 from . import resource_plan
 from . import resource_plan_resource
-from . import resource_object
+from . import resource_slot_template
 from . import resource_plan_role
 from . import resource_planning
 from . import resource_role 
