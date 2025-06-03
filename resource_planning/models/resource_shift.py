@@ -362,4 +362,15 @@ class ResourceShift(models.Model):
     def unset_resource(self):
         self.resource_id = False
         
-        
+    def set_attended(self):
+        for shift in self:
+            employee = shift.resource_id.employee_id if hasattr(shift.resource_id, 'employee_id') else None
+            if not employee:
+                raise UserError("Missing Employee!")
+            attendance_vals = {
+                'employee_id': employee.id,
+                'check_in': shift.date_start,
+                'check_out': shift.date_stop, 
+            }
+            self.env['hr.attendance'].create(attendance_vals)
+        return True
