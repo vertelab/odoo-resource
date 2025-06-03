@@ -15,8 +15,6 @@
       <field name="model">resource.shift</field>
       <field name="arch" type="xml">
         <form string="resource Shift">
-        
-
           <sheet>
             <div name="button_box" id="button_box" class="oe_button_box">
                 <button name="action_view_shift_objects"
@@ -49,46 +47,7 @@
         </form>
       </field>
     </record>
-    
-    <record id="view_resource_week_template_form" model="ir.ui.view">
-      <field name="name">resource.week.template.form</field>
-      <field name="model">resource.week.template</field>
-      <field name="arch" type="xml">
-        <form string="Week Template">
-          <header>
-            <button name="update_template_lines" type="object" string="Updated Shifts" class="btn-primary" />
-          </header>
-          <sheet>
-            <div name="button_box" id="button_box" class="oe_button_box">
-              <button name="week_template_shift_action" class="oe_stat_button " type="object" icon="fa-calendar">
-                <field string="Template Shifts" name="week_template_shift_count" widget="statinfo" />
-              </button>
-            </div>
-            <div class="oe_title pe-0">
-              <h1 class="d-flex justify-content-between align-items-center">
-                <div class="d-flex w-100">
-                  <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Week..." />
-                </div>
-              </h1>
-            </div>
-            <notebook>
-              <page string="Shift Data">
-                <group>
-                  <field name="week_template_line_ids" nolabel="1" no_open="1">
-                    <list create="false" edit="false" delete="false">
-                      <field name="role_id" />
-                      <field name="duration" widget="float_time" sum="True" />
-                    </list>
-                  </field>
-                </group>
-              </page>
-            </notebook>
-          </sheet>
-          <chatter />
-        </form>
-      </field>
-    </record>
-    
+        
     <record id="view_resource_slot_object_form" model="ir.ui.view">
         <field name="name">resource.shift.object.form</field>
         <field name="model">resource.shift.object</field>
@@ -123,6 +82,13 @@
           <field name="date_stop" optional="hide" />
           <field name="duration" widget="float_time" sum="True" optional="hide" />
           <field name="worked_hours" widget="float_time" sum="True" optional="hide" />
+        <button name="unset_resource" class="oe_stat_button" type="object" icon="fa-user-times" />
+                   
+<!--
+            <span t-att-class="'o_status_bubble mx-0 o_color_bubble_' + record.status_color.value or 0" t-att-tooltip="record.status_title.value" />
+-->
+               
+          
         </list>
       </field>
     </record>
@@ -179,6 +145,7 @@
                         ('date_start','&lt;', context_today().strftime('%%Y-%%m-01'))]" />
           <group expand="0" string="Group By">
             <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
+            <filter string="Resources" name="group_by_resource" context="{'group_by': 'resource_id'}" />
             <filter string="Roles" name="group_by_role" context="{'group_by': 'role_id'}" />
             <filter string="Week" name="group_by_week" context="{'group_by': 'week_number'}" />
             <filter string="Date" name="group_by_date" context="{'group_by': 'date_start'}" />
@@ -193,17 +160,25 @@
       <field name="name">resource.shift.kanban</field>
       <field name="model">resource.shift</field>
       <field name="arch" type="xml">
-        <kanban highlight_color="color" quick_create="false">
+        <kanban highlight_color="color" quick_create="false" editable="true">
+            <field name="has_unassigned_shifts" invisible="1"/>
+            <field name="any_unassigned" invisible="1"/>
           <header>
+              <field name="has_unassigned_shifts" invisible="False"/>
+<!--
+            <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" invisible="not any_unassigned" />
+-->
             <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
           </header>
           <field name="color" />
-          <field name="name" />
-          <field name="status_color" />
-          <field name="image_128" />
-          <field name="show_hr_icon_display" />
-          <field name="hr_icon_display" />
           <field name="company_id" />
+          <field name="hr_icon_display" />
+          <field name="image_128" />
+          <field name="name" />
+          <field name="show_hr_icon_display" />
+          <field name="status_color" />
+          <field name="status_title" />
+          <field name="has_unassigned_shifts"/>
           <progressbar field="activity_state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}" sum_field="duration" recurring_revenue_sum_field="worked_hours" help="This bar allows to filter the opportunities based on scheduled activities." />
           <templates>
             <t t-name="menu">
@@ -229,9 +204,13 @@
                 <div>
                   <field class="fw-bold fs-5" name="name" placeholder="Shift Name" />
                   <div t-if="record.show_hr_icon_display.raw_value" class="float-end">
+<!--
                     <field name="hr_icon_display" class="o_employee_availability" widget="hr_presence_status" />
+-->
                   </div>
+                            <field name="has_unassigned_shifts" invisible="False"/>
                 </div>
+                
                 <footer>
                   <div class="d-flex justify-content-between align-items-center w-100">
                     <div class="d-flex align-items-center">
@@ -240,7 +219,11 @@
                            <field name="last_run" t-if="record.last_run.value != False" />
                       -->
                     </div>
-                    <span t-att-class="'o_status_bubble mx-0 o_color_bubble_' + record.status_color.value or 0" />
+                    <button name="unset_resource" class="oe_stat_button" type="object" icon="fa-user-times" />
+<!--
+                    <field name="resource_id" widget="many2one_avatar_user" domain="[('share', '=', False)]" options="{'no_open': True}" class="ms-auto" style="margin-right: 5px;" />
+-->
+                    <span t-att-class="'o_status_bubble mx-0 o_color_bubble_' + record.status_color.value or 0" t-att-help="record.status_title.value" />
                   </div>
                 </footer>
               </main>

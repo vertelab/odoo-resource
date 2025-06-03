@@ -20,12 +20,33 @@ class ResourcePlan(models.Model):
     plan_resource_ids = fields.One2many(comodel_name="resource.plan.resource", inverse_name="plan_id")
     plan_role_ids = fields.One2many(comodel_name="resource.plan.role", inverse_name="plan_id")
     planning_id = fields.Many2one(comodel_name="resource.planning")
+    is_planning_slots = fields.Boolean(compute="_compute_is_planning_slots")
     shift_count = fields.Integer(compute="_compute_shift_count")
     shift_ids = fields.One2many(comodel_name="resource.shift",inverse_name="plan_id")
     slot_count = fields.Integer(compute="_compute_slot_count")
     slot_ids = fields.One2many(comodel_name="resource.slot",inverse_name="plan_id")
     week_template_ids = fields.Many2many(comodel_name="resource.week.template")
-    worked_hours = fields.Float(compute="_compute_worked_hours") 
+    worked_hours = fields.Float(compute="_compute_worked_hours")
+    use_slots = fields.Boolean(compute="_compute_use_slots")
+    has_unassigned_shifts = fields.Boolean(compute="_has_unassigned_shifts")
+    
+    def _has_unassigned_shifts(self):
+        for plan in self:
+            plan.has_unassigned_shifts = self.env["resource.shift"].search_count([('plan_id', '=', plan.id),('resource_id','=',False)]) > 0
+
+    def _compute_use_slots(self):
+        use_slots = self.env['ir.config_parameter'].sudo().get_param('resource_planning.use_slots', 'False') == 'True'
+        for rec in self:
+            rec.use_slots = use_slots
+        
+    def _compute_is_planning_slots(self):
+        for record in self:
+            is_planning_slots_char = self.env['ir.config_parameter'].sudo().get_param('resource_planning.is_planning_slots')
+            _logger.error(f"{is_planning_slots_char=}"*100)
+            if is_planning_slots_char.lower() == "true":
+                record.is_planning_slots = True
+            else:
+                record.is_planning_slots = False
 
     def action_open_assign_objects_wizard(self):
         return {
@@ -114,7 +135,6 @@ class ResourcePlan(models.Model):
         for week_template_id in self.week_template_ids:
             if stop_loop:
                 break
-            _logger.error(f"{date_start.weekday()=}")
             for day_number in range(date_start.weekday(), 7):
                 shifts_this_day = list(filter(lambda w: w.week_number == day_number, week_template_id.week_template_shift_ids))
                 if date_start.weekday() == day_number:
@@ -150,14 +170,24 @@ class ResourcePlan(models.Model):
         return self.env['resource.shift'].search([('plan_id','=',self.id),('resource_id','=',False)])
 
     def get_prioritized_resources(self):
-        employee_department = freelance_department = self.env['hr.employee']
+        employee_department = freelance_department = employee_non = freelance_non = self.env['hr.employee']
         if self.planning_id.department_id:
             employee_department = self.env["hr.employee"].search([('employee_type','in',['employee','worker','contractor']),('department_id','=',self.planning_id.department_id.id)])
             freelance_department = self.env["hr.employee"].search([('employee_type','in',['freelance','student','trainee']),('department_id','=',self.planning_id.department_id.id)])
+        employee_non = self.env["hr.employee"].search([('employee_type','in',['employee','worker','contractor']),('department_id','=',False)])
+        freelance_non = self.env["hr.employee"].search([('employee_type','in',['freelance','student','trainee']),('department_id','=',False)])
+
         employee_all = self.env["hr.employee"].search([('employee_type','in',['employee','worker','contractor'])])
         freelance_all = self.env["hr.employee"].search([('employee_type','in',['freelance','student','trainee'])])
-                
-        return (employee_department | freelance_department | employee_all | freelance_all).sorted(key=lambda r: (
+        plant_type = self.env['ir.config_parameter'].sudo().get_param('resource_planning.plan_department')
+        if plant_type == '' or 'department_prioritized':
+            plan_employee = (employee_department | freelance_department | employee_all | freelance_all)
+        elif plan_type == 'department_and_non':
+             plan_employee = (employee_department | freelance_department | employee_non | freelance_non)
+        else: # department_only
+             plan_employee = (employee_department | freelance_department )
+        
+        return plan_employee.sorted(key=lambda r: (
                                         0 if r in employee_department else
                                         1 if r in freelance_department else
                                         2 if r in employee_all else

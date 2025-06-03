@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
-    role_ids = fields.Many2many(comodel_name="resource.role")
+    role_ids = fields.Many2many(related="resource_id.role_ids")
     resource_shift_ids = fields.One2many(comodel_name="resource.shift", inverse_name="employee_id")
     resource_shift_count = fields.Integer(compute="_compute_resource_shift_count")
 
