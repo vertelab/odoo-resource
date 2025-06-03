@@ -7,7 +7,11 @@
       <field name="model">resource.planning</field>
       <field name="arch" type="xml">
         <form string="Resource Planning">
+        <header>
+            <button name="action_staff_register_wizard" type="object" string="Staff Register Report" class="btn-primary" />
+          </header>
           <sheet>
+
             <div name="button_box" id="button_box" class="oe_button_box">
               <button name="get_plans" class="oe_stat_button " type="object" icon="fa-calendar">
                 <field string="Plans" name="plan_count" widget="statinfo" />
@@ -39,6 +43,18 @@
               <field name="tz"/>
               <field name="resource_calendar_id"/>
             </group>
+<!--
+            <notebook>
+                <page string="Staff Register">
+                    <field name="shift_date"/>
+                    <field name="shift_ids" >
+                        <list>
+                            <field name="name" />
+                        </list>
+                    </field>
+                </page>
+            </notebook>
+-->
             <!-- <notebook>
                  <page string="Roles Data">
                  <field name="plan_role_ids">
@@ -64,6 +80,64 @@
         </form>
       </field>
     </record>
+    
+    
+     <record id="action_report_resource_planning_shifts" model="ir.actions.report">
+        <field name="name">Resource Planning Shifts Report</field>
+        <field name="model">resource.planning</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">resource_planning.report_resource_planning_shifts</field>
+        <field name="report_file">resource_planning.report_resource_planning_shifts</field>
+<!--
+        <field name="print_report_name">'Resource Planning - %s' % (object.name)</field>
+-->
+        <field name="binding_model_id" ref="resource_planning.model_resource_planning"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+<!--
+    <record id="action_report_resource_planning_shifts" model="ir.actions.report">
+            <field name="name">Shift Report</field>
+            <field name="model">resource.planning</field>
+            <field name="binding_model_id" ref="resource_planning.model_resource_planning"/>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">resource_planning.report_original_vendor_bill</field>
+            <field name="report_file">resource_planning.report_original_vendor_bill</field>
+            <field name="attachment">'original_vendor_bill.pdf'</field>
+            <field name="attachment_use">True</field>
+</record>
+-->
+    
+    <record id="staff_register_wizard_view" model="ir.ui.view">
+        <field name="name">staff.register.wizard.view</field>
+        <field name="model">resource.planning</field>
+        <field name="arch" type="xml">
+            <form string="Warning">
+                <sheet>
+                     <group>
+                    <field name="shift_date"/>
+                </group>
+                 <notebook>
+                <page string="Staff Register">
+                    <field name="shift_date"/>
+                    <field name="shift_ids" >
+                        <list>
+                            <field name="name" />
+                        </list>
+                    </field>
+                </page>
+            </notebook>
+            </sheet>
+               
+                <footer>
+                    <button name="%(resource_planning.action_report_resource_planning_shifts)d" string="Create" type="action" class="oe_highlight"/>
+                    <button name="cancel" string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    
     
     <record id="resource_planning_kanban" model="ir.ui.view">
       <field name="name">resource.planning.kanban</field>

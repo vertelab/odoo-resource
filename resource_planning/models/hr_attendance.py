@@ -12,8 +12,6 @@ _logger = logging.getLogger(__name__)
 class HrAttendance(models.Model):
     _inherit = "hr.attendance"
 
-    # shift_id = fields.Many2one(comodel_name="resource.shift")
-
     @api.model_create_multi
     def create(self, vals_list):
         attendance_ids = super().create(vals_list)
@@ -22,7 +20,6 @@ class HrAttendance(models.Model):
 
     def connect_attendance_with_shift(self,attendance_ids):
         for attendance_id in attendance_ids:
-            _logger.error("test"*100)
             shifts = self.env["resource.shift"].search(
                 [
                     ("date_start", ">=", datetime.combine(attendance_id.check_in.date(), datetime.min.time())), 
