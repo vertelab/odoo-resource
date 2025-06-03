@@ -71,14 +71,14 @@ class ResourceShift(models.Model):
     week_start_date = fields.Datetime(compute="_compute_week_start_date",store=True)
     week_template_id = fields.Many2one(comodel_name="resource.week.template")
     worked_hours = fields.Float(related="attendance_id.worked_hours")
-    shift_object_ids = fields.One2many('resource.shift.object','shift_id',string='Shift Objects')
+    shift_object_ids = fields.One2many('resource.slot','shift_id',string='Shift Objects')
     
     def action_view_shift_objects(self):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
             'name': 'Assigned Objects',
-            'res_model': 'resource.shift.object',
+            'res_model': 'resource.slot',
             'view_mode': 'list,form',
             'domain': [('shift_id', '=', self.id)],
             'context': {'default_shift_id': self.id},

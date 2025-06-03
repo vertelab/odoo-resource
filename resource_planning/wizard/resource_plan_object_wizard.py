@@ -19,11 +19,11 @@ class ResourcePlanObjectWizard(models.TransientModel):
         # Do something with plan
         for shift in plan.shift_ids:
             for resource_object in shift.role_id.mapped('resource_object_ids'):
-                resource_object.create_resource_shift_objects()
+                resource_object.create_slots()
                 if shift.assigned_duration >= shift.duration:
                     break
                 
-                objects = self.env['resource.shift.object'].search([('object_description_id', '=', resource_object.id),('shift_id','=',False)])
+                objects = self.env['resource.slot'].search([('object_description_id', '=', resource_object.id),('shift_id','=',False)])
                 if resource_object.order_by_field:
                     order_field_name = resource_object.order_by_field.name
                 objects = objects.sorted(key=lambda rec: getattr(rec.reference_id, order_field_name) or datetime.max)

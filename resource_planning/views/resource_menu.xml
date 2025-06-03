@@ -58,9 +58,9 @@
             <field name="view_mode">list,form</field>
         </record>
         
-        <record id="action_resource_slot_object" model="ir.actions.act_window">
-            <field name="name">Resource Slot Objects</field>
-            <field name="res_model">resource.shift.object</field>
+        <record id="action_slot" model="ir.actions.act_window">
+            <field name="name">Slots</field>
+            <field name="res_model">resource.slot</field>
             <field name="view_mode">list,form</field>
         </record>
 

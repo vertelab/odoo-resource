@@ -43,14 +43,14 @@
       <field name="arch" type="xml">
         <form string="Resource Object">
             <header>
-                <button name="create_resource_shift_objects"
+                <button name="create_slots"
                 type="object"
-                string="Create Shift Objects"
+                string="Create Slots"
                 class="btn-primary"/>
             </header>
           <sheet>
             <div class="oe_button_box" name="button_box">
-                    <button name="action_open_shift_objects"
+                    <button name="action_open_slots"
                             type="object"
                             class="oe_stat_button"
                             icon="fa-list"
@@ -238,9 +238,9 @@
     
     
 
-    <record id="resource_shift_object_search_view" model="ir.ui.view">
-        <field name="name">resource.shift.object.search</field>
-        <field name="model">resource.shift.object</field>
+    <record id="resource_slot_search_view" model="ir.ui.view">
+        <field name="name">resource.slot.search</field>
+        <field name="model">resource.slot</field>
         <field name="arch" type="xml">
             <search string="Shift Objects">
                 <field name="name"/>
