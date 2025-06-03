@@ -48,3 +48,5 @@ class ResourceSlot(models.Model):
         domain=[('resource_type', '=', 'user')]
         resource_ids = resource_id._search(domain)
         return self.env["resource.resource"].browse(resource_ids)
+
+

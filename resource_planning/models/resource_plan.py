@@ -59,6 +59,20 @@ class ResourcePlan(models.Model):
             else:
                 record.is_planning_slots = False
 
+    def action_open_assign_objects_wizard(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Assign Objects to Shifts',
+            'res_model': 'resource.plan.object.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'active_id': self.id,
+                'active_ids': self.ids,
+            },
+        }
+
+
     def _compute_duration(self):
         for record in self:
             if record.shift_ids:
