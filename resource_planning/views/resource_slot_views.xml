@@ -1,0 +1,65 @@
+<odoo>
+  <data>
+
+    <!-- From Views -->
+    
+   
+    
+        
+    <record id="view_slot_form" model="ir.ui.view">
+        <field name="name">resource.slot.form</field>
+        <field name="model">resource.slot</field>
+        <field name="arch" type="xml">
+            <form string="Slots">
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="shift_id"/>
+                        <field name="reference_id"/>
+                        <field name="duration"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    
+    <!-- List Views -->
+    
+    
+    
+    <record id="view_slot_list" model="ir.ui.view">
+        <field name="name">resource.slot.list</field>
+        <field name="model">resource.slot</field>
+        <field name="arch" type="xml">
+            <list string="Slots">
+                <field name="name"/>
+                <field name="shift_id"/>
+                <field name="reference_id"/>
+                <field name="duration"/>
+                <button name="action_open_form"
+                        type="object"
+                        string="View"
+                        icon="fa-eye"
+                        />
+            </list>
+        </field>
+    </record>
+
+   
+    <!-- Search Views -->
+  
+    <!-- Kanban Views -->
+    
+    <!-- Pivot Views -->
+
+
+
+
+
+    <!-- Calandar Views -->
+
+
+   
+  </data>
+</odoo>

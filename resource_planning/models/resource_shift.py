@@ -64,7 +64,7 @@ class ResourceShift(models.Model):
     show_hr_icon_display = fields.Boolean(related="employee_id.show_hr_icon_display")
     slot_id = fields.Many2one(comodel_name="resource.slot")
     start_time = fields.Float(string="Start Time", help="Shift start time (24-hour format)", tracking=True)
-    status_color = fields.Integer(compute="_check_shift")
+    status_color = fields.Selection(selection=[('at_risk', 'ORANGE'), ('on_track', 'GREEN'), ('off_track', 'RED')],compute="_check_shift",store=True)
     status_title = fields.Char(string="Shift Status",compute="_check_shift")
     week_number = fields.Integer(compute="_compute_week_number", store=True)
     week_number_string = fields.Char(compute="_compute_week_number_string", store=True)
@@ -88,28 +88,28 @@ class ResourceShift(models.Model):
     def compute_assigned_duration(self):
         for shift in self:
             shift.assigned_duration = sum(shift.shift_object_ids.mapped("duration"))
-        
+
     @api.depends("date_start","duration","resource_id")
     def _check_shift(self):
         for shift in self:
             if shift.resource_id:
-                shift.status_color = 10 # Green
+                shift.status_color = 'on_track' # Green
                 shift.status_title = 'All is Hunky Dory' # Green
             else:
-                shift.status_color = 0 # Gray
+                shift.status_color = None # Gray
                 shift.status_title = 'Not Assigned' # Green
             
             if shift.resource_id and not shift.plan_id.planning_id.shift_fit(shift):
                 shift.is_within_planner_calendar = 'not'
-                shift.status_color = 1 # Red
+                shift.status_color = 'off_track' # Red
                 shift.status_title = dict(shift._fields['is_within_planner_calendar'].selection).get(shift.is_within_planner_calendar, '')
             else:
                 shift.is_within_planner_calendar = 'ok'
 
             if shift.resource_id and not shift.employee_id.shift_fit(shift):
                 shift.is_within_resource_calendar = 'not'
-                if not shift.status_color == 1:
-                    shift.status_color = 3 # Orange
+                if not shift.status_color ==  'off_track':
+                    shift.status_color = 'at_risk' # Orange
                     shift.status_title = dict(shift._fields['is_within_resource_calendar'].selection).get(shift.is_within_resource_calendar, '')
             else:
                 shift.is_within_resource_calendar = 'ok'
@@ -117,7 +117,7 @@ class ResourceShift(models.Model):
             if shift.resource_id and not shift.role_id in shift.resource_id.role_ids:
                 shift.is_within_resource_role = 'not'
                 if not shift.status_color == 1:
-                    shift.status_color = 3 # Orange
+                    shift.status_color = 'at_risk' # Orange
                     shift.status_title = dict(shift._fields['is_within_resource_role'].selection).get(shift.is_within_resource_role, '')
             else:
                 shift.is_within_resource_role = 'ok'
@@ -126,21 +126,21 @@ class ResourceShift(models.Model):
             
             if shift.resource_id and shift.resouce_allocation_date(shift.date_start,shift.resource_id) > float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hour_day', 11.0)):
                 shift.is_within_resource_dwt = "not"
-                shift.status_color = 3 # Orange
+                shift.status_color = 'at_risk' # Orange
                 shift.status_title = dict(shift._fields['is_within_resource_dwt'].selection).get(shift.is_within_resource_dwt, '')
             else:
                 shift.is_within_resource_dwt = "ok"
             
             if shift.resource_id and shift.resource_allocation_week(shift.date_start,shift.resource_id,float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hours_week', 40.0))):
                 shift.is_within_resource_wwt = "not"
-                shift.status_color = 3 # Orange
+                shift.status_color = 'at_risk' # Orange
                 shift.status_title = dict(shift._fields['is_within_resource_wwt'].selection).get(shift.is_within_resource_wwt, '')
             else:
                 shift.is_within_resource_wwt = "ok"
             
             if shift.resource_id and fields.Datetime.now() >= shift.date_start and not shift.check_in:
                 shift.is_has_resource_checkedin = "not"
-                shift.status_color = 1 # Red
+                shift.status_color =  'off_track' # Red
                 shift.status_title = dict(shift._fields['is_has_resource_checkedin'].selection).get(shift.is_has_resource_checkedin, '')
             else:
                 shift.is_has_resource_checkedin = "ok"

@@ -18,6 +18,20 @@ class ResourcePlanRole(models.Model):
     shift_ids = fields.One2many(related="plan_id.shift_ids")
     duration= fields.Float(string="Planned Hours",compute="_compute_duration")
     worked_hours = fields.Float(compute="_compute_worked_hours") 
+    status_color = fields.Selection(selection=[('at_risk', 'ORANGE'), ('on_track', 'GREEN'), ('off_track', 'RED')],compute="_compute_status_color",store=True)
+ 
+
+    @api.depends('shift_ids.status_color')
+    def _compute_status_color(self):
+        for record in self:
+            status_color = set(record.shift_ids.mapped("status_color"))
+            if 'off_track' in status_color:
+                record.status_color = 'off_track'
+            elif 'at_risk' in status_color:
+                record.status_color = 'at_risk'
+            else:
+                record.status_color = 'on_track'
+
 
     def _compute_duration(self):
         for record in self:
@@ -50,7 +64,7 @@ class ResourcePlanRole(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Slots',
             'res_model': 'resource.slot',
-            'view_mode': 'kanban,calendar,form,list,pivot',
+            'view_mode': 'form,list',
             'target': 'current',
             'context': {'search_default_plan_id': self.plan_id.id,'search_default_role_id': self.role_id.id},
         }

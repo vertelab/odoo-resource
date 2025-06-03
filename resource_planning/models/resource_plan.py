@@ -39,9 +39,9 @@ class ResourcePlan(models.Model):
     def _compute_status_color(self):
         for record in self:
             status_color = set(record.shift_ids.mapped("status_color"))
-            if 1 in status_color:
+            if 'off_track' in status_color:
                 record.status_color = 'off_track'
-            elif 3 in status_color:
+            elif 'at_risk' in status_color:
                 record.status_color = 'at_risk'
             else:
                 record.status_color = 'on_track'
@@ -59,6 +59,27 @@ class ResourcePlan(models.Model):
                 record.is_planning_slots = True
             else:
                 record.is_planning_slots = False
+
+    def action_open_employee(self):
+        self.ensure_one()
+        if self.resource_type == "human":
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Employee',
+                'view_mode': 'form',
+                'res_model': 'hr.employee',
+                'res_id': self.employee_id.id,
+                'target': 'current',
+            }
+        else:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Resource',
+                'view_mode': 'form',
+                'res_model': 'resource.resource',
+                'res_id': self.id,
+                'target': 'current',
+            }
 
     def action_open_assign_objects_wizard(self):
         return {

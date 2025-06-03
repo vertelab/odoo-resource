@@ -58,6 +58,7 @@ More information:
         'views/resource_plan_views.xml',
         'views/resource_planning_views.xml',
         'views/resource_shift_views.xml',
+        'views/resource_slot_views.xml',
         'views/resource_views.xml',
         'wizard/week_template_wizard_views.xml',
         'wizard/resource_plan_object_wizard.xml',
