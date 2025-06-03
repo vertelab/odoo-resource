@@ -30,11 +30,6 @@ class ResourcePlanObjectWizard(models.TransientModel):
 
                 for object_record in objects:
                     if object_record.duration < (shift.duration - shift.assigned_duration):
-                       _logger.warning(f"{object_record.duration=}")
-                       _logger.warning(f"{shift.duration=}")
-                       _logger.warning(f"{shift.assigned_duration=}")
-                       _logger.warning(f"{(shift.duration - shift.assigned_duration)=}")
-                       _logger.warning(f"{object_record.duration < (shift.duration - shift.assigned_duration)=}")
                        object_record.shift_id = shift
                 
             
