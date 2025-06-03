@@ -56,12 +56,14 @@
         </form>
       </field>
     </record>
+    
     <!-- List Views -->
+    
     <record id="view_resource_plan_list" model="ir.ui.view">
       <field name="name">resource.plan.list</field>
       <field name="model">resource.plan</field>
       <field name="arch" type="xml">
-        <list string="Resource Plans" default_order="date_start desc">
+        <list string="Resource Plans" default_order="date_start desc" >
           <header>
             <!--
                  <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" display="always" />
@@ -76,10 +78,13 @@
           <button name="action_get_shifts" class="oe_stat_button" title="ACtion Get Slots" type="object" icon="fa-cubes" invisible="use_slots == False" />
           <field name="duration" widget="float_time" sum="True" />
           <field name="worked_hours" widget="float_time" sum="True" />
+          <field name="test_state" widget="project_state_selection" nolabel="1" width="100px" readonly="1"/>
         </list>
       </field>
     </record>
+    
     <!-- Search Views -->
+    
     <record id="resource_plan_search" model="ir.ui.view">
       <field name="name">resource.plan.search</field>
       <field name="model">resource.plan</field>

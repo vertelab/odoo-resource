@@ -29,10 +29,21 @@ class ResourcePlan(models.Model):
     worked_hours = fields.Float(compute="_compute_worked_hours")
     use_slots = fields.Boolean(compute="_compute_use_slots")
     has_unassigned_shifts = fields.Boolean(compute="_has_unassigned_shifts")
+    test_state = fields.Selection(selection=[('at_risk', 'ORANGE'), ('on_track', 'GREEN'), ('off_track', 'RED')],compute="_compute_status_color")
     
     def _has_unassigned_shifts(self):
         for plan in self:
             plan.has_unassigned_shifts = self.env["resource.shift"].search_count([('plan_id', '=', plan.id),('resource_id','=',False)]) > 0
+
+    def _compute_status_color(self):
+        for record in self:
+            status_colors = set(record.shift_ids.mapped("status_color"))
+            if 1 in status_colors:
+                record.test_state = 'off_track'
+            elif 3 in status_colors:
+                record.test_state = 'at_risk'
+            else:
+                record.test_state = 'on_track'
 
     def _compute_use_slots(self):
         use_slots = self.env['ir.config_parameter'].sudo().get_param('resource_planning.use_slots', 'False') == 'True'
@@ -79,7 +90,7 @@ class ResourcePlan(models.Model):
             'res_model': 'resource.shift',
             'view_mode': 'kanban,calendar,form,list,pivot',
             'target': 'current',
-            'context': {'group_by':'resource_id','search_default_plan_id': self.id},
+            'context': {'search_default_group_by_resource':True,'search_default_plan_id': self.id},
         }
         return action
 
@@ -91,7 +102,6 @@ class ResourcePlan(models.Model):
             'view_mode': 'kanban,form,list',
             'target': 'current',
             'context': {'group_by':'resource_id','search_default_plan_id': self.id},
-            # ~ 'domain': [('plan_id', '=', self.id)]
         }
         return action
 

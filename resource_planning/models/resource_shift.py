@@ -50,6 +50,10 @@ class ResourceShift(models.Model):
     is_within_resource_dwt = fields.Selection(string="Day Worktime", selection=[('ok','OK'),('not','Out of Resource Day Worktime')],compute="_check_shift",tracking=True, default="ok")
     is_within_resource_role = fields.Selection(string="Role", selection=[('ok','OK'),('not','Out of Planning Schema')],compute="_check_shift",tracking=True, default="ok")
     is_within_resource_wwt = fields.Selection(string="Week Worktime", selection=[('ok','OK'),('not','Out of Resource Week Worktime')],compute="_check_shift",tracking=True, default="ok")
+    is_current_week = fields.Boolean(compute="_compute_is_current_week",store=True)
+    is_last_week = fields.Boolean(compute="_compute_is_last_week", store=True)
+    is_next_week = fields.Boolean(compute="_compute_is_next_week", store=True)
+    is_today = fields.Boolean(compute="_compute_is_today", store=True)
     name = fields.Char(string="Shift Name", compute="_compute_name", store=True)
     plan_id = fields.Many2one(comodel_name="resource.plan")
     planning_id = fields.Many2one(related="plan_id.planning_id")
@@ -109,7 +113,7 @@ class ResourceShift(models.Model):
             else:
                 shift.is_within_resource_dwt = "ok"
             
-            if shift.resource_id and not shift.resource_allocation_week(shift.date_start,shift.resource_id,float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hours_week', 40.0))):
+            if shift.resource_id and shift.resource_allocation_week(shift.date_start,shift.resource_id,float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hours_week', 40.0))):
                 shift.is_within_resource_wwt = "not"
                 shift.status_color = 3 # Orange
                 shift.status_title = dict(shift._fields['is_within_resource_wwt'].selection).get(shift.is_within_resource_wwt, '')
@@ -123,17 +127,38 @@ class ResourceShift(models.Model):
             else:
                 shift.is_has_resource_checkedin = "ok"
             
+    @api.depends("date_start")
+    def _compute_is_today(self):
+        for record in self:
+            record.is_today = record.date_start.date() == datetime.now().date() 
  
     @api.depends("date_start")
     def _compute_week_number(self):
         for record in self:
-            record.week_number = record.date_start.isocalendar().week
-    
+            record.week_number = int(record.date_start.strftime('%V'))
 
     @api.depends("week_number")
     def _compute_week_number_string(self):
         for record in self:
             record.week_number_string = str(record.week_number)
+    
+    @api.depends("week_number")
+    def _compute_is_current_week(self):
+        for record in self:
+            _logger.error(f"{record.week_number} {int(datetime.now().strftime('%V'))} {record.week_number == int(datetime.now().strftime('%V'))}")
+            record.is_current_week = record.week_number == int(datetime.now().strftime('%V'))
+
+    @api.depends("week_number")
+    def _compute_is_next_week(self):
+        for record in self:
+            _logger.error(f"{record.week_number} {int(datetime.now().strftime('%V')) + 1} {record.week_number == int(datetime.now().strftime('%V')) + 1}")
+            record.is_next_week = record.week_number == int(datetime.now().strftime('%V')) + 1
+    
+    @api.depends("week_number")
+    def _compute_is_last_week(self):
+        for record in self:
+            _logger.error(f"{record.week_number} {int(datetime.now().strftime('%V')) - 1} {record.week_number == int(datetime.now().strftime('%V')) - 1}")
+            record.is_last_week = record.week_number == int(datetime.now().strftime('%V')) - 1
 
     @api.depends("resource_id")
     def _compute_employee_id(self):
@@ -267,8 +292,7 @@ class ResourceShift(models.Model):
     def resource_allocation_week(self, date, resource_id, wwt):
         week_start = date - timedelta(days=date.weekday())
         period_start = week_start - timedelta(weeks=15)
-        # period_end = week_start + timedelta(days=6)        
-        period_end = week_start     
+        period_end = week_start + timedelta(days=6)
         shifts = self.env['resource.shift'].search([
             ('date_start', '>=', period_start.strftime('%Y-%m-%d 00:00:00')),
             ('date_start', '<=', period_end.strftime('%Y-%m-%d 23:59:59')),
