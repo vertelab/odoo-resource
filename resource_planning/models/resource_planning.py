@@ -107,7 +107,7 @@ class ResourcPlanning(models.Model):
             'res_model': 'resource.shift',
             'view_mode': 'calendar,kanban,list,form,pivot',
             'target': 'current',
-            'context': {'search_default_planning_id': self.id},
+            'context': {'search_default_this_week': True,'search_default_planning_id': self.id},
         }
         return action
 

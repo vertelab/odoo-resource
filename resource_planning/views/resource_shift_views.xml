@@ -127,6 +127,7 @@
           <field name="week_number_string" />
           <field name="plan_id" />
           <filter string="Start Date" name="date_start" date="date_start" />
+          <filter string="Today" name="today" domain="[('is_today', '=', True)]"/>
           <filter string="Monday" name="monday" domain="[('day', '=', 0)]" />
           <filter string="Tuesday" name="tuesday" domain="[('day', '=', 1)]" />
           <filter string="Wednesday" name="wednesday" domain="[('day', '=', 2)]" />
@@ -134,15 +135,9 @@
           <filter string="Friday" name="friday" domain="[('day', '=', 4)]" />
           <filter string="Saturday" name="saturday" domain="[('day', '=', 5)]" />
           <filter string="Sunday" name="sunday" domain="[('day', '=', 6)]" />
-<!--
-           <filter string="Current Week" domain="[('week_number_string', '=', (context_today()+relativedelta(weeks=0)).strftime('%%W'))]"/> 
--->
-          <filter string="This Week" name="this_week" domain="[('date_start','&gt;=', (context_today() + relativedelta(weeks=-1)).strftime('%%Y-%%m-01')), 
-                        ('date_start','&lt;', (context_today() + relativedelta(weeks=1)).strftime('%%Y-%%m-01'))]" />
-          <filter string="Next Week" name="next_week" domain="[('date_start','&gt;=', (context_today() + relativedelta(weeks=1)).strftime('%%Y-%%m-01')), 
-                        ('date_start','&lt;', (context_today() + relativedelta(weeks=2)).strftime('%%Y-%%m-01'))]" />
-          <filter string="Last Week" name="last_week" domain="[('date_start','&gt;=', (context_today() - relativedelta(weeks=1)).strftime('%%Y-%%m-01')), 
-                        ('date_start','&lt;', context_today().strftime('%%Y-%%m-01'))]" />
+          <filter string="This Week" name="this_week" domain="[('is_current_week', '=', True)]" />
+          <filter string="Next Week" name="next_week" domain="[('is_next_week', '=', True)]" />
+          <filter string="Last Week" name="last_week" domain="[('is_last_week', '=', True)]" />
           <group expand="0" string="Group By">
             <filter string="Days" name="group_by_day" context="{'group_by': 'day'}" />
             <filter string="Resources" name="group_by_resource" context="{'group_by': 'resource_id'}" />
