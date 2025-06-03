@@ -57,7 +57,8 @@ More information:
         'views/resource_views.xml',
         'views/hr_employee_views.xml',
         'views/res_users_views.xml',
-        'wizard/week_template_wizard_views.xml'
+        'wizard/week_template_wizard_views.xml',
+        'wizard/resource_plan_object_wizard.xml',
        ],
     'application': True,
     'installable': True,

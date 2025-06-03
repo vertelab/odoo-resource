@@ -15,7 +15,19 @@
       <field name="model">resource.shift</field>
       <field name="arch" type="xml">
         <form string="resource Shift">
+        
+
           <sheet>
+            <div name="button_box" id="button_box" class="oe_button_box">
+                <button name="action_view_shift_objects"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-cubes"
+                        string="Assigned Objects"
+                        >
+                    <field string="Assigned Objects" name="shift_object_ids" widget="statinfo"/>
+                </button>
+            </div>
             <div class="oe_title pe-0">
               <h1 class="d-flex justify-content-between align-items-center">
                 <div class="d-flex w-100">
@@ -30,7 +42,7 @@
               <field name="date_start" />
               <field name="date_stop" />
               <field name="duration" widget="float_time" />
-              <field name="shift_object_ids"/>
+              <field name="assigned_duration" widget="float_time" />
             </group>
           </sheet>
           <chatter />

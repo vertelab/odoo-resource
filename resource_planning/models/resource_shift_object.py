@@ -24,6 +24,18 @@ class ResourceShiftObject(models.Model):
         compute='_compute_name',
         store=True
     )
+    
+    reference_model = fields.Char(
+        string="Reference Model",
+        compute='_compute_reference_model',
+        store=True,
+        index=True
+    )
+
+    @api.depends('reference_id')
+    def _compute_reference_model(self):
+        for rec in self:
+            rec.reference_model = rec.reference_id._name if rec.reference_id else False
 
     @api.model
     def _reference_models(self):

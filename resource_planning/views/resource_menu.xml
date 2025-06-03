@@ -76,13 +76,13 @@
 
         <menuitem id="menu_resource_roles" name="Roles" parent="menu_resource_plan_configuration" action="action_resource_roles" sequence="40"/>
         
-        <menuitem id="menu_resource_objects" name="Objects" parent="menu_resource_plan_configuration" action="action_resource_objects" sequence="40"/>
+        <menuitem id="menu_resource_week_template" name="Week Template" parent="menu_resource_plan_configuration" action="action_resource_week_template" sequence="50"/>
 
-        <menuitem id="menu_resource_week_template" name="Week Template" parent="menu_resource_plan_configuration" action="action_resource_week_template" sequence="40"/>
-
-        <menuitem id="menu_resources" name="Resources" parent="menu_resource_plan_configuration" action="action_resources" sequence="40"/>
+        <menuitem id="menu_resources" name="Resources" parent="menu_resource_plan_configuration" action="action_resources" sequence="60"/>
         
-        <menuitem id="menu_resource_slot_object" parent="menu_resource_plan_configuration" name="Resource Slot Objects" action="action_resource_slot_object"/>
+        <menuitem id="menu_resource_objects" name="Object Templates" parent="menu_resource_plan_configuration" action="action_resource_objects" sequence="70"/>
+        
+        <menuitem id="menu_resource_slot_object" parent="menu_resource_plan_configuration" name="Objects" action="action_resource_slot_object"  sequence="80"/>
 
         <!-- <menuitem id="menu_resource_shifts" name="Shifts" parent="menu_resource_root" action="action_resource_shifts" sequence="40"/> -->
 

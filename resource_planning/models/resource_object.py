@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 
 class ResourceObject(models.Model):
     _name = 'resource.object'
-    _description = 'Resource Object'
+    _description = 'Resource Object Template'
     _inherit = ["mail.thread", "mail.activity.mixin"]
     name = fields.Char(
         string='Name',

@@ -214,6 +214,47 @@
         </search>
       </field>
     </record>
+    
+    
+    <record id="resource_object_search_view" model="ir.ui.view">
+        <field name="name">resource.object.search</field>
+        <field name="model">resource.object</field>
+        <field name="arch" type="xml">
+            <search string="Resource Objects">
+                <!-- Quick search fields -->
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="model_name"/>
+                <field name="order_by_field"/>
+                <field name="filter_domain"/>
+                <!-- Group by -->
+                <group expand="0" string="Group By">
+                    <filter name="group_by_model" string="Model" context="{'group_by':'model_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    
+
+    <record id="resource_shift_object_search_view" model="ir.ui.view">
+        <field name="name">resource.shift.object.search</field>
+        <field name="model">resource.shift.object</field>
+        <field name="arch" type="xml">
+            <search string="Shift Objects">
+                <field name="name"/>
+                <field name="shift_id"/>
+                <field name="object_description_id"/>
+                <field name="reference_model" string="Reference Model"/>
+                <field name="duration"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_reference_model" string="Reference Model" context="{'group_by': 'reference_model'}"/>
+                    <filter name="group_by_shift" string="Shift" context="{'group_by': 'shift_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- Kanban Views -->
    
     <record id="view_resource_week_template_calendar" model="ir.ui.view">

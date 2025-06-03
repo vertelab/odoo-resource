@@ -27,6 +27,7 @@ class ResourceShift(models.Model):
         ], compute="_compute_day", store=True)
     department_id = fields.Many2one(related="plan_id.planning_id.department_id")
     duration = fields.Float(string="Duration (Hours)",help="Shift duration in decimal hours",tracking=True)
+    assigned_duration = fields.Float(string="Assigned Duration (Hours)",help="Shift duration in decimal hours",compute="compute_assigned_duration",store=True)
     employee_id = fields.Many2one(comodel_name="hr.employee", compute="_compute_employee_id",store=True)
     end_time = fields.Float(string="End Time", tracking=True)
     hr_icon_display = fields.Selection(related='employee_id.hr_icon_display')
@@ -49,7 +50,22 @@ class ResourceShift(models.Model):
     worked_hours = fields.Float(related="attendance_id.worked_hours")
     shift_object_ids = fields.One2many('resource.shift.object','shift_id',string='Shift Objects')
     
-
+    def action_view_shift_objects(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Assigned Objects',
+            'res_model': 'resource.shift.object',
+            'view_mode': 'list,form',
+            'domain': [('shift_id', '=', self.id)],
+            'context': {'default_shift_id': self.id},
+        }
+    
+    @api.depends("shift_object_ids")
+    def compute_assigned_duration(self):
+        for shift in self:
+            shift.assigned_duration = sum(shift.shift_object_ids.mapped("duration"))
+        
     def compute_status_color(self):
         for shift in self:
             shift.status_color = 0 # Grey

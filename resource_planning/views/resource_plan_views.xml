@@ -10,6 +10,7 @@
           <header>
             <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" readonly="shift_count > 0" />
             <button name="update_data_lines" type="object" string="Update Data" class="btn-primary" />
+            <button name="action_open_assign_objects_wizard" type="object" string="Assign Objects" class="btn-primary"/>
           </header>
           <sheet>
             <div name="button_box" id="button_box" class="oe_button_box">
