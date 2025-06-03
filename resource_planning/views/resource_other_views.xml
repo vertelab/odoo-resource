@@ -27,6 +27,59 @@
               <field name="resource_ids" widget="many2many_tags" domain="[('resource_type','=',resource_type)]" />
               <field name="resource_type" />
             </group>
+            <group>
+                <field name="resource_object_ids"/>
+            </group>
+          </sheet>
+          <chatter />
+        </form>
+      </field>
+    </record>
+    
+    
+     <record id="view_slot_template_form" model="ir.ui.view">
+      <field name="name">resource.slot.template.form</field>
+      <field name="model">resource.slot.template</field>
+      <field name="arch" type="xml">
+        <form string="Resource Object">
+            <header>
+                <button name="create_slots"
+                type="object"
+                string="Create Slots"
+                class="btn-primary"/>
+            </header>
+          <sheet>
+            <div class="oe_button_box" name="button_box">
+                    <button name="action_open_slots"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-list"
+                            string="Shift Objects">
+                        <field name="shift_object_ids" widget="statinfo"/>
+                    </button>
+            </div>
+            <div class="oe_title pe-0">
+              <h1 class="d-flex justify-content-between align-items-center">
+                <div class="d-flex w-100">
+                  <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Object description..." />
+                </div>
+              </h1>
+            </div>
+            <group>
+              <field name="model_id" />
+              <field name="model_name" invisible="1" />
+              <field name="filter_domain" widget="domain" options="{'model': 'model_name'}" />
+              <field name="order_by_field"/>
+              <field name="eval_duration"/>
+                <label for="eval_duration" string="Help"/>
+                <div class="oe_edit_only" style="color: #888; margin-bottom: 8px;">
+                    <p>
+                        <b>Python Expression:</b> Use <code>record</code> for the current record.<br/>
+                        Example: <code>record.some_field * 2 if record.some_field else 1</code><br/>
+                        The result will be used as the duration.
+                    </p>
+                </div>
+            </group>
           </sheet>
           <chatter />
         </form>
@@ -94,6 +147,7 @@
             </group>
             <group>
               <field name="role_id" />
+              <field name="resource_slot_template"/>
               <field name="duration" widget="float_time" />
             </group>
           </sheet>
@@ -108,6 +162,20 @@
       <field name="arch" type="xml">
         <list string="resource Roles">
           <field name="name" />
+        </list>
+      </field>
+    </record>
+    
+    <record id="view_slot_template_tree" model="ir.ui.view">
+      <field name="name">resource.slot.template.tree</field>
+      <field name="model">resource.slot.template</field>
+      <field name="arch" type="xml">
+        <list string="Resource Objects">
+          <field name="name" />
+          <button name="action_open_form"
+                    type="object"
+                    string="View"
+                    icon="fa-eye"/>
         </list>
       </field>
     </record>
@@ -148,6 +216,47 @@
         </search>
       </field>
     </record>
+    
+    
+    <record id="resource_slot_template_search_view" model="ir.ui.view">
+        <field name="name">resource.slot.template.search</field>
+        <field name="model">resource.slot.template</field>
+        <field name="arch" type="xml">
+            <search string="Resource Objects">
+                <!-- Quick search fields -->
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="model_name"/>
+                <field name="order_by_field"/>
+                <field name="filter_domain"/>
+                <!-- Group by -->
+                <group expand="0" string="Group By">
+                    <filter name="group_by_model" string="Model" context="{'group_by':'model_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    
+
+    <record id="resource_slot_search_view" model="ir.ui.view">
+        <field name="name">resource.slot.search</field>
+        <field name="model">resource.slot</field>
+        <field name="arch" type="xml">
+            <search string="Shift Objects">
+                <field name="name"/>
+                <field name="shift_id"/>
+                <field name="object_description_id"/>
+                <field name="reference_model" string="Reference Model"/>
+                <field name="duration"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_reference_model" string="Reference Model" context="{'group_by': 'reference_model'}"/>
+                    <filter name="group_by_shift" string="Shift" context="{'group_by': 'shift_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- Kanban Views -->
    
    

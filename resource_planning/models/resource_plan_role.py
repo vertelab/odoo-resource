@@ -35,4 +35,24 @@ class ResourcePlanRole(models.Model):
             else:
                 record.worked_hours = False
                 
+    def action_get_shift_role(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Shifts',
+            'res_model': 'resource.shift',
+            'view_mode': 'kanban,calendar,form,list,pivot',
+            'target': 'current',
+            'context': {'search_default_plan_id': self.plan_id.id,'search_default_role_id': self.role_id.id},
+        }
                 
+    def action_get_slot_role(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Slots',
+            'res_model': 'resource.slot',
+            'view_mode': 'kanban,calendar,form,list,pivot',
+            'target': 'current',
+            'context': {'search_default_plan_id': self.plan_id.id,'search_default_role_id': self.role_id.id},
+        }
+                
+                          

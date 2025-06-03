@@ -15,46 +15,61 @@
       <field name="model">resource.shift</field>
       <field name="arch" type="xml">
         <form string="resource Shift">
-         <sheet>
-          <div class="oe_title pe-0">
-            <h1 class="d-flex justify-content-between align-items-center">
-              <div class="d-flex w-100">
-                <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Shift" />
-              </div>
-            </h1>
-          </div>
-          <group>
-          <group >
-            <field name="role_id" />
-            <field name="slot_id" />
-            <field name="week_template_id" readonly="True" />
-            <field name="resource_id" widget="many2one_avatar_user" />
-            <field name="date_start" string="Planned Date" widget="daterange" options='{ "end_date_field": "date_stop", "always_range": true}' required="1" />
-            <field name="duration" widget="float_time" />
-            <field name="check_in" string="Attendance" widget="daterange" options='{ "end_date_field": "check_out", "always_range": true}' readonly="True" />
-            <field name="worked_hours" readonly="True" />
-          </group>
-          <group >
-            <field name="status_title" />
-            <field name="is_has_resource_checkedin" />
-            <field name="is_within_planner_calendar" />
-            <field name="is_within_resource_calendar" />
-            <field name="is_within_resource_dwt" />
-            <field name="is_within_resource_role" />
-            <field name="is_within_resource_wwt" />
-          </group>
-          </group>
-        </sheet>
+          <sheet>
+            <div name="button_box" id="button_box" class="oe_button_box">
+                <button name="action_view_shift_objects"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-cubes"
+                        string="Assigned Objects"
+                        >
+                    <field string="Assigned Objects" name="shift_object_ids" widget="statinfo"/>
+                </button>
+            </div>
+            <div class="oe_title pe-0">
+              <h1 class="d-flex justify-content-between align-items-center">
+                <div class="d-flex w-100">
+                  <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Shift" />
+                </div>
+              </h1>
+            </div>
+            <group>
+              <field name="role_id" />
+              <field name="slot_id" />
+              <field name="resource_id" />
+              <field name="date_start" />
+              <field name="date_stop" />
+              <field name="duration" widget="float_time" />
+              <field name="assigned_duration" widget="float_time" />
+            </group>
+          </sheet>
           <chatter />
         </form>
       </field>
     </record>
-   
+        
+    <record id="view_slot_form" model="ir.ui.view">
+        <field name="name">resource.slot.form</field>
+        <field name="model">resource.slot</field>
+        <field name="arch" type="xml">
+            <form string="Slots">
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="shift_id"/>
+                        <field name="reference_id"/>
+                        <field name="duration"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     
     <!-- List Views -->
     
-    <record id="view_resource_shift_tree" model="ir.ui.view">
-      <field name="name">resource.shift.tree</field>
+    <record id="view_resource_shift_list" model="ir.ui.view">
+      <field name="name">resource.shift.list</field>
       <field name="model">resource.shift</field>
       <field name="arch" type="xml">
         <list string="resource Shifts">
@@ -77,6 +92,25 @@
         </list>
       </field>
     </record>
+    
+    <record id="view_slot_list" model="ir.ui.view">
+        <field name="name">resource.slot.list</field>
+        <field name="model">resource.slot</field>
+        <field name="arch" type="xml">
+            <list string="Slots">
+                <field name="name"/>
+                <field name="shift_id"/>
+                <field name="reference_id"/>
+                <field name="duration"/>
+                <button name="action_open_form"
+                        type="object"
+                        string="View"
+                        icon="fa-eye"
+                        />
+            </list>
+        </field>
+    </record>
+
    
     <!-- Search Views -->
     <record id="resource_shift_search" model="ir.ui.view">
@@ -193,6 +227,20 @@
         </kanban>
       </field>
     </record>
+    <!-- Pivot Views -->
+
+    <record id="view_resource_shift_test_form" model="ir.ui.view">
+      <field name="name">resource.shift.test.from.view</field>
+      <field name="model">resource.shift</field>
+      <field name="arch" type="xml">
+        <form string="Test Shifts">
+          <field name="role_id" />
+        </form>
+      </field>
+    </record>
+
+
+
     <!-- Calandar Views -->
 
     <record id="view_resource_shift_calendar" model="ir.ui.view">
@@ -207,16 +255,5 @@
       </field>
     </record>
    
-    <!-- Pivot Views -->
-  
-    <record id="view_resource_shift_test_form" model="ir.ui.view">
-      <field name="name">resource.shift.test.from.view</field>
-      <field name="model">resource.shift</field>
-      <field name="arch" type="xml">
-        <form string="Test Shifts">
-          <field name="role_id" />
-        </form>
-      </field>
-    </record>
   </data>
 </odoo>

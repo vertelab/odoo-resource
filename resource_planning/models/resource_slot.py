@@ -26,6 +26,28 @@ class ResourceSlot(models.Model):
     res_users_id = fields.Many2one(comodel_name="res.users")
     role_id = fields.Many2one(comodel_name="resource.role")
     plan_id = fields.Many2one(comodel_name="resource.plan")
+    shift_id = fields.Many2one('resource.shift',string='Shift',required=False,ondelete='cascade')
+    object_description_id = fields.Many2one('resource.slot.template',string='Object Description',required=True,ondelete='cascade')
+    
+    reference_id = fields.Reference(
+        selection='_reference_models',
+        string='Reference'
+    )
+    duration = fields.Float(string='Duration')
+    
+    name = fields.Char(
+        string='Name',
+        compute='_compute_name',
+        store=True
+    )
+    
+    reference_model = fields.Char(
+        string="Reference Model",
+        compute='_compute_reference_model',
+        store=True,
+        index=True
+    )
+
 
     @api.depends("duration","date_start")
     def _compute_date_stop(self):
@@ -48,3 +70,39 @@ class ResourceSlot(models.Model):
         domain=[('resource_type', '=', 'user')]
         resource_ids = resource_id._search(domain)
         return self.env["resource.resource"].browse(resource_ids)
+        
+    @api.depends('reference_id')
+    def _compute_reference_model(self):
+        for rec in self:
+            rec.reference_model = rec.reference_id._name if rec.reference_id else False
+
+    @api.model
+    def _reference_models(self):
+        model_ids = self.env['ir.model'].search([('transient', '=', False)])
+        return [(model.model, model.name) for model in model_ids if 'name' in model.field_id.mapped('name')]
+
+    @api.depends('reference_id')
+    def _compute_name(self):
+        for rec in self:
+            if rec.reference_id:
+                # This will call the record's display_name (usually the 'name' field or _rec_name)
+                rec.name = rec.reference_id.display_name
+            else:
+                rec.name = False
+    
+    def _compute_duration(self):
+        for rec in self:
+            if rec.object_description_id:
+               rec.duration = rec.object_description_id.return_duration(rec)
+                
+    def action_open_form(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Resource Shift Object',
+            'res_model': 'resource.slot',
+            'view_mode': 'form',
+            'res_id': self.id,
+            'target': 'current',
+        }
+

@@ -7,8 +7,9 @@
       <field name="arch" type="xml">
         <form string="Resource Planning">
           <header>
-            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" invisible="shift_count > 0" />
-            <button name="update_data_lines" type="object" string="Update Data" class="btn-primary" />
+            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" readonly="shift_count > 0" groups="base.group_user"/>
+            <button name="update_data_lines" type="object" string="Update Data" class="btn-primary" groups="base.group_user" />
+            <button name="action_open_assign_objects_wizard" type="object" string="Assign Objects" class="btn-primary" groups="base.group_user"/>
           </header>
           <sheet>
             <div name="button_box" id="button_box" class="oe_button_box">
@@ -22,6 +23,7 @@
             <div class="oe_title pe-0">
               <h1 class="d-flex justify-content-between align-items-center">
                 <div class="d-flex w-100">
+                <field name="status_color" widget="project_state_selection" nolabel="1" width="200px" readonly="1"/>
                   <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Month..." />
                 </div>
               </h1>
@@ -36,6 +38,10 @@
                 <field name="plan_role_ids" no_open="1">
                   <list create="false" edit="false" delete="false">
                     <field name="role_id" />
+<!--
+                    <button name="action_get_shift_role" class="oe_stat_button " type="object" icon="fa-trello"/>
+                     <button name="action_get_slot_role" class="oe_stat_button " type="object" icon="fa-cubes" invisible="use_slots == False"/>
+-->
                     <field name="duration" widget="float_time" sum="True" />
                     <field name="worked_hours" widget="float_time" sum="True" />
                   </list>
@@ -45,6 +51,8 @@
                 <field name="plan_resource_ids" no_open="1">
                   <list create="false" edit="false" delete="false">
                     <field name="resource_id" widget="many2one_avatar_user" />
+                     <button name="action_get_shifts_resource" class="oe_stat_button " type="object" icon="fa-trello"/>
+                     <button name="action_get_slot_resource" class="oe_stat_button " type="object" icon="fa-cubes" invisible="use_slots == False"/>
                     <field name="duration" widget="float_time" sum="True" />
                     <field name="worked_hours" widget="float_time" sum="True" />
                   </list>
@@ -73,12 +81,12 @@
           <field name="date_start" required="True" />
           <field name="date_stop" required="True" />
           <field name="week_template_ids" widget="many2many_tags" />
-          <field name="use_slots" invisible="True"/>
+          <field name="use_slots" invisible="True" nolabel="True"/>
           <button name="action_get_shifts" class="oe_stat_button" title="Action Get Shifts" type="object" icon="fa-trello" />
-          <button name="action_get_shifts" class="oe_stat_button" title="ACtion Get Slots" type="object" icon="fa-cubes" invisible="use_slots == False" />
+          <button name="action_get_shifts" class="oe_stat_button" title="Action Get Slots" type="object" icon="fa-cubes" invisible="use_slots == False" />
           <field name="duration" widget="float_time" sum="True" />
           <field name="worked_hours" widget="float_time" sum="True" />
-          <field name="test_state" widget="project_state_selection" nolabel="1" width="100px" readonly="1"/>
+          <field name="status_color" widget="project_state_selection" nolabel="1" width="100px" readonly="1"/>
         </list>
       </field>
     </record>

@@ -1,6 +1,7 @@
 import logging
 
 from odoo import models, fields, api
+from odoo.tools.safe_eval import safe_eval
 
 _logger = logging.getLogger(__name__)
 
@@ -19,3 +20,7 @@ class ResourceRole(models.Model):
         ('user', 'Human'),
         ('material', 'Material')], string='Type',
         default='user', required=True)
+    resource_object_ids = fields.Many2many(
+        comodel_name='resource.slot.template')
+
+ 
