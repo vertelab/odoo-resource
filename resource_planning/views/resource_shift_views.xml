@@ -23,7 +23,6 @@
                         icon="fa-cubes"
                         string="Slots"
                         invisible="use_slots == False"
-                        
                         >
                     <field string="Slots" name="shift_object_ids" widget="statinfo"/>
                 </button>
@@ -93,7 +92,7 @@
       <field name="name">resource.shift.list</field>
       <field name="model">resource.shift</field>
       <field name="arch" type="xml">
-        <list string="resource Shifts">
+        <list string="resource Shifts" >
           <header>
             <button name="action_assign_shifts" type="object" string="Assign Shifts" class="btn-primary" display="always" />
           </header>

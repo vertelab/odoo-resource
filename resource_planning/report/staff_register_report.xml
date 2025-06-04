@@ -18,11 +18,11 @@
                     <tbody>
                         <t t-foreach="doc.shift_ids" t-as="shift">
                             <tr>
-                                <td t-esc="shift.date_start"/>
-                                <td t-esc="shift.date_stop"/>
+                                <td t-esc="doc.make_tz_aware(shift.date_start).strftime('%-d/%-m -%-y')"/>
+                                <td t-esc="doc.make_tz_aware(shift.date_stop).strftime('%-d/%-m -%-y')"/>
                                 <td t-esc="shift.resource_id.name"/>
-                                <td t-esc="shift.attendance_id.check_in"/>
-                                <td t-esc="shift.attendance_id.check_out"/>
+                                <td t-esc="doc.make_tz_aware(shift.attendance_id.check_in).strftime('%H:%M')"/>
+                                <td t-esc="doc.make_tz_aware(shift.attendance_id.check_out).strftime('%H:%M')"/>
                             </tr>
                         </t>
                     </tbody>

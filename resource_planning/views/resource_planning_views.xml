@@ -43,18 +43,6 @@
               <field name="tz"/>
               <field name="resource_calendar_id"/>
             </group>
-<!--
-            <notebook>
-                <page string="Staff Register">
-                    <field name="shift_date"/>
-                    <field name="shift_ids" >
-                        <list>
-                            <field name="name" />
-                        </list>
-                    </field>
-                </page>
-            </notebook>
--->
             <!-- <notebook>
                  <page string="Roles Data">
                  <field name="plan_role_ids">

@@ -5,6 +5,7 @@ from odoo import models, fields, api
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.exceptions import UserError, ValidationError
 import pytz
+from pytz import timezone
 
 _logger = logging.getLogger(__name__)
 
@@ -13,7 +14,7 @@ class ResourcPlanning(models.Model):
     _description = 'Resource Planning'
     _inherit = ["mail.thread", "mail.activity.mixin"]
     
-    
+
     _tzs = [(tz, tz) for tz in sorted(pytz.all_timezones, key=lambda tz: tz if not tz.startswith('Etc/') else '_')]
 
     active = fields.Boolean(default=True)
@@ -41,11 +42,21 @@ class ResourcPlanning(models.Model):
         for rec in self:
             rec.use_slots = use_slots
     
+    def make_tz_aware(self,_date):
+        tz = self.env.context.get('tz')
+        return timezone("UTC").localize(_date).astimezone(timezone(tz))
+    
     @api.depends("shift_date")
     def _compute_shift_ids(self):
         for record in self:
             if record.shift_date:
-                record.shift_ids = self.env["resource.shift"].search([("date_start", ">=", datetime(record.shift_date.year, record.shift_date.month, record.shift_date.day)), ("date_start", "<", datetime(record.shift_date.year, record.shift_date.month, record.shift_date.day + 1))])
+                record.shift_ids = self.env["resource.shift"].search([
+                ("date_start", ">=", datetime(record.shift_date.year, record.shift_date.month, record.shift_date.day)),
+                ("date_start", "<", datetime(record.shift_date.year, record.shift_date.month, record.shift_date.day + 1)),
+                ("resource_id", "!=", False),
+                ("check_in", "!=", False),
+                ("check_out", "!=", False),
+                ])
             else: 
                 record.shift_ids = False
                 
