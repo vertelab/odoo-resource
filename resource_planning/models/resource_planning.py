@@ -1,5 +1,5 @@
 import logging
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 
 from odoo import models, fields, api
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
@@ -28,8 +28,8 @@ class ResourcPlanning(models.Model):
     plan_ids = fields.One2many(comodel_name="resource.plan", inverse_name="planning_id")
     resource_calendar_id = fields.Many2one(comodel_name="resource.calendar",tracking=True)
     status_color = fields.Integer(compute="compute_status_color")
-    shift_date = fields.Date(default=fields.Date.context_today)
-    shift_ids = fields.One2many(comodel_name="resource.shift", inverse_name="planning_id", compute="_compute_shift_ids", store=True)
+    shift_date = fields.Date()
+    shift_ids = fields.One2many(comodel_name="resource.shift", inverse_name="planning_id", compute="_compute_shift_ids")
     tz = fields.Selection(_tzs, string='Timezone', default=lambda self: self._context.get('tz'),
                           help="When printing documents and exporting/importing data, time values are computed according to this timezone.\n"
                                "If the timezone is not set, UTC (Coordinated Universal Time) is used.\n"
@@ -78,19 +78,11 @@ class ResourcPlanning(models.Model):
         for record in self:
             record.plan_count = len(record.plan_ids)
 
-    def test_action_report(self):
-        action = {
-            'type': 'ir.actions.report',
-            'name': "Resource Planning Shifts Report",
-            'res_model': "resource.planning",
-            'report_type': "qweb-pdf",
-            'report_name': "resource_planning.report_resource_planning_shifts",
-            'report_file': "resource_planning.report_resource_planning_shifts",
-            'print_report_name': "Test",
-            'binding_model_id': self.env.ref('resource_planning.model_resource_planning').id,
-            'res_id': self.id,
-        }
-        return action
+    # def test_action_report(self):
+        # action = self.env.ref('resource_planning.action_report_resource_planning_shifts')
+        # _logger.error(f"{self.shift_ids=}")
+
+        # return action.report_action(self.id)
         
         
 # <record id="action_report_resource_planning_shifts" model="ir.actions.report">
@@ -107,11 +99,13 @@ class ResourcPlanning(models.Model):
         
 
     def action_staff_register_wizard(self):
+        self.shift_date = date.today()
         action = {
             'type': 'ir.actions.act_window',
             'name': 'Staff Register Wizard',
             'res_model': 'resource.planning',
             'view_mode': 'form',
+            "res_id": self.id,
             'view_id': self.env.ref('resource_planning.staff_register_wizard_view').id,
             'target': 'new',
         }

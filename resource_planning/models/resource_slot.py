@@ -25,9 +25,9 @@ class ResourceSlot(models.Model):
     resource_id = fields.Many2one(comodel_name="resource.resource",group_expand="_group_expand_resource_id",domain="[('resource_type', '=', 'user')]")
     res_users_id = fields.Many2one(comodel_name="res.users")
     role_id = fields.Many2one(comodel_name="resource.role")
-    plan_id = fields.Many2one(comodel_name="resource.plan")
+    plan_id = fields.Many2one(comodel_name="resource.plan", related='shift_id.plan_id')
     shift_id = fields.Many2one('resource.shift',string='Shift',required=False,ondelete='cascade')
-    object_description_id = fields.Many2one('resource.slot.template',string='Object Description',required=True,ondelete='cascade')
+    object_description_id = fields.Many2one('resource.slot.template',string='Object Description',required=False,ondelete='cascade')
     
     reference_id = fields.Reference(
         selection='_reference_models',

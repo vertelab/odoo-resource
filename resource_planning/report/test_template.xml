@@ -4,13 +4,15 @@
         <t t-foreach="docs" t-as="doc">
             <t t-call="web.external_layout">
                 <div class="page">
+                    <h2 t-esc="doc"/>
                     <h2 t-esc='f"Resource Planning: {doc.name}"' />
                     <p t-esc="doc.shift_ids"/>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Date Start</th>
-                            <th>Date Stop</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Name</th>
                             <th>Check In</th>
                             <th>Check Out</th>
                         </tr>
@@ -20,6 +22,7 @@
                             <tr>
                                 <td t-esc="shift.date_start"/>
                                 <td t-esc="shift.date_stop"/>
+                                <td t-esc="shift.resource_id.name"/>
                                 <td t-esc="shift.attendance_id.check_in"/>
                                 <td t-esc="shift.attendance_id.check_out"/>
                             </tr>
@@ -33,7 +36,6 @@
     </t>
 </template>
 
-<!--
 <record id="action_report_resource_planning_shifts" model="ir.actions.report">
         <field name="name">Resource Planning Shifts Report</field>
         <field name="model">resource.planning</field>
@@ -43,47 +45,6 @@
         <field name="print_report_name">'Test'</field>
         <field name="binding_model_id" ref="resource_planning.model_resource_planning"/>
         <field name="binding_type">report</field>
-        <field name="context"></field>
     </record>
--->
 
 </odoo>
-
-
-
-
-<!--
-<report
-    id="action_report_resource_planning_shifts"
-    model="resource.planning"
-    string="Shift Report"
-    report_type="qweb-pdf"
-    name="your_module.report_resource_planning_shifts"
-    file="your_module.report_resource_planning_shifts"
-    print_report_name="'Shifts - %s' % (object.name)"
-/>
--->
-
-
-<!--
-<h2>Resource Planning: <t t-esc="doc.name"/></h2>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Date Start</th>
-                            <th>Date Stop</th>
-                            <th>Check In</th>
-                            <th>Check Out</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <t t-foreach="doc.shift_ids" t-as="shift">
-                            <tr>
-                                <td><t t-esc="shift.date_start"/></td>
-                                <td><t t-esc="shift.date_stop"/></td>
-                                <td><t t-esc="shift.attendance_id.check_in"/></td>
-                                <td><t t-esc="shift.attendance_id.check_out"/></td>
-                            </tr>
-                        </t>
-                    </tbody>
-                </table>-->

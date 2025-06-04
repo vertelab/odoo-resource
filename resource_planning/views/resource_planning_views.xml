@@ -81,18 +81,6 @@
       </field>
     </record>
     
-<!--
-    <record id="action_report_resource_planning_shifts" model="ir.actions.report">
-            <field name="name">Shift Report</field>
-            <field name="model">resource.planning</field>
-            <field name="binding_model_id" ref="resource_planning.model_resource_planning"/>
-            <field name="report_type">qweb-pdf</field>
-            <field name="report_name">resource_planning.report_original_vendor_bill</field>
-            <field name="report_file">resource_planning.report_original_vendor_bill</field>
-            <field name="attachment">'original_vendor_bill.pdf'</field>
-            <field name="attachment_use">True</field>
-</record>
--->
     
     <record id="staff_register_wizard_view" model="ir.ui.view">
         <field name="name">staff.register.wizard.view</field>
@@ -115,7 +103,7 @@
             </sheet>
                
                 <footer>
-                    <button name="test_action_report" string="Create" type="object" class="oe_highlight"/>
+                    <button name="%(resource_planning.action_report_resource_planning_shifts)d" string="Create" type="action" class="oe_highlight"/>
                     <button name="cancel" string="Cancel" special="cancel"/>
                 </footer>
             </form>

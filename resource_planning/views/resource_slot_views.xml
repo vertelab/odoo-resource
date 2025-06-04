@@ -15,6 +15,7 @@
                     <group>
                         <field name="name" readonly="1"/>
                         <field name="shift_id"/>
+                        <field name="plan_id"/>
                         <field name="reference_id"/>
                         <field name="duration"/>
                     </group>
@@ -37,6 +38,7 @@
                 <field name="shift_id"/>
                 <field name="reference_id"/>
                 <field name="duration"/>
+                <field name="plan_id"/>
                 <button name="action_open_form"
                         type="object"
                         string="View"

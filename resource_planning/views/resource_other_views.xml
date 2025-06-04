@@ -246,9 +246,10 @@
             <search string="Shift Objects">
                 <field name="name"/>
                 <field name="shift_id"/>
-                <field name="object_description_id"/>
-                <field name="reference_model" string="Reference Model"/>
+                <field name="object_description_id" readonly="1"/>
+                <field name="reference_model" string="Reference Model" readonly="1"/>
                 <field name="duration"/>
+                <field name="plan_id" />
                 <group expand="0" string="Group By">
                     <filter name="group_by_reference_model" string="Reference Model" context="{'group_by': 'reference_model'}"/>
                     <filter name="group_by_shift" string="Shift" context="{'group_by': 'shift_id'}"/>

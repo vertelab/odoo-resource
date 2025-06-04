@@ -152,11 +152,11 @@ class ResourcePlan(models.Model):
             'res_model': 'resource.slot',
             'view_mode': 'kanban,form,list',
             'target': 'current',
-            #'context': {'group_by':'resource_id','search_default_plan_id': self.id}, Does not work
+            'context': {'search_default_group_by_shift':True,'search_default_plan_id': self.id},
             
         }
         return action
-
+    
     def update_data_lines(self):
         self.update_plan_roles()
         self.update_plan_resources()
