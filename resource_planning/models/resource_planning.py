@@ -77,27 +77,7 @@ class ResourcPlanning(models.Model):
     def _compute_plan_count(self):
         for record in self:
             record.plan_count = len(record.plan_ids)
-
-    # def test_action_report(self):
-        # action = self.env.ref('resource_planning.action_report_resource_planning_shifts')
-        # _logger.error(f"{self.shift_ids=}")
-
-        # return action.report_action(self.id)
         
-        
-# <record id="action_report_resource_planning_shifts" model="ir.actions.report">
-        # <field name="name">Resource Planning Shifts Report</field>
-        # <field name="model">resource.planning</field>
-        # <field name="report_type">qweb-html</field>
-        # <field name="report_name">resource_planning.report_resource_planning_shifts</field>
-        # <field name="report_file">resource_planning.report_resource_planning_shifts</field>
-        # <field name="print_report_name">'Test'</field>
-        # <field name="binding_model_id" ref="resource_planning.model_resource_planning"/>
-        # <field name="binding_type">report</field>
-        # <field name="context"></field>
-    # </record>
-        
-
     def action_staff_register_wizard(self):
         self.shift_date = date.today()
         action = {

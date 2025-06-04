@@ -49,7 +49,7 @@ More information:
     'depends': ['hr', 'hr_attendance', 'calendar','project','resource','mail'],
     'data': [
         'security/ir.model.access.csv',
-        'report/test_template.xml',
+        'report/staff_register_report.xml',
         'views/hr_employee_views.xml',
         'views/res_config_settings.xml',
         'views/res_users_views.xml',

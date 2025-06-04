@@ -1,12 +1,10 @@
 <odoo>
-<template id="report_resource_planning_shifts">
+<template id="staff_register_report">
     <t t-call="web.html_container">
         <t t-foreach="docs" t-as="doc">
             <t t-call="web.external_layout">
                 <div class="page">
-                    <h2 t-esc="doc"/>
-                    <h2 t-esc='f"Resource Planning: {doc.name}"' />
-                    <p t-esc="doc.shift_ids"/>
+                    <h2 t-esc='f"Place Name: {doc.name}"' />
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -36,15 +34,16 @@
     </t>
 </template>
 
-<record id="action_report_resource_planning_shifts" model="ir.actions.report">
-        <field name="name">Resource Planning Shifts Report</field>
+<record id="action_staff_register_report" model="ir.actions.report">
+        <field name="name">Staff Register</field>
         <field name="model">resource.planning</field>
-        <field name="report_type">qweb-html</field>
-        <field name="report_name">resource_planning.report_resource_planning_shifts</field>
-        <field name="report_file">resource_planning.report_resource_planning_shifts</field>
-        <field name="print_report_name">'Test'</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">resource_planning.staff_register_report</field>
+        <field name="report_file">resource_planning.staff_register_report</field>
+        <field name="print_report_name">'%s_report' % (object.name).replace('/','')</field>
         <field name="binding_model_id" ref="resource_planning.model_resource_planning"/>
         <field name="binding_type">report</field>
+        <field name="attachment_use" eval="False"/>
     </record>
 
 </odoo>

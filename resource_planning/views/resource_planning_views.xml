@@ -103,7 +103,7 @@
             </sheet>
                
                 <footer>
-                    <button name="%(resource_planning.action_report_resource_planning_shifts)d" string="Create" type="action" class="oe_highlight"/>
+                    <button name="%(resource_planning.action_staff_register_report)d" string="Create" type="action" class="oe_highlight"/>
                     <button name="cancel" string="Cancel" special="cancel"/>
                 </footer>
             </form>
