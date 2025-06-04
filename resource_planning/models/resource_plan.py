@@ -93,8 +93,23 @@ class ResourcePlan(models.Model):
                 'active_ids': self.ids,
             },
         }
+        
+    def create_slots(self):
+        for plan in self:
+            for shift in plan.shift_ids:
+                for resource_object in shift.resource_slot_template:
+                    #resource_object.create_slots() # Bara assigna det som finns?
+                    if shift.assigned_duration >= shift.duration:
+                        break
+                    objects = self.env['resource.slot'].search([('object_description_id', '=', resource_object.id),('shift_id','=',False)])
+                    if resource_object.order_by_field:
+                        order_field_name = resource_object.order_by_field.name
+                        objects = objects.sorted(key=lambda rec: getattr(rec.reference_id, order_field_name) or datetime.max)
 
-
+                    for object_record in objects:
+                        if object_record.duration < (shift.duration - shift.assigned_duration):
+                           object_record.shift_id = shift
+            
     def _compute_duration(self):
         for record in self:
             if record.shift_ids:
@@ -137,7 +152,8 @@ class ResourcePlan(models.Model):
             'res_model': 'resource.slot',
             'view_mode': 'kanban,form,list',
             'target': 'current',
-            'context': {'group_by':'resource_id','search_default_plan_id': self.id},
+            #'context': {'group_by':'resource_id','search_default_plan_id': self.id}, Does not work
+            
         }
         return action
 
@@ -180,7 +196,8 @@ class ResourcePlan(models.Model):
                             "duration": shift.duration,
                             "role_id": shift.role_id.id,
                             "plan_id": self.id,
-                            "week_template_id": week_template_id.id
+                            "week_template_id": week_template_id.id,
+                            "shift_template_id":shift.id,
                         }
                         records.append(record)
                 date_start = date_start + timedelta(days=1)

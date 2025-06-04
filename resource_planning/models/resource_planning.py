@@ -78,6 +78,34 @@ class ResourcPlanning(models.Model):
         for record in self:
             record.plan_count = len(record.plan_ids)
 
+    def test_action_report(self):
+        action = {
+            'type': 'ir.actions.report',
+            'name': "Resource Planning Shifts Report",
+            'res_model': "resource.planning",
+            'report_type': "qweb-pdf",
+            'report_name': "resource_planning.report_resource_planning_shifts",
+            'report_file': "resource_planning.report_resource_planning_shifts",
+            'print_report_name': "Test",
+            'binding_model_id': self.env.ref('resource_planning.model_resource_planning').id,
+            'res_id': self.id,
+        }
+        return action
+        
+        
+# <record id="action_report_resource_planning_shifts" model="ir.actions.report">
+        # <field name="name">Resource Planning Shifts Report</field>
+        # <field name="model">resource.planning</field>
+        # <field name="report_type">qweb-html</field>
+        # <field name="report_name">resource_planning.report_resource_planning_shifts</field>
+        # <field name="report_file">resource_planning.report_resource_planning_shifts</field>
+        # <field name="print_report_name">'Test'</field>
+        # <field name="binding_model_id" ref="resource_planning.model_resource_planning"/>
+        # <field name="binding_type">report</field>
+        # <field name="context"></field>
+    # </record>
+        
+
     def action_staff_register_wizard(self):
         action = {
             'type': 'ir.actions.act_window',
@@ -86,7 +114,6 @@ class ResourcPlanning(models.Model):
             'view_mode': 'form',
             'view_id': self.env.ref('resource_planning.staff_register_wizard_view').id,
             'target': 'new',
-            'context': {'search_default_planning_id': self.id},
         }
         return action
 

@@ -73,6 +73,17 @@ class ResourceShift(models.Model):
     worked_hours = fields.Float(related="attendance_id.worked_hours")
     shift_object_ids = fields.One2many('resource.slot','shift_id',string='Shift Objects')
     use_slots = fields.Boolean(compute="_compute_use_slots")
+    shift_template_id = fields.Many2one(comodel_name="resource.week.template.shift")
+    resource_slot_template = fields.Many2many(
+        comodel_name='resource.slot.template' , compute="set_default_resource_template", store=True, readonly=False)
+    
+    @api.depends('shift_template_id')
+    def set_default_resource_template(self):
+        for record in self:
+            if not record.resource_slot_template:
+                record.resource_slot_template = record.shift_template_id.resource_slot_template
+            else:
+                record.resource_slot_template = record.resource_slot_template
 
     def _compute_use_slots(self):
         use_slots = self.env['ir.config_parameter'].sudo().get_param('resource_planning.use_slots', 'False') == 'True'

@@ -42,6 +42,8 @@
             <field name="week_template_id" readonly="True" />
             <field name="resource_id" widget="many2one_avatar_user" />
             <field name="date_start" string="Planned Date" widget="daterange" options='{ "end_date_field": "date_stop", "always_range": true}' required="1" />
+            <field name="shift_template_id"/>
+            <field name="resource_slot_template"/>
             <field name="duration" widget="float_time" />
             <field name="check_in" string="Attendance" widget="daterange" options='{ "end_date_field": "check_out", "always_range": true}' readonly="True" /> 
             <button name="set_attended" type="object" string="Attended"                class="oe_highlight"
