@@ -7,7 +7,7 @@
       <field name="arch" type="xml">
         <form string="Resource Planning">
           <header>
-            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" readonly="shift_count > 0" groups="base.group_user" />
+            <button name="create_shifts" type="object" string="Generate Shifts" class="btn-primary" invisible="shift_count > 0" groups="base.group_user" />
             <button name="update_data_lines" type="object" string="Update Data" class="btn-primary" groups="base.group_user" />
             <button name="create_slots" type="object" string="Create Slots" class="btn-primary" groups="base.group_user" />
           </header>
