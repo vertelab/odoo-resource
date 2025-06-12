@@ -8,7 +8,8 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Date</th>
+                            <th>Start Date</th>
+                            <th>Social</th>
                             <th>Name</th>
                             <th>Check In</th>
                             <th>Check Out</th>
@@ -18,6 +19,27 @@
                         <t t-foreach="doc.shift_ids" t-as="shift">
                             <tr>
                                 <td t-esc="doc.make_tz_aware(shift.date_start).strftime('%-d/%-m -%-y')"/>
+<!--
+                                <td t-esc="doc.make_tz_aware(shift.date_stop).strftime('%-d/%-m -%-y')"/>
+-->
+                                <td>
+    <t t-if="shift.resource_id.employee_id">
+        <t t-if="shift.resource_id.employee_id.identification_id">
+            <span t-esc="shift.resource_id.employee_id.identification_id"/>
+        </t>
+        <t t-elif="shift.resource_id.employee_id.ssnid">
+            <span t-esc="shift.resource_id.employee_id.ssnid"/>
+        </t>
+        <t t-elif="shift.resource_id.employee_id.passport_id">
+            <span t-esc="shift.resource_id.employee_id.passport_id"/>
+        </t>
+
+        <t t-elif="not shift.resource_id.employee_id.passport_id">
+            <span>None</span>
+        </t>
+            </t>
+</td>
+                                <td t-esc="shift.resource_id.employee_id.ssnid"/>
                                 <td t-esc="shift.resource_id.name"/>
                                 <td t-esc="doc.make_tz_aware(shift.attendance_id.check_in).strftime('%H:%M')"/>
                                 <td t-esc="doc.make_tz_aware(shift.attendance_id.check_out).strftime('%H:%M')"/>

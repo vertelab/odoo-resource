@@ -1,5 +1,5 @@
-odoo-planning / planning_ce
-2023-02-28
+odoo-resource / resource_planning
+2025-06-11
 
 
 Be aware of these!
