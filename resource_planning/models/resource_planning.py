@@ -55,7 +55,6 @@ class ResourcPlanning(models.Model):
                 ("date_start", "<", datetime(record.shift_date.year, record.shift_date.month, record.shift_date.day + 1)),
                 ("resource_id", "!=", False),
                 ("check_in", "!=", False),
-                ("check_out", "!=", False),
                 ])
             else: 
                 record.shift_ids = False
@@ -114,13 +113,15 @@ class ResourcPlanning(models.Model):
         return action
 
     def get_today(self):
+        shifts = self.env["resource.shift"].search([("planning_id", "=", self.id)])
+        shifts.recompute_stored_fields()
         action = {
             'type': 'ir.actions.act_window',
             'name': 'Today',
             'res_model': 'resource.shift',
-            'view_mode': 'calendar,list,form,kanban,pivot',
+            'view_mode': 'list,calendar,form,kanban,pivot',
             'target': 'current',
-            'context': {'search_default_planning_id': self.id},
+            'context': {'search_default_this_week': True,'search_default_planning_id': self.id},
         }
         return action
     def get_today_slots(self):
@@ -130,7 +131,7 @@ class ResourcPlanning(models.Model):
             'res_model': 'resource.slot',
             'view_mode': 'calendar,list,form,kanban,pivot',
             'target': 'current',
-            'context': {'search_default_planning_id': self.id},
+            'context': {'search_default_this_week': True,'search_default_planning_id': self.id},
         }
         return action
 
@@ -154,12 +155,15 @@ class ResourcPlanning(models.Model):
         
         return self.env["hr.department"].search([])
 
-    def shift_fit(self,shift):
-        if not shift:
-            return
-        if shift.resource_id:
-            ok = self.resource_calendar_id._work_intervals_batch(pytz.timezone(self.tz or 'UTC').localize(shift.date_start),pytz.timezone(self.tz or 'UTC').localize(shift.date_stop),compute_leaves=True)
-        else:
-            ok = False
-        return ok
-        
+    def shift_fit(self,shift):        
+        for planning_id in self:        
+            if not shift:
+                return
+            if shift.resource_id:
+                utc_date_start = timezone("UTC").localize(shift.date_start)
+                utc_date_stop = timezone("UTC").localize(shift.date_stop)
+                ok = planning_id.resource_calendar_id._work_intervals_batch(utc_date_start,utc_date_stop,compute_leaves=True)
+            else:
+                ok = False
+            return ok
+            

@@ -51,7 +51,7 @@ class ResourceShift(models.Model):
     is_within_resource_dwt = fields.Selection(string="Day Worktime", selection=[('ok','OK'),('not','Out of Resource Day Worktime')],compute="_check_shift",tracking=True, default="ok")
     is_within_resource_role = fields.Selection(string="Role", selection=[('ok','OK'),('not','Out of Planning Schema')],compute="_check_shift",tracking=True, default="ok")
     is_within_resource_wwt = fields.Selection(string="Week Worktime", selection=[('ok','OK'),('not','Out of Resource Week Worktime')],compute="_check_shift",tracking=True, default="ok")
-    is_current_week = fields.Boolean(compute="_compute_is_current_week",store=True)
+    is_current_week = fields.Boolean(compute="_compute_is_current_week", store=True)
     is_last_week = fields.Boolean(compute="_compute_is_last_week", store=True)
     is_next_week = fields.Boolean(compute="_compute_is_next_week", store=True)
     is_today = fields.Boolean(compute="_compute_is_today", store=True)
@@ -138,9 +138,7 @@ class ResourceShift(models.Model):
                     shift.status_title = dict(shift._fields['is_within_resource_role'].selection).get(shift.is_within_resource_role, '')
             else:
                 shift.is_within_resource_role = 'ok'
-            
-            _logger.error(f"{shift.resource_allocation_week(shift.date_start,shift.resource_id,float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hours_week', 40.0)))}")
-            
+                        
             if shift.resource_id and shift.resouce_allocation_date(shift.date_start,shift.resource_id) > float(self.env['ir.config_parameter'].sudo().get_param('resource_planning.hour_day', 11.0)):
                 shift.is_within_resource_dwt = "not"
                 shift.status_color = 'at_risk' # Orange
@@ -180,19 +178,16 @@ class ResourceShift(models.Model):
     @api.depends("week_number")
     def _compute_is_current_week(self):
         for record in self:
-            _logger.error(f"{record.week_number} {int(datetime.now().strftime('%V'))} {record.week_number == int(datetime.now().strftime('%V'))}")
             record.is_current_week = record.week_number == int(datetime.now().strftime('%V'))
 
     @api.depends("week_number")
     def _compute_is_next_week(self):
         for record in self:
-            _logger.error(f"{record.week_number} {int(datetime.now().strftime('%V')) + 1} {record.week_number == int(datetime.now().strftime('%V')) + 1}")
             record.is_next_week = record.week_number == int(datetime.now().strftime('%V')) + 1
     
     @api.depends("week_number")
     def _compute_is_last_week(self):
         for record in self:
-            _logger.error(f"{record.week_number} {int(datetime.now().strftime('%V')) - 1} {record.week_number == int(datetime.now().strftime('%V')) - 1}")
             record.is_last_week = record.week_number == int(datetime.now().strftime('%V')) - 1
 
     @api.depends("resource_id")
@@ -240,6 +235,12 @@ class ResourceShift(models.Model):
             else:
                 record.name = False
 
+    def recompute_stored_fields(self):
+        self._compute_is_today()
+        self._compute_is_current_week()
+        self._compute_is_next_week()
+        self._compute_is_last_week()
+   
     def make_tz_aware(self,_date):
         tz = self.env.context.get('tz')
         return timezone("UTC").localize(_date).astimezone(timezone(tz))
@@ -269,16 +270,6 @@ class ResourceShift(models.Model):
                             shift.write({'resource_id': employee.id})
             nbr += 1
             
-
-    def _filter_unique_shifts(self,shifts):
-        overlapping_shifts = set()
-        for check_shift in shifts:
-            for shift in shifts:
-                if check_shift.date_start >= shift.date_start and check_shift.date_start < shift.date_stop:
-                    overlapping_shifts.add(check_shift.id)
-        unique_shifts = shifts.filtered(lambda s: s.id not in overlapping_shifts)
-        _logger.error(f"{unique_shifts=}")
-        return unique_shifts
 
     def _group_expand_resource_id(self, resource_id, domain):
         _logger.error(f"{domain=}")
@@ -369,7 +360,9 @@ class ResourceShift(models.Model):
                 non_parallel_shifts += shift
                 last_end = shift.date_stop
         return non_parallel_shifts.sorted(lambda d: duration,reverse=True)
-        
+    
+
+    
     def unset_resource(self):
         self.resource_id = False
         

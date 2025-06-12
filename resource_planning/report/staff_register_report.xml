@@ -8,8 +8,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Start Date</th>
-                            <th>End Date</th>
+                            <th>Date</th>
                             <th>Name</th>
                             <th>Check In</th>
                             <th>Check Out</th>
@@ -19,7 +18,6 @@
                         <t t-foreach="doc.shift_ids" t-as="shift">
                             <tr>
                                 <td t-esc="doc.make_tz_aware(shift.date_start).strftime('%-d/%-m -%-y')"/>
-                                <td t-esc="doc.make_tz_aware(shift.date_stop).strftime('%-d/%-m -%-y')"/>
                                 <td t-esc="shift.resource_id.name"/>
                                 <td t-esc="doc.make_tz_aware(shift.attendance_id.check_in).strftime('%H:%M')"/>
                                 <td t-esc="doc.make_tz_aware(shift.attendance_id.check_out).strftime('%H:%M')"/>

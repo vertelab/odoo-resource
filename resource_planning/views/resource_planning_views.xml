@@ -11,21 +11,11 @@
             <button name="action_staff_register_wizard" type="object" string="Staff Register Report" class="btn-primary" />
           </header>
           <sheet>
-
             <div name="button_box" id="button_box" class="oe_button_box">
               <button name="get_plans" class="oe_stat_button " type="object" icon="fa-calendar">
                 <field string="Plans" name="plan_count" widget="statinfo" />
               </button>
             </div>
-            <!--
-                 <div class="oe_title pe-0">
-                 <h1 class="d-flex justify-content-between align-items-center">
-                 <div class="d-flex w-100">
-                 <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Name..."/>
-                 </div>
-                 </h1>
-                 </div>
-            -->
             <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active" />
             <div class="row justify-content-between position-relative w-100 m-0 mb-2">
               <div class="oe_title mw-75 ps-0 pe-2">
@@ -43,26 +33,6 @@
               <field name="tz"/>
               <field name="resource_calendar_id"/>
             </group>
-            <!-- <notebook>
-                 <page string="Roles Data">
-                 <field name="plan_role_ids">
-                 <list>
-                 <field name="role_id" />
-                 <field name="duration" widget="float_time"/>
-                 <field name="worked_hours" widget="float_time"/>
-                 </list>
-                 </field>
-                 </page>
-                 <page string="Resource Data">
-                 <field name="plan_resource_ids">
-                 <list>
-                 <field name="resource_id" />
-                 <field name="duration" widget="float_time"/>
-                 <field name="worked_hours" widget="float_time"/>
-                 </list>
-                 </field>
-                 </page>
-                 </notebook> -->
           </sheet>
           <chatter />
         </form>
