@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from pytz import timezone
 from pytz import all_timezones
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.exceptions import UserError, ValidationError
 
@@ -38,33 +38,52 @@ class WeekTemplateWizard(models.TransientModel):
         self.week_template_shift_ids = [(6,0, shifts)]
 
     def copy_days(self):
-        days_check = [self.monday,self.tuesday,self.wednesday,self.thursday,self.friday,self.saturday,self.sunday]
-        if any(days_check):
-            records = []
-            for shift in self.week_template_shift_ids:
-                days = []
-                if self.monday:
-                    days.append(0)
-                if self.tuesday:
-                    days.append(1)
-                if self.wednesday:
-                    days.append(2)
-                if self.thursday:
-                    days.append(3)
-                if self.friday:
-                    days.append(4)
-                if self.saturday:
-                    days.append(5)
-                if self.sunday:
-                    days.append(6)
-                for day in days:
-                    new_date_start = shift.date_start 
-                    days_to_move = day - int(shift.day)
-                    if 0 > days_to_move:
-                        new_date_start = new_date_start - timedelta(days=abs(days_to_move))
-                    else:
-                        new_date_start = new_date_start + timedelta(days=days_to_move)
-                    records.append({"date_start":new_date_start,"duration":shift.duration,"week_template_id":shift.week_template_id.id,"role_id":shift.role_id.id})
-            return self.env["resource.week.template.shift"].create(records)
-        raise UserError(_("You need to select one or more day/days to copy to!"))
+        days = self.get_selected_days()
+        if not days:
+            raise UserError(_("You need to select one or more day/days to copy to!"))
+            
+        if not self.week_template_shift_ids:
+            raise UserError(_("No shift to copy from selected!"))
+            
+        if any(int(day) in days for day in self.week_template_shift_ids.mapped("day")):
+            raise UserError(_("You can't copy shifts to the same day as the selected day"))
+        
+        [self.env["resource.week.template.shift"].search([("day", "=", day)]).unlink() for day in days]
+        
+        records = []
+        for shift in self.week_template_shift_ids:
+            for day in days:
+                new_date_start = shift.date_start 
+                days_to_move = day - int(shift.day)
+                if 0 > days_to_move:
+                    new_date_start = new_date_start - timedelta(days=abs(days_to_move))
+                else:
+                    new_date_start = new_date_start + timedelta(days=days_to_move)
+                records.append({
+                    "date_start":new_date_start,
+                    "duration":shift.duration,
+                    "week_template_id":shift.week_template_id.id,
+                    "role_id":shift.role_id.id
+                    })
+        return self.env["resource.week.template.shift"].create(records)
+
+    def get_selected_days(self):
+        days = []
+        if self.monday:
+            days.append(0)
+        if self.tuesday:
+            days.append(1)
+        if self.wednesday:
+            days.append(2)
+        if self.thursday:
+            days.append(3)
+        if self.friday:
+            days.append(4)
+        if self.saturday:
+            days.append(5)
+        if self.sunday:
+            days.append(6)
+        return days
+
+    
 
