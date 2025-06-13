@@ -1,0 +1,18 @@
+<odoo>
+  <data>
+   
+    <record id="resource_shift_search" model="ir.ui.view">
+            <field name="name">resource.shift.search.fiscal.year</field>
+            <field name="model">resource.shift</field>
+            <field name="inherit_id" ref="resource_planning.resource_shift_search"/>
+            <field name="arch" type="xml">
+                <filter name="last_week" position="after">
+                    <separator/>
+                    <filter string="Current Fiscal Year" name="current_fiscal_year" domain="[('is_current_fiscal_year', '=', True)]"/>
+                    <filter string="Next Fiscal Year" name="next_fiscal_year" domain="[('is_next_fiscal_year', '=', True)]"/>
+                </filter>
+            </field>
+    </record> 
+
+  </data>
+</odoo>
