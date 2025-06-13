@@ -147,7 +147,9 @@
           <field name="week_number_string" />
           <field name="plan_id" />
           <filter string="Start Date" name="date_start" date="date_start" />
+          <separator/>
           <filter string="Today" name="today" domain="[('is_today', '=', True)]"/>
+          <separator/>
           <filter string="Monday" name="monday" domain="[('day', '=', 0)]" />
           <filter string="Tuesday" name="tuesday" domain="[('day', '=', 1)]" />
           <filter string="Wednesday" name="wednesday" domain="[('day', '=', 2)]" />
@@ -155,6 +157,7 @@
           <filter string="Friday" name="friday" domain="[('day', '=', 4)]" />
           <filter string="Saturday" name="saturday" domain="[('day', '=', 5)]" />
           <filter string="Sunday" name="sunday" domain="[('day', '=', 6)]" />
+          <separator/>
           <filter string="This Week" name="this_week" domain="[('is_current_week', '=', True)]" />
           <filter string="Next Week" name="next_week" domain="[('is_next_week', '=', True)]" />
           <filter string="Last Week" name="last_week" domain="[('is_last_week', '=', True)]" />

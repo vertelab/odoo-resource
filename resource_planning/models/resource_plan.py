@@ -135,7 +135,7 @@ class ResourcePlan(models.Model):
             record.slot_count = self.env["resource.slot"].search_count([('plan_id', '=', record.id)])
 
     def action_get_shifts(self):
-        shifts = self.env["resource.shift"].search([("planning_id", "=", self.id)])
+        shifts = self.env["resource.shift"].search([("plan_id", "=", self.id)])
         shifts.recompute_stored_fields()
         action = {
             'type': 'ir.actions.act_window',
