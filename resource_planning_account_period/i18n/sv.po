@@ -1,0 +1,43 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* resource_planning_account_period
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0-20250925\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-30 11:52+0000\n"
+"PO-Revision-Date: 2025-09-30 14:15+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#. module: resource_planning_account_period
+#: model_terms:ir.ui.view,arch_db:resource_planning_account_period.resource_shift_search
+msgid "Current Fiscal Year"
+msgstr "Innevarande räkenskapsår"
+
+#. module: resource_planning_account_period
+#: model:ir.model.fields,field_description:resource_planning_account_period.field_resource_shift__is_current_fiscal_year
+msgid "Is Current Fiscal Year"
+msgstr "Är innevarande räkenskapsår"
+
+#. module: resource_planning_account_period
+#: model:ir.model.fields,field_description:resource_planning_account_period.field_resource_shift__is_next_fiscal_year
+msgid "Is Next Fiscal Year"
+msgstr "Är nästa räkenskapsår"
+
+#. module: resource_planning_account_period
+#: model_terms:ir.ui.view,arch_db:resource_planning_account_period.resource_shift_search
+msgid "Next Fiscal Year"
+msgstr "Nästa räkenskapsår"
+
+#. module: resource_planning_account_period
+#: model:ir.model,name:resource_planning_account_period.model_resource_shift
+msgid "Resource Shift"
+msgstr "Resursskifte"
