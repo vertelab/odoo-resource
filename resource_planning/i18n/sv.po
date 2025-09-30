@@ -4,13 +4,13 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0-20250609\n"
+"Project-Id-Version: Odoo Server 18.0-20250925\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-10 11:43+0000\n"
-"PO-Revision-Date: 2025-06-10 14:38+0200\n"
+"POT-Creation-Date: 2025-09-30 11:51+0000\n"
+"PO-Revision-Date: 2025-09-30 14:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: sv_SE\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -42,6 +42,11 @@ msgid "<span class=\"fa fa-clock-o me-2\" title=\"Dates\"/>"
 msgstr "<span class=\"fa fa-clock-o me-2\" title=\"Datum\"/>"
 
 #. module: resource_planning
+#: model_terms:ir.ui.view,arch_db:resource_planning.staff_register_report
+msgid "<span>None</span>"
+msgstr "<span>Ingen</span>"
+
+#. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_shift__is_has_resource_checkedin
 msgid "Absent"
 msgstr "Frånvarande"
@@ -69,7 +74,7 @@ msgstr "Action Get Slots"
 #: model:ir.model.fields,field_description:resource_planning.field_resource_week_template_line__message_needaction
 #: model:ir.model.fields,field_description:resource_planning.field_resource_week_template_shift__message_needaction
 msgid "Action Needed"
-msgstr "Åtgärder krävs"
+msgstr "Åtgärd krävs"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_planning__active
@@ -165,6 +170,12 @@ msgstr "Afrika/Algier"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__africa/asmara
 msgid "Africa/Asmara"
 msgstr "Afrika/Asmara"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__africa/asmera
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__africa/asmera
+msgid "Africa/Asmera"
+msgstr "Afrika/Asmera"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__africa/bamako
@@ -497,6 +508,12 @@ msgid "America/Argentina/Catamarca"
 msgstr "Amerika/Argentina/Catamarca"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/argentina/comodrivadavia
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/argentina/comodrivadavia
+msgid "America/Argentina/ComodRivadavia"
+msgstr "Amerika/Argentina/ComodRivadavien"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/argentina/cordoba
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/argentina/cordoba
 msgid "America/Argentina/Cordoba"
@@ -635,6 +652,12 @@ msgid "America/Boise"
 msgstr "Amerika/Boise"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/buenos_aires
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/buenos_aires
+msgid "America/Buenos_Aires"
+msgstr "Amerika/Buenos_Aires"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/cambridge_bay
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/cambridge_bay
 msgid "America/Cambridge_Bay"
@@ -657,6 +680,12 @@ msgstr "Amerika/Cancun"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/caracas
 msgid "America/Caracas"
 msgstr "Amerika/Caracas"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/catamarca
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/catamarca
+msgid "America/Catamarca"
+msgstr "Amerika/Catamarca"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/cayenne
@@ -693,6 +722,12 @@ msgstr "Amerika/Ciudad_Juarez"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/coral_harbour
 msgid "America/Coral_Harbour"
 msgstr "Amerika/Coral_Harbour"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/cordoba
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/cordoba
+msgid "America/Cordoba"
+msgstr "Amerika/Cordoba"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/costa_rica
@@ -791,6 +826,12 @@ msgid "America/Fort_Nelson"
 msgstr "Amerika/Fort_Nelson"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/fort_wayne
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/fort_wayne
+msgid "America/Fort_Wayne"
+msgstr "Amerika/Fort_Wayne"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/fortaleza
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/fortaleza
 msgid "America/Fortaleza"
@@ -801,6 +842,12 @@ msgstr "Amerika/Fortaleza"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/glace_bay
 msgid "America/Glace_Bay"
 msgstr "Amerika/Glace_Bay"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/godthab
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/godthab
+msgid "America/Godthab"
+msgstr "Amerika/Godthab"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/goose_bay
@@ -911,6 +958,12 @@ msgid "America/Indiana/Winamac"
 msgstr "Amerika/Indiana/Winamac"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/indianapolis
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/indianapolis
+msgid "America/Indianapolis"
+msgstr "Amerika/Indianapolis"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/inuvik
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/inuvik
 msgid "America/Inuvik"
@@ -929,6 +982,12 @@ msgid "America/Jamaica"
 msgstr "Amerika/Jamaica"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/jujuy
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/jujuy
+msgid "America/Jujuy"
+msgstr "Amerika/Jujuy"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/juneau
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/juneau
 msgid "America/Juneau"
@@ -945,6 +1004,12 @@ msgstr "Amerika/Kentucky/Louisville"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/kentucky/monticello
 msgid "America/Kentucky/Monticello"
 msgstr "Amerika/Kentucky/Monticello"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/knox_in
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/knox_in
+msgid "America/Knox_IN"
+msgstr "Amerika/Knox_IN"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/kralendijk
@@ -969,6 +1034,12 @@ msgstr "Amerika/Lima"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/los_angeles
 msgid "America/Los_Angeles"
 msgstr "Amerika/Los_Angeles"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/louisville
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/louisville
+msgid "America/Louisville"
+msgstr "Amerika/Louisville"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/lower_princes
@@ -1017,6 +1088,12 @@ msgstr "Amerika/Matamoros"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/mazatlan
 msgid "America/Mazatlan"
 msgstr "Amerika/Mazatlan"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/mendoza
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/mendoza
+msgid "America/Mendoza"
+msgstr "Amerika/Mendoza"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/menominee
@@ -1235,6 +1312,12 @@ msgid "America/Rio_Branco"
 msgstr "Amerika/Rio_Branco"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/rosario
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/rosario
+msgid "America/Rosario"
+msgstr "Amerika/Rosario"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__america/santa_isabel
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__america/santa_isabel
 msgid "America/Santa_Isabel"
@@ -1445,6 +1528,12 @@ msgid "Antarctica/Rothera"
 msgstr "Antarktis/Rothera"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__antarctica/south_pole
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__antarctica/south_pole
+msgid "Antarctica/South_Pole"
+msgstr "Antarktis/Södra_Polen"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__antarctica/syowa
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__antarctica/syowa
 msgid "Antarctica/Syowa"
@@ -1521,6 +1610,12 @@ msgid "Asia/Ashgabat"
 msgstr "Asien/Ashgabat"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/ashkhabad
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/ashkhabad
+msgid "Asia/Ashkhabad"
+msgstr "Asien/Ashkhabad"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/atyrau
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/atyrau
 msgid "Asia/Atyrau"
@@ -1575,6 +1670,12 @@ msgid "Asia/Brunei"
 msgstr "Asien/Brunei"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/calcutta
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/calcutta
+msgid "Asia/Calcutta"
+msgstr "Asien/Calcutta"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/chita
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/chita
 msgid "Asia/Chita"
@@ -1593,10 +1694,22 @@ msgid "Asia/Chongqing"
 msgstr "Asien/Chongqing"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/chungking
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/chungking
+msgid "Asia/Chungking"
+msgstr "Asien/Chungking"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/colombo
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/colombo
 msgid "Asia/Colombo"
 msgstr "Asien/Colombo"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/dacca
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/dacca
+msgid "Asia/Dacca"
+msgstr "Asien/Dacca"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/damascus
@@ -1731,6 +1844,12 @@ msgid "Asia/Kathmandu"
 msgstr "Asien/Kathmandu"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/katmandu
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/katmandu
+msgid "Asia/Katmandu"
+msgstr "Asien/Katmandu"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/khandyga
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/khandyga
 msgid "Asia/Khandyga"
@@ -1765,6 +1884,12 @@ msgstr "Asien/Kuching"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/kuwait
 msgid "Asia/Kuwait"
 msgstr "Asien/Kuwait"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/macao
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/macao
+msgid "Asia/Macao"
+msgstr "Asien/Macao"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/macau
@@ -1863,10 +1988,22 @@ msgid "Asia/Qyzylorda"
 msgstr "Asien/Qyzylorda"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/rangoon
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/rangoon
+msgid "Asia/Rangoon"
+msgstr "Asien/Rangoon"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/riyadh
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/riyadh
 msgid "Asia/Riyadh"
 msgstr "Asien/Riyadh"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/saigon
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/saigon
+msgid "Asia/Saigon"
+msgstr "Asien/Saigon"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/sakhalin
@@ -1935,6 +2072,12 @@ msgid "Asia/Tel_Aviv"
 msgstr "Asien/Tel_Aviv"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/thimbu
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/thimbu
+msgid "Asia/Thimbu"
+msgstr "Asien/Thimbu"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/thimphu
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/thimphu
 msgid "Asia/Thimphu"
@@ -1953,10 +2096,22 @@ msgid "Asia/Tomsk"
 msgstr "Asien/Tomsk"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/ujung_pandang
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/ujung_pandang
+msgid "Asia/Ujung_Pandang"
+msgstr "Asien/Ujung_Pandang"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/ulaanbaatar
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/ulaanbaatar
 msgid "Asia/Ulaanbaatar"
 msgstr "Asien/Ulaanbaatar"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/ulan_bator
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__asia/ulan_bator
+msgid "Asia/Ulan_Bator"
+msgstr "Asien/Ulan_Bator"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__asia/urumqi
@@ -2054,6 +2209,12 @@ msgid "Atlantic/Cape_Verde"
 msgstr "Atlanten/Kap_Verde"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__atlantic/faeroe
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__atlantic/faeroe
+msgid "Atlantic/Faeroe"
+msgstr "Atlantic/Faeroe"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__atlantic/faroe
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__atlantic/faroe
 msgid "Atlantic/Faroe"
@@ -2123,6 +2284,12 @@ msgid "Attended"
 msgstr "Närvarande"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/act
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/act
+msgid "Australia/ACT"
+msgstr "Australien/ACT"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/adelaide
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/adelaide
 msgid "Australia/Adelaide"
@@ -2171,6 +2338,12 @@ msgid "Australia/Hobart"
 msgstr "Australien/Hobart"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/lhi
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/lhi
+msgid "Australia/LHI"
+msgstr "Australien/LHI"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/lindeman
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/lindeman
 msgid "Australia/Lindeman"
@@ -2189,16 +2362,58 @@ msgid "Australia/Melbourne"
 msgstr "Australien/Melbourne"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/nsw
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/nsw
+msgid "Australia/NSW"
+msgstr "Australien/NSW"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/north
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/north
+msgid "Australia/North"
+msgstr "Australien/Nord"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/perth
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/perth
 msgid "Australia/Perth"
 msgstr "Australien/Perth"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/queensland
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/queensland
+msgid "Australia/Queensland"
+msgstr "Australien/Queensland"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/south
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/south
+msgid "Australia/South"
+msgstr "Australien/Syd"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/sydney
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/sydney
 msgid "Australia/Sydney"
 msgstr "Australien/Sydney"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/tasmania
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/tasmania
+msgid "Australia/Tasmania"
+msgstr "Australien/Tasmanien"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/victoria
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/victoria
+msgid "Australia/Victoria"
+msgstr "Australien/Victoria"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/west
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__australia/west
+msgid "Australia/West"
+msgstr "Australien/Väst"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__australia/yancowinna
@@ -2212,6 +2427,30 @@ msgid "Available Resources"
 msgstr "Tillgängliga resurser"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__brazil/acre
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__brazil/acre
+msgid "Brazil/Acre"
+msgstr "Brasilien/Acre"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__brazil/denoronha
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__brazil/denoronha
+msgid "Brazil/DeNoronha"
+msgstr "Brasilien/DeNoronha"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__brazil/east
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__brazil/east
+msgid "Brazil/East"
+msgstr "Brasilien/Öst"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__brazil/west
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__brazil/west
+msgid "Brazil/West"
+msgstr "Brasilien/Väst"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__cet
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__cet
 msgid "CET"
@@ -2222,6 +2461,54 @@ msgstr "CET"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__cst6cdt
 msgid "CST6CDT"
 msgstr "CST6CDT"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__canada/atlantic
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__canada/atlantic
+msgid "Canada/Atlantic"
+msgstr "Kanada/Atlanten"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__canada/central
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__canada/central
+msgid "Canada/Central"
+msgstr "Kanada/Central"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__canada/eastern
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__canada/eastern
+msgid "Canada/Eastern"
+msgstr "Kanada/Östra"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__canada/mountain
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__canada/mountain
+msgid "Canada/Mountain"
+msgstr "Kanada/Mountain"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__canada/newfoundland
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__canada/newfoundland
+msgid "Canada/Newfoundland"
+msgstr "Kanada/Newfoundland"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__canada/pacific
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__canada/pacific
+msgid "Canada/Pacific"
+msgstr "Kanada/Stillahavsområdet"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__canada/saskatchewan
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__canada/saskatchewan
+msgid "Canada/Saskatchewan"
+msgstr "Kanada/Saskatchewan"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__canada/yukon
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__canada/yukon
+msgid "Canada/Yukon"
+msgstr "Kanada/Yukon"
 
 #. module: resource_planning
 #: model_terms:ir.ui.view,arch_db:resource_planning.staff_register_wizard_view
@@ -2241,6 +2528,18 @@ msgstr "Checka in"
 #: model_terms:ir.ui.view,arch_db:resource_planning.staff_register_report
 msgid "Check Out"
 msgstr "Checka ut"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__chile/continental
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__chile/continental
+msgid "Chile/Continental"
+msgstr "Chile/Kontinental"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__chile/easterisland
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__chile/easterisland
+msgid "Chile/EasterIsland"
+msgstr "Chile/Påskön"
 
 #. module: resource_planning
 #: model_terms:ir.ui.view,arch_db:resource_planning.res_config_settings_view_form
@@ -2323,7 +2622,13 @@ msgstr "Skapad av"
 #: model:ir.model.fields,field_description:resource_planning.field_resource_week_template_shift__create_date
 #: model:ir.model.fields,field_description:resource_planning.field_week_template_wizard__create_date
 msgid "Created on"
-msgstr "Skapad på"
+msgstr "Skapad den"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__cuba
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__cuba
+msgid "Cuba"
+msgstr "Kuba"
 
 #. module: resource_planning
 #: model_terms:ir.ui.view,arch_db:resource_planning.resource_plan_search
@@ -2453,6 +2758,18 @@ msgid "Edit"
 msgstr "Redigera"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__egypt
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__egypt
+msgid "Egypt"
+msgstr "Egypten"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__eire
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__eire
+msgid "Eire"
+msgstr "Eire"
+
+#. module: resource_planning
 #: model:ir.model,name:resource_planning.model_hr_employee
 #: model:ir.model.fields,field_description:resource_planning.field_resource_shift__employee_id
 msgid "Employee"
@@ -2462,11 +2779,6 @@ msgstr "Anställd"
 #: model:ir.model.fields,field_description:resource_planning.field_resource_shift__is_within_resource_calendar
 msgid "Employee Schema"
 msgstr "Schema för anställda"
-
-#. module: resource_planning
-#: model_terms:ir.ui.view,arch_db:resource_planning.staff_register_report
-msgid "End Date"
-msgstr "Slutdatum"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_shift__end_time
@@ -2817,6 +3129,12 @@ msgid "Europe/Kaliningrad"
 msgstr "Europa/Kaliningrad"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__europe/kiev
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__europe/kiev
+msgid "Europe/Kiev"
+msgstr "Europe/Kiev"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__europe/kirov
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__europe/kirov
 msgid "Europe/Kirov"
@@ -3003,6 +3321,12 @@ msgid "Europe/Ulyanovsk"
 msgstr "Europa/Ulyanovsk"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__europe/uzhgorod
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__europe/uzhgorod
+msgid "Europe/Uzhgorod"
+msgstr "Europa/Uzhgorod"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__europe/vaduz
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__europe/vaduz
 msgid "Europe/Vaduz"
@@ -3043,6 +3367,12 @@ msgstr "Europa/Varszawa"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__europe/zagreb
 msgid "Europe/Zagreb"
 msgstr "Europa/Zagreb"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__europe/zaporozhye
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__europe/zaporozhye
+msgid "Europe/Zaporozhye"
+msgstr "Europa/Zaporozhye"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__europe/zurich
@@ -3111,10 +3441,40 @@ msgid "Friday"
 msgstr "Fredag"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__gb
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__gb
+msgid "GB"
+msgstr "GB"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__gb-eire
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__gb-eire
+msgid "GB-Eire"
+msgstr "GB-Eire"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__gmt
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__gmt
 msgid "GMT"
 msgstr "GMT"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__gmt+0
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__gmt+0
+msgid "GMT+0"
+msgstr "GMT+0"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__gmt-0
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__gmt-0
+msgid "GMT-0"
+msgstr "GMT-0"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__gmt0
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__gmt0
+msgid "GMT0"
+msgstr "GMT0"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_plan__status_color__on_track
@@ -3131,6 +3491,12 @@ msgid "Generate Shifts"
 msgstr "Generera skift"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__greenwich
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__greenwich
+msgid "Greenwich"
+msgstr "Greenwich"
+
+#. module: resource_planning
 #: model_terms:ir.ui.view,arch_db:resource_planning.resource_plan_search
 #: model_terms:ir.ui.view,arch_db:resource_planning.resource_planning_search
 #: model_terms:ir.ui.view,arch_db:resource_planning.resource_shift_search
@@ -3138,7 +3504,7 @@ msgstr "Generera skift"
 #: model_terms:ir.ui.view,arch_db:resource_planning.resource_slot_template_search_view
 #: model_terms:ir.ui.view,arch_db:resource_planning.resource_week_template_shift_search
 msgid "Group By"
-msgstr "Grupp av"
+msgstr "Gruppera efter"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__hst
@@ -3171,6 +3537,12 @@ msgstr "Har icke tilldelade skift"
 #: model_terms:ir.ui.view,arch_db:resource_planning.view_slot_template_form
 msgid "Help"
 msgstr "Hjälp"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__hongkong
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__hongkong
+msgid "Hongkong"
+msgstr "Hong Kong"
 
 #. module: resource_planning
 #: model_terms:ir.ui.view,arch_db:resource_planning.res_config_settings_view_form
@@ -3214,6 +3586,12 @@ msgstr "Människan"
 #: model:ir.model.fields,field_description:resource_planning.field_week_template_wizard__id
 msgid "ID"
 msgstr "ID"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__iceland
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__iceland
+msgid "Iceland"
+msgstr "Island"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_plan__activity_exception_icon
@@ -3372,6 +3750,12 @@ msgid "Indian/Reunion"
 msgstr "Indiska oceanen/Reunionatlantiv"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__iran
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__iran
+msgid "Iran"
+msgstr "Iran"
+
+#. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_shift__is_current_week
 msgid "Is Current Week"
 msgstr "Är aktuell vecka"
@@ -3404,12 +3788,36 @@ msgstr "Är nästa vecka"
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_plan__is_planning_slots
 msgid "Is Planning Slots"
-msgstr "Planerar spelautomater"
+msgstr "Planerar tidsluckor"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_shift__is_today
 msgid "Is Today"
 msgstr "Är idag"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__israel
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__israel
+msgid "Israel"
+msgstr "Israel"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__jamaica
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__jamaica
+msgid "Jamaica"
+msgstr "Jamaica"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__japan
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__japan
+msgid "Japan"
+msgstr "Japan"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__kwajalein
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__kwajalein
+msgid "Kwajalein"
+msgstr "Kwajalein"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_plan__write_uid
@@ -3449,6 +3857,12 @@ msgstr "Senast uppdaterad den"
 #: model_terms:ir.ui.view,arch_db:resource_planning.resource_shift_search
 msgid "Last Week"
 msgstr "Förra veckan"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__libya
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__libya
+msgid "Libya"
+msgstr "Libyen"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__met
@@ -3529,6 +3943,24 @@ msgid "Messages"
 msgstr "Meddelanden"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__mexico/bajanorte
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__mexico/bajanorte
+msgid "Mexico/BajaNorte"
+msgstr "Mexiko/BajaNorte"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__mexico/bajasur
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__mexico/bajasur
+msgid "Mexico/BajaSur"
+msgstr "Mexiko/BajaSur"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__mexico/general
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__mexico/general
+msgid "Mexico/General"
+msgstr "Mexiko/allmänna frågor"
+
+#. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_slot_template__model_id
 #: model_terms:ir.ui.view,arch_db:resource_planning.resource_slot_template_search_view
 msgid "Model"
@@ -3570,6 +4002,18 @@ msgid "My Activity Deadline"
 msgstr "Min aktivitet Deadline"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__nz
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__nz
+msgid "NZ"
+msgstr "NYA ZEELAND"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__nz-chat
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__nz-chat
+msgid "NZ-CHAT"
+msgstr "NZ-CHAT"
+
+#. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_plan__name
 #: model:ir.model.fields,field_description:resource_planning.field_resource_planning__name
 #: model:ir.model.fields,field_description:resource_planning.field_resource_role__name
@@ -3580,6 +4024,12 @@ msgstr "Min aktivitet Deadline"
 #: model_terms:ir.ui.view,arch_db:resource_planning.staff_register_report
 msgid "Name"
 msgstr "Namn"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__navajo
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__navajo
+msgid "Navajo"
+msgstr "Navajo"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_plan__activity_calendar_event_id
@@ -3645,6 +4095,12 @@ msgstr "Nästa aktivitetstyp"
 #: model_terms:ir.ui.view,arch_db:resource_planning.resource_shift_search
 msgid "Next Week"
 msgstr "Nästa vecka"
+
+#. module: resource_planning
+#. odoo-python
+#: code:addons/resource_planning/wizard/week_template_wizard.py:0
+msgid "No shift to copy from selected!"
+msgstr "Ingen växling för att kopiera från vald!"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_plan__message_needaction_counter
@@ -3766,6 +4222,12 @@ msgid "Out of Resource Week Worktime"
 msgstr "Arbetstid utanför resursveckan"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__prc
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__prc
+msgid "PRC"
+msgstr "PRC"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__pst8pdt
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__pst8pdt
 msgid "PST8PDT"
@@ -3812,6 +4274,12 @@ msgstr "Stilla havet/Östern"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__pacific/efate
 msgid "Pacific/Efate"
 msgstr "Stilla havet/Efate"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__pacific/enderbury
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__pacific/enderbury
+msgid "Pacific/Enderbury"
+msgstr "Pacific/Enderbury"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__pacific/fakaofo
@@ -3958,6 +4426,12 @@ msgid "Pacific/Pohnpei"
 msgstr "Stilla havet/Pohnpei"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__pacific/ponape
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__pacific/ponape
+msgid "Pacific/Ponape"
+msgstr "Stilla havet/Ponape"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__pacific/port_moresby
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__pacific/port_moresby
 msgid "Pacific/Port_Moresby"
@@ -3998,6 +4472,12 @@ msgstr "Stilla havet/Tarawa"
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__pacific/tongatapu
 msgid "Pacific/Tongatapu"
 msgstr "Stilla havet/Tongatapu"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__pacific/truk
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__pacific/truk
+msgid "Pacific/Truk"
+msgstr "Pacific/Truck"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__pacific/wake
@@ -4090,6 +4570,18 @@ msgid "Plans"
 msgstr "Planer"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__poland
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__poland
+msgid "Poland"
+msgstr "Polen"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__portugal
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__portugal
+msgid "Portugal"
+msgstr "Portugal"
+
+#. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_slot__project_id
 msgid "Project"
 msgstr "Projekt"
@@ -4110,6 +4602,18 @@ msgstr ""
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_shift__status_color__off_track
 msgid "RED"
 msgstr "RÖD"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__roc
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__roc
+msgid "ROC"
+msgstr "ROC"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__rok
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__rok
+msgid "ROK"
+msgstr "ROK"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_plan__rating_ids
@@ -4410,7 +4914,7 @@ msgstr "Skiftdata"
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_planning__shift_date
 msgid "Shift Date"
-msgstr "Skift Datum"
+msgstr "Skiftdatum"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_shift__name
@@ -4424,12 +4928,12 @@ msgstr "Namn på skift"
 #: model_terms:ir.ui.view,arch_db:resource_planning.resource_slot_search_view
 #: model_terms:ir.ui.view,arch_db:resource_planning.view_slot_template_form
 msgid "Shift Objects"
-msgstr "Skifta objekt"
+msgstr "Skiftsobjekt"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_slot_template__shift_object_ids
 msgid "Shift Slots"
-msgstr "Shift-spelautomater"
+msgstr "Byta tidsluckor"
 
 #. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_shift__status_title
@@ -4466,6 +4970,12 @@ msgid "Show Hr Icon Display"
 msgstr "Visa Hr Ikon Display"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__singapore
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__singapore
+msgid "Singapore"
+msgstr "Singapore"
+
+#. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_plan__slot_ids
 #: model:ir.model.fields,field_description:resource_planning.field_resource_shift__slot_id
 msgid "Slot"
@@ -4490,6 +5000,11 @@ msgstr "Mallar för spelautomater"
 #: model_terms:ir.ui.view,arch_db:resource_planning.view_slot_list
 msgid "Slots"
 msgstr "Slots"
+
+#. module: resource_planning
+#: model_terms:ir.ui.view,arch_db:resource_planning.staff_register_report
+msgid "Social"
+msgstr "Sociala"
 
 #. module: resource_planning
 #: model:ir.actions.report,name:resource_planning.action_staff_register_report
@@ -4634,6 +5149,12 @@ msgid "Tuesday"
 msgstr "Tisdag"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__turkey
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__turkey
+msgid "Turkey"
+msgstr "Turkiet"
+
+#. module: resource_planning
 #: model:ir.model.fields,field_description:resource_planning.field_resource_role__resource_type
 msgid "Type"
 msgstr "Typ"
@@ -4664,10 +5185,94 @@ msgid "Tz Date Stop"
 msgstr "Tz Datum Stopp"
 
 #. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__uct
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__uct
+msgid "UCT"
+msgstr "UCT"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/alaska
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/alaska
+msgid "US/Alaska"
+msgstr "USA/Alaska"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/aleutian
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/aleutian
+msgid "US/Aleutian"
+msgstr "USA/Aleutian"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/arizona
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/arizona
+msgid "US/Arizona"
+msgstr "USA/Arizona"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/central
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/central
+msgid "US/Central"
+msgstr "USA/Central"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/east-indiana
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/east-indiana
+msgid "US/East-Indiana"
+msgstr "USA/Östra Indiana"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/eastern
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/eastern
+msgid "US/Eastern"
+msgstr "USA/Östra"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/hawaii
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/hawaii
+msgid "US/Hawaii"
+msgstr "USA/Hawaii"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/indiana-starke
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/indiana-starke
+msgid "US/Indiana-Starke"
+msgstr "USA/Indiana-Starke"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/michigan
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/michigan
+msgid "US/Michigan"
+msgstr "USA/Michigan"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/mountain
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/mountain
+msgid "US/Mountain"
+msgstr "US/Mountain"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/pacific
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/pacific
+msgid "US/Pacific"
+msgstr "USA/Stillahavsområdet"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__us/samoa
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__us/samoa
+msgid "US/Samoa"
+msgstr "USA/Samoa"
+
+#. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__utc
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__utc
 msgid "UTC"
 msgstr "UTC"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__universal
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__universal
+msgid "Universal"
+msgstr "Universal"
 
 #. module: resource_planning
 #: model_terms:ir.ui.view,arch_db:resource_planning.view_resource_shift_list
@@ -4704,6 +5309,12 @@ msgstr "Användare"
 #: model_terms:ir.ui.view,arch_db:resource_planning.view_slot_template_tree
 msgid "View"
 msgstr "Vy"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__w-su
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__w-su
+msgid "W-SU"
+msgstr "W-SU"
 
 #. module: resource_planning
 #: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__wet
@@ -4843,8 +5454,20 @@ msgstr "Arbetade timmar"
 #. module: resource_planning
 #. odoo-python
 #: code:addons/resource_planning/wizard/week_template_wizard.py:0
+msgid "You can't copy shifts to the same day as the selected day"
+msgstr "Du kan inte kopiera skift till samma dag som den valda dagen"
+
+#. module: resource_planning
+#. odoo-python
+#: code:addons/resource_planning/wizard/week_template_wizard.py:0
 msgid "You need to select one or more day/days to copy to!"
 msgstr "Du måste välja en eller flera dagar som du vill kopiera till!"
+
+#. module: resource_planning
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_planning__tz__zulu
+#: model:ir.model.fields.selection,name:resource_planning.selection__resource_week_template__tz__zulu
+msgid "Zulu"
+msgstr "Zulu"
 
 #. module: resource_planning
 #: model_terms:ir.ui.view,arch_db:resource_planning.view_resource_role_tree
@@ -4854,9 +5477,9 @@ msgstr "resursroller"
 #. module: resource_planning
 #: model_terms:ir.ui.view,arch_db:resource_planning.view_resource_shift_form
 msgid "resource Shift"
-msgstr "resurs Skift"
+msgstr "resursskift"
 
 #. module: resource_planning
 #: model_terms:ir.ui.view,arch_db:resource_planning.view_resource_shift_list
 msgid "resource Shifts"
-msgstr "resurs Skift"
+msgstr "resursskift"
