@@ -17,16 +17,16 @@ class ResourceWeekTemplateShift(models.Model):
     _name = 'resource.week.template.shift'
     _description = 'Resource Week Template Shift'
     _inherit = ["mail.thread", "mail.activity.mixin"]  
-
     date_start = fields.Datetime(required=True)
     date_stop = fields.Datetime(compute="_compute_date_stop",store=True)
     duration = fields.Float()
+    shift_points = fields.Float()
     name = fields.Char(compute="_compute_name", store=True)
     week_template_id = fields.Many2one(comodel_name="resource.week.template",required=True)
     role_id = fields.Many2one(comodel_name="resource.role",required=True)
     week_number = fields.Integer(compute="_compute_week_number",store=True)
-    tz_date_start = fields.Datetime(compute="_compute_tz_date_start")
-    tz_date_stop = fields.Datetime(compute="_compute_tz_date_stop")
+    # tz_date_start = fields.Datetime(compute="_compute_tz_date_start")
+    # tz_date_stop = fields.Datetime(compute="_compute_tz_date_stop")
     resource_slot_template = fields.Many2many(
         comodel_name='resource.slot.template' , compute="set_default_resource_template", store=True, readonly=False)
     
@@ -88,15 +88,20 @@ class ResourceWeekTemplateShift(models.Model):
         for record in self:
             record.week_number = record.date_start.weekday()
 
-    @api.depends("date_start","date_stop")
+    @api.depends("date_start","date_stop","shift_points")
     def _compute_name(self):
         for record in self:
             if record.date_start and record.date_stop:
+                _logger.error(f"{record.date_start=}")
                 tz_date_start = self.make_tz_aware(record.date_start)
                 tz_date_stop = self.make_tz_aware(record.date_stop)
+                _logger.error(f"{tz_date_start=}")
                 record.name = f"{dict(record._fields['day'].selection).get(record.day)} {tz_date_start.strftime('%H:%M')} - {tz_date_stop.strftime('%H:%M')}"
                 if record.role_id:
                     record.name = f"{record.role_id.name} {record.name}"
+                if record.shift_points != 0:
+                    record.name = f"{record.name}  ({record.shift_points} Points)"
+
 
             else:
                 record.name = False

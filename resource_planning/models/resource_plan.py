@@ -22,6 +22,7 @@ class ResourcePlan(models.Model):
     plan_resource_ids = fields.One2many(comodel_name="resource.plan.resource", inverse_name="plan_id")
     plan_role_ids = fields.One2many(comodel_name="resource.plan.role", inverse_name="plan_id")
     planning_id = fields.Many2one(comodel_name="resource.planning")
+    planned_points = fields.Integer()
     shift_count = fields.Integer(compute="_compute_shift_count")
     shift_ids = fields.One2many(comodel_name="resource.shift",inverse_name="plan_id")
     slot_count = fields.Integer(compute="_compute_slot_count")
@@ -30,6 +31,8 @@ class ResourcePlan(models.Model):
     use_slots = fields.Boolean(compute="_compute_use_slots")
     week_template_ids = fields.Many2many(comodel_name="resource.week.template")
     worked_hours = fields.Float(compute="_compute_worked_hours")
+    worked_points = fields.Integer()
+    planning_type = fields.Selection([('planned_based_on_hours','Planned Based On hours'),('planned_based_on_points','Planned Based On Points')])
     
     def _has_unassigned_shifts(self):
         for plan in self:
@@ -193,6 +196,7 @@ class ResourcePlan(models.Model):
                             date_start.year, date_start.month, date_start.day,
                             shift.date_start.hour, shift.date_start.minute, shift.date_start.second
                         )
+                        _logger.error(f"{new_date_start=}")
                         record = {
                             "date_start": new_date_start,
                             "duration": shift.duration,
@@ -206,7 +210,7 @@ class ResourcePlan(models.Model):
                 if date_start > self.date_stop:
                     stop_loop = True
                     break
-        self.env["resource.shift"].create(records)
+        self.env["resource.shift"].with_context({'tz': 'Europe/Stockholm'}).create(records)
 
     def reset_date_start(self):
         if self.date_start.weekday() == 0:

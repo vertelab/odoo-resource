@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime, time
+from datetime import timedelta, datetime, date, time
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 from pytz import timezone
@@ -13,14 +13,6 @@ class ResourceShift(models.Model):
 
 
     any_unassigned = fields.Boolean(compute="_compute_any_unassigned", store=False)
-    @api.depends('plan_id')
-    def _compute_any_unassigned(self):
-        plan_ids = self.mapped('plan_id').ids
-        domain = [('plan_id', 'in', plan_ids), ('resource_id', '=', False)]
-        shifts_per_plan = self.env['resource.shift'].read_group(domain, ['plan_id'], ['plan_id'])
-        plan_unassigned = {rec['plan_id'][0]: rec['plan_id_count'] > 0 for rec in shifts_per_plan}
-        for rec in self:
-            rec.any_unassigned = plan_unassigned.get(rec.plan_id.id, False)
     attendance_id = fields.Many2one(comodel_name="hr.attendance")
     check_in = fields.Datetime(related="attendance_id.check_in")
     check_out = fields.Datetime(related="attendance_id.check_out")
@@ -58,6 +50,7 @@ class ResourceShift(models.Model):
     name = fields.Char(string="Shift Name", compute="_compute_name", store=True)
     plan_id = fields.Many2one(comodel_name="resource.plan")
     planning_id = fields.Many2one(related="plan_id.planning_id")
+    points = fields.Float()
     res_users_id = fields.Many2one(comodel_name="res.users", related="resource_id.user_id")
     resource_id = fields.Many2one(comodel_name="resource.resource",group_expand="_group_expand_resource_id",domain="[('resource_type', '=', 'user')]", tracking=True)
     role_id = fields.Many2one(comodel_name="resource.role", required=True, tracking=True)
@@ -101,6 +94,15 @@ class ResourceShift(models.Model):
             'context': {'default_shift_id': self.id},
         }
     
+    @api.depends('plan_id')
+    def _compute_any_unassigned(self):
+        plan_ids = self.mapped('plan_id').ids
+        domain = [('plan_id', 'in', plan_ids), ('resource_id', '=', False)]
+        shifts_per_plan = self.env['resource.shift'].read_group(domain, ['plan_id'], ['plan_id'])
+        plan_unassigned = {rec['plan_id'][0]: rec['plan_id_count'] > 0 for rec in shifts_per_plan}
+        for rec in self:
+            rec.any_unassigned = plan_unassigned.get(rec.plan_id.id, False)
+
     @api.depends("shift_object_ids")
     def compute_assigned_duration(self):
         for shift in self:
@@ -223,6 +225,11 @@ class ResourceShift(models.Model):
             if record.date_start and record.date_stop:
                 tz_date_start = self.make_tz_aware(record.date_start)
                 tz_date_stop = self.make_tz_aware(record.date_stop)
+                # _logger.error(f"{record.date_start=}")
+                # _logger.error(f"{record.date_stop=}")
+                _logger.error(f"{tz_date_start=}")
+                # _logger.error(f"{tz_date_stop=}")
+                # _logger.error(f"{self.env.context=}")
                 record.name = f"{tz_date_start.strftime('%H:%M')} - {tz_date_stop.strftime('%H:%M')}"
                 if record.role_id:
                     record.name = f"{dict(record._fields['day'].selection).get(record.day)} " + record.name
@@ -243,7 +250,15 @@ class ResourceShift(models.Model):
    
     def make_tz_aware(self,_date):
         tz = self.env.context.get('tz')
-        return timezone("UTC").localize(_date).astimezone(timezone(tz))
+        current_timezone = timezone("UTC").localize(datetime.now()).astimezone(timezone(tz)).tzname()
+        aware = timezone("UTC").localize(_date).astimezone(timezone(tz))
+        if current_timezone != aware.tzname():
+            if aware.dst() != 0:
+                _date = _date + timedelta(hours=1)
+            else:
+                _date = _date - timedelta(hours=1)
+        aware = timezone("UTC").localize(_date).astimezone(timezone(tz))
+        return aware
 
     def action_assign_shifts(self):
         active_domain = self.env.context.get('active_domain', [])

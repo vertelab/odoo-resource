@@ -48,7 +48,6 @@ class ResourceSlot(models.Model):
         index=True
     )
 
-
     @api.depends("duration","date_start")
     def _compute_date_stop(self):
         for record in self:

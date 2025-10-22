@@ -3,6 +3,7 @@ from . import hr_employee
 from . import res_config_settings
 from . import res_users
 from . import resource
+from . import resource_calendar
 from . import resource_plan
 from . import resource_plan_resource
 from . import resource_slot_template
