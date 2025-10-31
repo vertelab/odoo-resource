@@ -2556,7 +2556,7 @@ msgstr "Färg"
 #: model:ir.model.fields,field_description:resource_planning.field_resource_planning__company_id
 #: model:ir.model.fields,field_description:resource_planning.field_resource_shift__company_id
 msgid "Company"
-msgstr "Företag"
+msgstr "Bolag"
 
 #. module: resource_planning
 #: model:ir.model,name:resource_planning.model_res_config_settings
