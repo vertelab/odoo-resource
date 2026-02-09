@@ -249,20 +249,27 @@ class ResourceShift(models.Model):
         self._compute_is_last_week()
    
     def make_tz_aware(self,_date):
-        tz = self.env.context.get('tz')
-        current_timezone = timezone("UTC").localize(datetime.now()).astimezone(timezone(tz)).tzname()
-        aware = timezone("UTC").localize(_date).astimezone(timezone(tz))
+        if not _date:
+            return None
+
+        tz = self.env.context.get('tz') or self.env.user.tz or 'UTC'
+        current_timezone = timezone('UTC').localize(datetime.now()).astimezone(timezone(tz)).tzname()
+        aware = timezone('UTC').localize(_date).astimezone(timezone(tz))
         if current_timezone != aware.tzname():
-            if aware.dst() != 0:
+            if aware.dst() != timedelta(0):
                 _date = _date + timedelta(hours=1)
             else:
                 _date = _date - timedelta(hours=1)
-        aware = timezone("UTC").localize(_date).astimezone(timezone(tz))
+        aware = timezone('UTC').localize(_date).astimezone(timezone(tz))
         return aware
 
     def action_assign_shifts(self):
         active_domain = self.env.context.get('active_domain', [])
-        plan = self.env['resource.plan'].browse(next((v for (field, op, v) in active_domain if field == 'plan_id' and op == '='), None))
+        plan = self.env['resource.plan'].browse(
+            next(
+                (v for (field, op, v) in active_domain if field == 'plan_id' and op == '='), None
+            )
+        )
         active_domain.append(('resource_id', '=', False))
         
         nbr = 0
