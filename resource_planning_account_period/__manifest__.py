@@ -32,7 +32,7 @@
         Long description of module's purpose
     """,
     'author': 'Vertel AB',
-    'website': 'https://vertel.se/apps/odoo-',
+    'website': 'https://vertel.se/apps/odoo-resource/resource_planning_account_period',
     'images': ['static/description/banner.png'], 
     'license': 'AGPL-3',
     'depends': ["account_accountant_ce", "resource_planning"],
