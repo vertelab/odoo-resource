@@ -23,14 +23,20 @@
 #
 {
     'name': 'Resource: Planning Account Period',
-    'version': '1.0',
-    'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.odoo.com""",
+    'version': '18.0.1.0.0',
+    'summary': "Links resource planning to accounting periods.",
     'category': '', # Technical Settings|Localization|Payroll Localization|Account Charts|User types|Invoicing|Sales|Human Resources|Operations|Marketing|Manufacturing|Website|Theme|Administration|Appraisals|Sign|Helpdesk|Administration|Extra Rights|Other Extra Rights|
-    'description': """
-        Long description of module's purpose
-    """,
+    'description': '''
+Planning Account Period
+=======================
+
+    Links resource planning to accounting periods.
+
+    Features:
+
+        - UI Integration: Extends 2 view(s) in the Odoo interface.
+        - Extends Odoo: Builds on resource.shift.
+    ''',
     'author': 'Vertel AB',
     'website': 'https://vertel.se/apps/odoo-resource/resource_planning_account_period',
     'images': ['static/description/banner.png'], 

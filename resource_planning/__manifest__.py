@@ -21,16 +21,23 @@
 
 {
     'name': 'Resource: Planning',
-    'version': '1.0',
+    'version': '18.0.1.0.0',
     # Version ledger: 14.0 = Odoo version. 1 = Major. Non regressionable code. 2 = Minor. New features that are regressionable. 3 = Bug fixes
-    'summary': '',
+    'summary': "Adds resource planning with timezones.",
     'category': 'Project',
-    'description': """
-Using Timeline to plan the work for resources
-=================================================
+    'description': '''
+Planning
+========
 
-More information:
-    """,
+    Adds resource planning with timezones.
+
+    Features:
+
+        - Guided Wizards: Step-by-step dialogs for data entry.
+        - Reports: Adds printable reports.
+        - UI Integration: Extends 11 view(s) in the Odoo interface.
+        - Extends Odoo: Builds on employee_id, hr.attendance, hr.department, hr.employee.
+    ''',
     #'sequence': '1',
     'author': 'Vertel AB',
     'website': 'https://vertel.se/apps/odoo-resource/resource_planning',
